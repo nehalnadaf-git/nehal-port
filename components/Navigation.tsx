@@ -1,0 +1,120 @@
+'use client'
+
+import { useState, useEffect } from 'react';
+
+export default function Navigation() {
+  const [time, setTime] = useState('');
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setTime(now.toLocaleTimeString('en-US', { hour12: false }));
+    };
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  return (
+    <nav
+      aria-label="Main navigation"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        /* iOS safe area support */
+        paddingTop: 'max(env(safe-area-inset-top, 0px), 0px)',
+        /* Feather zone below content row — smaller on mobile so it doesn't eat hero text */
+        paddingBottom: 'clamp(28px, 5vw, 56px)',
+        pointerEvents: 'none',
+        transition: 'all 0.4s ease',
+        /* Frosted glass */
+        backdropFilter: 'blur(28px) saturate(200%) brightness(1.05)',
+        WebkitBackdropFilter: 'blur(28px) saturate(200%) brightness(1.05)',
+        background: scrolled
+          ? 'rgba(255, 255, 255, 0.72)'
+          : 'rgba(255, 255, 255, 0.60)',
+        /* Inner top highlight sheen */
+        boxShadow: scrolled
+          ? 'inset 0 1px 0 rgba(255,255,255,0.95), 0 1px 0 rgba(0,0,0,0.06)'
+          : 'inset 0 1px 0 rgba(255,255,255,0.9)',
+        /* Feathered bottom edge dissolves into page */
+        maskImage: 'linear-gradient(to bottom, black 0%, black 46%, rgba(0,0,0,0.88) 60%, rgba(0,0,0,0.6) 74%, rgba(0,0,0,0.28) 86%, transparent 100%)',
+        WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 46%, rgba(0,0,0,0.88) 60%, rgba(0,0,0,0.6) 74%, rgba(0,0,0,0.28) 86%, transparent 100%)',
+      }}
+    >
+      {/* ── Content row ── */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr auto 1fr',
+          alignItems: 'center',
+          padding: 'clamp(14px, 2vw, 20px) clamp(20px, 5vw, 72px)',
+          pointerEvents: 'auto',
+        }}
+      >
+        {/* Left — live clock */}
+        <span
+          aria-label="Current local time"
+          style={{
+            fontFamily: "'JetBrains Mono', 'Courier New', monospace",
+            fontSize: 'clamp(11px, 1.2vw, 13px)',
+            fontWeight: 500,
+            letterSpacing: '0.06em',
+            color: 'rgba(0, 0, 0, 0.65)',
+            userSelect: 'none',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Local/ {time}
+        </span>
+
+        {/* Centre — brand name (always perfectly centred) */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: '5px',
+            userSelect: 'none',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 900,
+              fontSize: 'clamp(15px, 1.6vw, 18px)',
+              letterSpacing: '-0.04em',
+              color: '#000000',
+            }}
+          >
+            Nehal
+          </span>
+          <span
+            style={{
+              fontFamily: "'Playfair Display', Georgia, serif",
+              fontStyle: 'italic',
+              fontWeight: 500,
+              fontSize: 'clamp(15px, 1.6vw, 18px)',
+              letterSpacing: '0em',
+              color: '#000000',
+            }}
+          >
+            Nadaf
+          </span>
+        </div>
+
+        {/* Right — empty, balances the grid */}
+        <span aria-hidden="true" />
+      </div>
+    </nav>
+  );
+}
