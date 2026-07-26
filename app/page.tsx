@@ -19,7 +19,6 @@ import FAQSection from '@/sections/FAQSection';
 import CTASection from '@/sections/CTASection';
 import WebsiteProjectsGallery from '@/sections/WebsiteProjectsGallery';
 import VideoProjectsGallery from '@/sections/VideoProjectsGallery';
-import FlowArt, { FlowSection } from '@/components/ui/story-scroll';
 
 export default function HomePage() {
   useSmoothScroll();
@@ -31,32 +30,19 @@ export default function HomePage() {
       <Navigation />
 
       <main className="relative z-10">
-        {/*
-          FlowArt only wraps the first two sections:
-            [0] Hero  — pins in place
-            [1] About — slides up from fully below the viewport (full-screen slide)
-          All other sections scroll normally with no pinning or transforms.
-        */}
-        <FlowArt aria-label="Hero to Page transition">
-          <FlowSection aria-label="Hero">
-            <HeroSection />
-          </FlowSection>
-
-          <FlowSection aria-label="Portfolio Content">
-            <AboutIntroSection />
-            <WebsiteProjectsGallery />
-            <VideoProjectsGallery />
-            <WhoAmISection />
-            <BioStatementSection />
-            <CreativeByMeSection />
-            <StatsSection />
-            <ExperienceSection />
-            <AwardsSection />
-            <StackToolsSection />
-            <FAQSection />
-            <CTASection />
-          </FlowSection>
-        </FlowArt>
+        <HeroSection />
+        <AboutIntroSection />
+        <WebsiteProjectsGallery />
+        <VideoProjectsGallery />
+        <WhoAmISection />
+        <BioStatementSection />
+        <CreativeByMeSection />
+        <StatsSection />
+        <ExperienceSection />
+        <AwardsSection />
+        <StackToolsSection />
+        <FAQSection />
+        <CTASection />
       </main>
 
       <Footer />
