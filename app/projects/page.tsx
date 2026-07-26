@@ -107,22 +107,22 @@ export default function WebsiteProjectsPage() {
                 style={{
                   border: '3px solid #000000',
                   boxShadow: '6px 6px 0px #000000',
-                  borderRadius: '16px',
-                  background: '#ffffff',
+                  borderRadius: '0px',
+                  background: '#000000',
                   overflow: 'hidden',
                   animation: `tileIn 0.65s cubic-bezier(0.16,1,0.3,1) ${i * 55}ms both`,
                 }}
               >
                 <video
                   src={item.src}
+                  poster={item.src.replace(/\.mp4$/, '.jpg')}
+                  autoPlay
                   muted
                   loop
                   playsInline
-                  preload="none"
-                  onMouseEnter={e => (e.currentTarget as HTMLVideoElement).play()}
-                  onMouseLeave={e => { const v = e.currentTarget as HTMLVideoElement; v.pause(); v.currentTime = 0; }}
+                  preload="metadata"
                   className="pointer-events-none absolute h-full w-full object-cover"
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'auto' }}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'auto', borderRadius: '0px', background: '#000000' }}
                 />
                 {/* Hover overlay */}
                 <div

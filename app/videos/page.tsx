@@ -61,8 +61,8 @@ export default function VideoProjectsPage() {
                   style={{
                     border: '3px solid #000000',
                     boxShadow: '6px 6px 0px #000000',
-                    borderRadius: '16px',
-                    background: '#000',
+                    borderRadius: '0px',
+                    background: '#000000',
                     overflow: 'hidden',
                   }}
                 >
@@ -70,16 +70,17 @@ export default function VideoProjectsPage() {
                   <video
                     src={item.src}
                     poster={item.thumbSrc}
+                    autoPlay
                     muted
                     loop
                     playsInline
-                    preload="none"
-                    onMouseEnter={e => (e.currentTarget as HTMLVideoElement).play()}
-                    onMouseLeave={e => { const v = e.currentTarget as HTMLVideoElement; v.pause(); v.currentTime = 0; }}
+                    preload="metadata"
                     style={{
                       position: 'absolute', top: 0, left: 0,
                       width: '100%', height: '100%', objectFit: 'cover',
                       pointerEvents: 'none',
+                      borderRadius: '0px',
+                      background: '#000000',
                     }}
                   />
                   {/* Play indicator overlay */}

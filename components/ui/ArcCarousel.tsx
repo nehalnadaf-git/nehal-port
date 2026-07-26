@@ -121,7 +121,9 @@ export default function ArcCarousel({
 
       // Update shadow and border on the card element directly (avoids re-render)
       const isActive = distFromCenter < 0.5;
+      el.style.borderRadius = '0px';
       el.style.border = '3px solid #000000';
+      el.style.backgroundColor = '#000000';
       if (isActive) {
         el.style.boxShadow = '8px 8px 0px #000000';
       } else {
@@ -338,15 +340,18 @@ export default function ArcCarousel({
                   left: 0,
                   width: `${cardSize.w}px`,
                   height: `${cardSize.h}px`,
-                  borderRadius: '16px',
+                  borderRadius: '0px',
                   overflow: 'hidden',
                   willChange: 'transform, opacity',
                   transformOrigin: 'center bottom',
                   border: '3px solid #000000',
+                  background: '#000000',
                   boxShadow: isActive
                     ? '8px 8px 0px #000000'
                     : '4px 4px 0px #000000',
                   backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  isolation: 'isolate',
                   transition: 'box-shadow 0.35s ease',
                   cursor: isActive ? 'pointer' : 'grab',
                   touchAction: 'pan-y',
@@ -360,25 +365,34 @@ export default function ArcCarousel({
                   muted
                   playsInline
                   preload="metadata"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    pointerEvents: 'none',
+                    borderRadius: '0px',
+                    background: '#000000',
+                  }}
                 />
                 {/* View badge — center card only */}
                 {isActive && (
                   <div style={{
                     position: 'absolute',
-                    bottom: '14px',
-                    right: '14px',
-                    background: 'rgba(0,0,0,0.72)',
-                    backdropFilter: 'blur(8px)',
-                    borderRadius: '100px',
-                    padding: '6px 12px',
+                    bottom: '12px',
+                    right: '12px',
+                    background: '#000000',
+                    border: '1.5px solid #FFFFFF',
+                    borderRadius: '0px',
+                    padding: '4px 10px',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '5px',
                     pointerEvents: 'none',
+                    boxShadow: '2px 2px 0px #FFFFFF',
                   }}>
-                    <span style={{ fontSize: '11px', color: '#fff', fontWeight: 600, letterSpacing: '0.08em' }}>View</span>
-                    <ArrowUpRight size={11} color="#fff" />
+                    <span style={{ fontSize: '11px', color: '#fff', fontWeight: 700, letterSpacing: '0.08em', fontFamily: "'JetBrains Mono', monospace" }}>VIEW</span>
+                    <ArrowUpRight size={12} color="#fff" />
                   </div>
                 )}
               </div>

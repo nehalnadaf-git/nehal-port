@@ -122,11 +122,11 @@ export default function PortfolioLightbox({
           maxWidth: isVertical ? '360px' : '980px',
           maxHeight: isVertical ? 'min(72vh, 640px)' : 'min(72vh, 560px)',
           aspectRatio: isVertical ? '9 / 16' : '16 / 9',
-          borderRadius: '12px',
+          borderRadius: '0px',
           overflow: 'hidden',
-          background: '#000',
-          boxShadow: '0 32px 80px rgba(0,0,0,0.85)',
-          border: '2px solid rgba(255,255,255,0.15)',
+          background: '#000000',
+          boxShadow: '8px 8px 0px #000000',
+          border: '3px solid #FFFFFF',
           flexShrink: 0,
           display: 'flex',
           alignItems: 'center',
@@ -145,6 +145,7 @@ export default function PortfolioLightbox({
             height: '100%',
             display: 'block',
             objectFit: isVertical ? 'cover' : 'contain',
+            borderRadius: '0px',
           }}
         />
       </div>
@@ -195,7 +196,7 @@ export default function PortfolioLightbox({
               padding: '10px 24px',
               background: '#A855F7',
               border: '2px solid #000',
-              borderRadius: '100px',
+              borderRadius: '0px',
               color: '#fff',
               fontWeight: 700,
               fontSize: '13px',

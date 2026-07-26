@@ -85,7 +85,7 @@ export default function DraggableGrid({
   imageWidth = 320,
   imageHeight = 200,
   gap = 24,
-  rounded = 3,
+  rounded = 0,
   autoScroll = false,
   autoScrollDx = 0.18,
   autoScrollDy = 0.12,
