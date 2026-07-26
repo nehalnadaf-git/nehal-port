@@ -160,7 +160,7 @@ export function MorphingText({ texts, className, style }: MorphingTextProps) {
         style={{ position: "absolute", width: 0, height: 0, opacity: 0, pointerEvents: "none" }}
       >
         <defs>
-          <filter id={filterId} colorInterpolationFilters="sRGB">
+          <filter id={filterId} colorInterpolationFilters="sRGB" x="-30%" y="-30%" width="160%" height="160%">
             <feColorMatrix
               in="SourceGraphic"
               type="matrix"

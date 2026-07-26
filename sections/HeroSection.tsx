@@ -87,12 +87,9 @@ export default function HeroSection() {
         {/* Text Morph Title — behind the photo, peeks around on all sides */}
         <div
           ref={morphRef}
-          className="hero-retro-btn absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none select-none"
+          className="hero-retro-btn absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none select-none w-full max-w-full px-2"
           style={{
-            width: '130%',
-            maxWidth: '900px',
-            minWidth: '320px',
-            height: 'clamp(100px, 28vw, 300px)',
+            height: 'clamp(60px, 20vw, 280px)',
           }}
         >
           <MorphingText
@@ -100,8 +97,8 @@ export default function HeroSection() {
             style={{
               fontFamily: "'Inter', system-ui, sans-serif",
               fontWeight: 900,
-              fontSize: "clamp(96px, 26vw, 280px)",
-              height: "clamp(96px, 26vw, 280px)",
+              fontSize: "clamp(42px, 20vw, 260px)",
+              height: "clamp(60px, 20vw, 260px)",
               letterSpacing: "-0.05em",
               color: "#000",
             }}

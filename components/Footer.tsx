@@ -101,15 +101,15 @@ export default function Footer() {
       <div
         ref={morphRef}
         className="rv-scale relative flex items-center justify-center w-full mt-12 md:mt-16 py-8"
-        style={{ minHeight: '280px' }}
+        style={{ minHeight: 'clamp(100px, 18vw, 240px)' }}
       >
         <MorphingText
           texts={["Nehal", "Nadaf"]}
           style={{
             fontFamily: "'Inter', system-ui, sans-serif",
             fontWeight: 900,
-            fontSize: "clamp(70px, 18vw, 240px)",
-            height: "clamp(70px, 18vw, 240px)",
+            fontSize: "clamp(42px, 18vw, 240px)",
+            height: "clamp(55px, 18vw, 240px)",
             letterSpacing: "-0.05em",
             color: "#000",
           }}
