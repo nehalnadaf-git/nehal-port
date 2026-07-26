@@ -32,7 +32,9 @@ export default function CTASection() {
       {/* CTA Button */}
       <a
         ref={btnRef}
-        href="mailto:nehalnadaff@gmail.com"
+        href="https://wa.me/916363278962?text=Hi%20Nehal%2C%20I%20am%20interested%20in%20working%20with%20you."
+        target="_blank"
+        rel="noopener noreferrer"
         className="rv-up inline-flex items-center justify-center mt-10 rounded-full border-2 border-black px-9 py-4"
         style={{
           background: '#A855F7',

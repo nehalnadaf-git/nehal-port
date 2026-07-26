@@ -18,7 +18,7 @@ export const SEO = {
     'Nehal Nadaf is a multi-disciplinary creative professional specialising in premium web development, UI/UX design, and professional video production based in Hubli, Karnataka, India. 8+ live client websites delivered across automotive detailing, dental healthcare, food service, and home-appliance industries.',
   email: 'nehalnadaff@gmail.com',
   phone: '+916363278962',
-  whatsapp: 'https://wa.me/916363278962',
+  whatsapp: 'https://wa.me/916363278962?text=Hi%20Nehal%2C%20I%20am%20interested%20in%20working%20with%20you.',
 
   // ─── Location ──────────────────────────────────────────────────────────────
   location: {
