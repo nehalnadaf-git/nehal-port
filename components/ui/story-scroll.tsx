@@ -40,8 +40,16 @@ export const FlowSection: React.FC<FlowSectionProps> = ({
 );
 
 // ─── FlowArt ─────────────────────────────────────────────────────────────────
-// Each section (except the first) slides up from 100vh below.
-// Each section (except the last) pins while the next one slides over it.
+// Desktop: each section (except the first) slides up from 100vh below,
+//          and each section (except the last) pins while the next slides over it.
+//
+// Mobile / touch devices: all animations and pins are DISABLED.
+//   Rationale — GSAP ScrollTrigger pins require a reliable scroll position signal.
+//   On iOS, Lenis is also disabled (see useSmoothScroll), so ScrollTrigger receives
+//   native scroll values directly. The pin would still work mathematically, but
+//   the slide-in "y: 100vh" initial state would hide all portfolio content until
+//   the pin resolves — which is a terrible mobile UX. On mobile we just let
+//   every section render in normal document flow with no transforms.
 
 export interface FlowArtProps {
   children: React.ReactNode;
@@ -58,13 +66,25 @@ const FlowArt: React.FC<FlowArtProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
+  // Detect reduced-motion preference
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const update = () => setReducedMotion(mq.matches);
     update();
     mq.addEventListener('change', update);
     return () => mq.removeEventListener('change', update);
+  }, []);
+
+  // Detect touch / mobile device — checked once on mount.
+  // Using (pointer: coarse) is the most reliable cross-browser signal.
+  useEffect(() => {
+    const isTouch =
+      window.matchMedia('(pointer: coarse)').matches ||
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0;
+    setIsTouchDevice(isTouch);
   }, []);
 
   useGSAP(
@@ -78,14 +98,21 @@ const FlowArt: React.FC<FlowArtProps> = ({
 
       const triggers: ScrollTrigger[] = [];
 
-      if (reducedMotion) {
+      // ── Touch / Mobile — reset everything, no pin, no slide ──────────────
+      // Ensure no leftover transforms from a previous desktop render or SSR.
+      if (reducedMotion || isTouchDevice) {
         sections.forEach((s) => {
           const inner = s.querySelector<HTMLElement>('.flow-art-container');
-          if (inner) gsap.set(inner, { clearProps: 'transform' });
+          if (inner) {
+            gsap.set(inner, { clearProps: 'all' });
+          }
+          // Reset any zIndex we may have set
+          gsap.set(s, { clearProps: 'zIndex' });
         });
         return () => {};
       }
 
+      // ── Desktop — pin + slide-in ─────────────────────────────────────────
       sections.forEach((section, i) => {
         // Later sections render on top of earlier ones
         gsap.set(section, { zIndex: i + 1 });
@@ -137,7 +164,7 @@ const FlowArt: React.FC<FlowArtProps> = ({
         triggers.forEach((t) => t.kill());
       };
     },
-    { scope: containerRef, dependencies: [childCount(children), reducedMotion] },
+    { scope: containerRef, dependencies: [childCount(children), reducedMotion, isTouchDevice] },
   );
 
   return (
