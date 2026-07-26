@@ -190,8 +190,15 @@
 html {
   scroll-behavior: auto;
   overflow-x: hidden;
-  /* Prevent iOS rubber-band from corrupting GSAP ScrollTrigger pin math */
-  overscroll-behavior: none;
+}
+
+/* Prevent iOS rubber-band from corrupting GSAP ScrollTrigger pin math — desktop only.
+   On iOS touch devices, overscroll-behavior: none can actually BLOCK scrolling
+   when combined with position:fixed elements. */
+@media (pointer: fine) {
+  html {
+    overscroll-behavior: none;
+  }
 }
 
 body {
@@ -206,9 +213,14 @@ body {
   font-feature-settings: 'kern' 1, 'liga' 1, 'cv11' 1, 'ss01' 1;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
-  /* Both required for full iOS overscroll prevention */
-  overscroll-behavior-y: none;
-  overscroll-behavior: none;
+}
+
+/* Desktop-only: prevent overscroll bounce that breaks GSAP pin math */
+@media (pointer: fine) {
+  body {
+    overscroll-behavior-y: none;
+    overscroll-behavior: none;
+  }
 }
 
 ::selection {
@@ -354,7 +366,10 @@ body {
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: hidden; }
+/* Lenis — only apply overflow:hidden on desktop to prevent mobile scroll lock */
+@media (pointer: fine) {
+  .lenis.lenis-stopped { overflow: hidden; }
+}
 
 /* Focus */
 :focus-visible { outline: 2px solid #A855F7; outline-offset: 2px; }

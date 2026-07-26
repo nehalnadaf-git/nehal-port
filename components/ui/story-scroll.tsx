@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -9,6 +9,17 @@ gsap.registerPlugin(ScrollTrigger);
 
 function cx(...parts: Array<string | undefined | false | null>): string {
   return parts.filter(Boolean).join(' ');
+}
+
+// ─── Touch detection (synchronous, SSR-safe) ─────────────────────────────────
+// Returns true on the server (safe default — no pin) and on touch devices.
+function getIsTouchDevice(): boolean {
+  if (typeof window === 'undefined') return true; // SSR → assume mobile
+  return (
+    window.matchMedia('(pointer: coarse)').matches ||
+    'ontouchstart' in window ||
+    navigator.maxTouchPoints > 0
+  );
 }
 
 // ─── FlowSection ─────────────────────────────────────────────────────────────
@@ -43,13 +54,15 @@ export const FlowSection: React.FC<FlowSectionProps> = ({
 // Desktop: each section (except the first) slides up from 100vh below,
 //          and each section (except the last) pins while the next slides over it.
 //
-// Mobile / touch devices: all animations and pins are DISABLED.
-//   Rationale — GSAP ScrollTrigger pins require a reliable scroll position signal.
-//   On iOS, Lenis is also disabled (see useSmoothScroll), so ScrollTrigger receives
-//   native scroll values directly. The pin would still work mathematically, but
-//   the slide-in "y: 100vh" initial state would hide all portfolio content until
-//   the pin resolves — which is a terrible mobile UX. On mobile we just let
-//   every section render in normal document flow with no transforms.
+// Mobile / touch devices: ALL animations and pins are DISABLED.
+//   The pin + slide is a desktop-only effect. On touch devices we render
+//   every section in normal document flow so native iOS / Android scroll works.
+//
+// CRITICAL: Touch detection is done synchronously via getIsTouchDevice()
+//   so the very first useGSAP call already knows whether to pin.
+//   Using useState for this caused a race condition: the first render applied
+//   the desktop pin, then the useEffect flipped the boolean → GSAP cleanup
+//   failed on iOS → page stuck.
 
 export interface FlowArtProps {
   children: React.ReactNode;
@@ -65,26 +78,17 @@ const FlowArt: React.FC<FlowArtProps> = ({
   'aria-label': ariaLabel = 'Scroll transition',
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [reducedMotion, setReducedMotion] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  // Detect reduced-motion preference
+  // Synchronous — no useState, no race condition.
+  // useMemo ensures it's computed once during the first client render.
+  const isTouch = useMemo(() => getIsTouchDevice(), []);
+
+  // Detect reduced-motion preference (this one is fine as useEffect —
+  // if it flips from false→true we just clear props, which is harmless).
+  const reducedMotionRef = useRef(false);
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setReducedMotion(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
-
-  // Detect touch / mobile device — checked once on mount.
-  // Using (pointer: coarse) is the most reliable cross-browser signal.
-  useEffect(() => {
-    const isTouch =
-      window.matchMedia('(pointer: coarse)').matches ||
-      'ontouchstart' in window ||
-      navigator.maxTouchPoints > 0;
-    setIsTouchDevice(isTouch);
+    reducedMotionRef.current = mq.matches;
   }, []);
 
   useGSAP(
@@ -98,29 +102,26 @@ const FlowArt: React.FC<FlowArtProps> = ({
 
       const triggers: ScrollTrigger[] = [];
 
-      // ── Touch / Mobile — reset everything, no pin, no slide ──────────────
-      // Ensure no leftover transforms from a previous desktop render or SSR.
-      if (reducedMotion || isTouchDevice) {
+      // ── Touch / Mobile — no pin, no slide, normal document flow ────────
+      if (isTouch || reducedMotionRef.current) {
         sections.forEach((s) => {
           const inner = s.querySelector<HTMLElement>('.flow-art-container');
           if (inner) {
             gsap.set(inner, { clearProps: 'all' });
           }
-          // Reset any zIndex we may have set
           gsap.set(s, { clearProps: 'zIndex' });
         });
         return () => {};
       }
 
-      // ── Desktop — pin + slide-in ─────────────────────────────────────────
+      // ── Desktop — pin + slide-in ──────────────────────────────────────
       sections.forEach((section, i) => {
-        // Later sections render on top of earlier ones
         gsap.set(section, { zIndex: i + 1 });
 
         const inner = section.querySelector<HTMLElement>('.flow-art-container');
         if (!inner) return;
 
-        // ── Slide-in: every section except the first ─────────────────────
+        // Slide-in: every section except the first
         if (i > 0) {
           gsap.set(inner, { y: '100vh' });
 
@@ -129,8 +130,8 @@ const FlowArt: React.FC<FlowArtProps> = ({
             ease: 'none',
             scrollTrigger: {
               trigger: section,
-              start: 'top bottom',  // section enters viewport from below
-              end: 'top top',       // section top reaches viewport top → fully in
+              start: 'top bottom',
+              end: 'top top',
               scrub: 1,
               invalidateOnRefresh: true,
             },
@@ -138,7 +139,7 @@ const FlowArt: React.FC<FlowArtProps> = ({
           if (tween.scrollTrigger) triggers.push(tween.scrollTrigger);
         }
 
-        // ── Pin: every section except the last ───────────────────────────
+        // Pin: every section except the last
         if (i < sections.length - 1) {
           triggers.push(
             ScrollTrigger.create({
@@ -155,7 +156,6 @@ const FlowArt: React.FC<FlowArtProps> = ({
 
       const t1 = setTimeout(() => ScrollTrigger.refresh(), 200);
       const t2 = setTimeout(() => ScrollTrigger.refresh(), 800);
-      // Also refresh after fonts are loaded — prevents misaligned triggers on slow connections
       document.fonts.ready.then(() => ScrollTrigger.refresh());
 
       return () => {
@@ -164,7 +164,7 @@ const FlowArt: React.FC<FlowArtProps> = ({
         triggers.forEach((t) => t.kill());
       };
     },
-    { scope: containerRef, dependencies: [childCount(children), reducedMotion, isTouchDevice] },
+    { scope: containerRef, dependencies: [childCount(children), isTouch] },
   );
 
   return (

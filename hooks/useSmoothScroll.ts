@@ -19,10 +19,14 @@ export function useSmoothScroll() {
   const lenisRef = useRef<any>(null);
 
   useEffect(() => {
+    // Synchronous detection — must happen before any GSAP/Lenis init
     const isTouchDevice =
       window.matchMedia('(pointer: coarse)').matches ||
       ('ontouchstart' in window) ||
       navigator.maxTouchPoints > 0;
+
+    // Track the cleanup returned from the async init()
+    let scrollCleanup: (() => void) | undefined;
 
     const init = async () => {
       const gsap = (await import('gsap')).default;
@@ -32,71 +36,57 @@ export function useSmoothScroll() {
 
       if (isTouchDevice) {
         // ── Touch / Mobile path ───────────────────────────────────────────
-        // Skip Lenis entirely. Native scroll works perfectly on iOS.
-        // Wire ScrollTrigger to the native scroll event so that any GSAP
-        // parallax / trigger effects still work correctly.
-        const onScroll = () => ScrollTrigger.update();
-        window.addEventListener('scroll', onScroll, { passive: true });
+        // Skip Lenis entirely. Do NOT even import it — Lenis's CSS side
+        // effects can add classes to <html> that interact badly with the
+        // .lenis-stopped { overflow: hidden } rule in globals.css.
+        //
+        // Explicitly remove any Lenis classes that might have leaked from
+        // the CSS file (the CSS rules reference them, no JS needed to add).
+        document.documentElement.classList.remove(
+          'lenis', 'lenis-smooth', 'lenis-stopped', 'lenis-scrolling'
+        );
 
-        // Disable GSAP's lag smoothing — not needed without Lenis
+        // Disable GSAP's lag smoothing
         gsap.ticker.lagSmoothing(0);
 
-        // Refresh once DOM is fully painted and fonts are loaded
+        // Refresh once DOM is painted and fonts are loaded
         setTimeout(() => ScrollTrigger.refresh(), 400);
         document.fonts.ready.then(() => ScrollTrigger.refresh());
 
-        return () => {
-          window.removeEventListener('scroll', onScroll);
-        };
+        scrollCleanup = () => {};
+        return;
       }
 
       // ── Desktop path — Lenis smooth scroll ────────────────────────────
       const Lenis = (await import('lenis')).default;
 
       const lenis = new Lenis({
-        // lerp 0.12 → fast enough that GSAP pin triggers fire at the correct
-        // visual position. 0.08 was too slow: pins appeared to "jump" because
-        // the native scroll position outran the visual position during scrub.
         lerp: 0.12,
         smoothWheel: true,
-        // Prevent iOS rubber-band bounce from corrupting pin math
         overscroll: false,
       });
 
       lenisRef.current = lenis;
-      // Expose globally so any component can hook into Lenis scroll events
       (window as any).__lenis = lenis;
 
-      // Correct Lenis v1 + GSAP ScrollTrigger integration:
-      // ScrollTrigger.update is called on every Lenis tick (lerped position),
-      // so all trigger points are evaluated against the smooth scroll value,
-      // not the raw native scroll position.
       lenis.on('scroll', ScrollTrigger.update);
 
-      // Drive Lenis from GSAP's ticker so they share the same rAF loop
       gsap.ticker.add((time: number) => {
         lenis.raf(time * 1000);
       });
 
-      // Disable GSAP's lag smoothing — Lenis handles frame timing itself
       gsap.ticker.lagSmoothing(0);
 
-      // After Lenis is running and first paint is complete, recalculate all
-      // ScrollTrigger positions. Images/fonts can shift layout after init.
       setTimeout(() => ScrollTrigger.refresh(), 300);
       document.fonts.ready.then(() => ScrollTrigger.refresh());
 
-      return () => {
+      scrollCleanup = () => {
         lenis.destroy();
         (window as any).__lenis = null;
       };
     };
 
-    let cleanup: (() => void) | undefined;
-
-    init().then((fn) => {
-      cleanup = fn;
-    });
+    init();
 
     return () => {
       if (lenisRef.current) {
@@ -104,7 +94,7 @@ export function useSmoothScroll() {
         (window as any).__lenis = null;
         lenisRef.current = null;
       }
-      cleanup?.();
+      scrollCleanup?.();
     };
   }, []);
 
