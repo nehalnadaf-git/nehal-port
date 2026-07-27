@@ -10,9 +10,11 @@
  */
 
 import type { Metadata, Viewport } from 'next';
+import { headers } from 'next/headers';
 import './globals.css';
 import { buildMetadata } from '@/lib/seo';
 import HomeSEO from '@/app/HomeSEO';
+import HomeSchemas from '@/app/HomeSchemas';
 import BrutalistMacCursor from '@/components/BrutalistMacCursor';
 
 // ─── Root-level metadata ──────────────────────────────────────────────────────
@@ -31,15 +33,23 @@ export const viewport: Viewport = {
 };
 
 // ─── Layout ───────────────────────────────────────────────────────────────────
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Determine if we're on the homepage to inject the FAQPage schema only there.
+  // headers() gives us the request path without needing client-side JS.
+  const headersList = await headers();
+  const pathname = headersList.get('x-invoke-path') ?? headersList.get('x-pathname') ?? '/';
+  const isHomepage = pathname === '/' || pathname === '';
+
   return (
     <html lang="en-IN" className="h-full antialiased">
       <head>
         <HomeSEO />
+        {/* FAQPage schema — homepage only (prevents schema misinformation on sub-pages) */}
+        {isHomepage && <HomeSchemas />}
         {/* Preconnect to Google Fonts to reduce font load latency on all devices */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

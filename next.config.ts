@@ -27,6 +27,37 @@ const nextConfig: NextConfig = {
   },
   // Transpile Three.js ecosystem for Next.js
   transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
+
+  // ─── Domain Consolidation ────────────────────────────────────────────────────
+  // Enforce canonical apex domain: nehalnadaf.me (no www).
+  // All www variants and old .com domain are permanently redirected here.
+  // Requires: both nehalnadaf.me AND www.nehalnadaf.me to be added as domains
+  // in your Vercel project dashboard (Domains tab) for these to fire at edge.
+  async redirects() {
+    return [
+      // www.nehalnadaf.me  →  nehalnadaf.me  (apex domain wins)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.nehalnadaf.me' }],
+        destination: 'https://nehalnadaf.me/:path*',
+        permanent: true,
+      },
+      // www.nehalnadaf.com →  nehalnadaf.me  (old domain + www)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.nehalnadaf.com' }],
+        destination: 'https://nehalnadaf.me/:path*',
+        permanent: true,
+      },
+      // nehalnadaf.com     →  nehalnadaf.me  (old apex domain)
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'nehalnadaf.com' }],
+        destination: 'https://nehalnadaf.me/:path*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withSerwist(nextConfig);

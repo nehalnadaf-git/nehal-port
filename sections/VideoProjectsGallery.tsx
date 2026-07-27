@@ -12,6 +12,7 @@ import type { VideoArcItem } from '@/components/ui/VideoArcCarousel';
 import ArcCarousel from '@/components/ui/ArcCarousel';
 import type { ArcCarouselItem } from '@/components/ui/ArcCarousel';
 import { MagicText } from '@/components/ui/magic-text';
+import { cldVideo, cldPoster } from '@/lib/cloudinary';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,25 +20,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 const verticalVideoProjects: VideoArcItem[] = [
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4'),
     title: 'TPF Tajweed',
     label: 'Brand Reel • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4'),
     title: 'Brand Reel 04',
     label: 'Social Media • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784351904/AQPWxjmQyfz1h6eBdHlY-5mnFDs0zbqeMofj3SEFBpT_cL4Zt_BptaBJoSQImyUTxPj7BW_kcB2eqOBafVA_qIUcrStuLkeUE1jYdDU_x3pyea.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351904/AQPWxjmQyfz1h6eBdHlY-5mnFDs0zbqeMofj3SEFBpT_cL4Zt_BptaBJoSQImyUTxPj7BW_kcB2eqOBafVA_qIUcrStuLkeUE1jYdDU_x3pyea.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351904/AQPWxjmQyfz1h6eBdHlY-5mnFDs0zbqeMofj3SEFBpT_cL4Zt_BptaBJoSQImyUTxPj7BW_kcB2eqOBafVA_qIUcrStuLkeUE1jYdDU_x3pyea.mp4'),
     title: 'Brand Reel 05',
     label: 'Brand Film • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784351903/AQNs7JWx7643lqque_gte9iVmvD3FmzWci4MY8qN7q4JPfInqGeT1zo24ArKmWatBkcLBaLWUh16lZdDBU9_wSxY19IxEjyjmQXQWOg_bk1qkg.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351903/AQNs7JWx7643lqque_gte9iVmvD3FmzWci4MY8qN7q4JPfInqGeT1zo24ArKmWatBkcLBaLWUh16lZdDBU9_wSxY19IxEjyjmQXQWOg_bk1qkg.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351903/AQNs7JWx7643lqque_gte9iVmvD3FmzWci4MY8qN7q4JPfInqGeT1zo24ArKmWatBkcLBaLWUh16lZdDBU9_wSxY19IxEjyjmQXQWOg_bk1qkg.mp4'),
     title: 'Brand Reel 06',
     label: 'Instagram Reel • 9:16',
     aspectRatio: 'vertical',
@@ -46,7 +51,8 @@ const verticalVideoProjects: VideoArcItem[] = [
 
 const horizontalVideoProjects: ArcCarouselItem[] = [
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4'),
     alt: 'Al Moon Academy',
     category: 'Education',
     url: undefined,

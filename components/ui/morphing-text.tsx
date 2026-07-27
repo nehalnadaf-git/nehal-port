@@ -144,12 +144,12 @@ export function MorphingText({ texts, className, style }: MorphingTextProps) {
     >
       <span
         ref={text1Ref}
-        className="absolute top-1/2 left-1/2 whitespace-nowrap text-center will-change-[filter,opacity,transform]"
+        className="absolute top-1/2 left-1/2 whitespace-nowrap text-center will-change-[opacity]"
         style={{ transform: "translate3d(-50%, -50%, 0)" }}
       />
       <span
         ref={text2Ref}
-        className="absolute top-1/2 left-1/2 whitespace-nowrap text-center will-change-[filter,opacity,transform]"
+        className="absolute top-1/2 left-1/2 whitespace-nowrap text-center will-change-[opacity]"
         style={{ transform: "translate3d(-50%, -50%, 0)" }}
       />
 

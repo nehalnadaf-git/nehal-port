@@ -4,7 +4,12 @@
  * infinite-drag-scroll.tsx
  * Infinite drag + wheel scroll gallery grid.
  * Based on the shadcn community component pattern.
- * No zoom — removed for performance.
+ * Features:
+ *   - Staggered scale+fade entrance animation on each tile (random delay)
+ *   - Infinite wrap in X and Y via framer-motion wrap()
+ *   - Wheel scroll (Y + X trackpad), ctrl+wheel zoom blocked
+ *   - Touch drag with momentum on mobile
+ *   - bgColor prop for seamless canvas background
  */
 
 import {
@@ -30,6 +35,20 @@ export type GridVariant = 'default' | 'masonry' | 'polaroid';
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 const GridVariantContext = createContext<GridVariant | undefined>(undefined);
+
+// ─── Entrance animation variants (matches the reference template exactly) ─────
+const tileVariants = {
+  initial: { opacity: 0, scale: 0.3 },
+  animate: () => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: Math.random() + 1.5,
+      duration: 1.4,
+      ease: [0.18, 0.71, 0.11, 1] as [number, number, number, number],
+    },
+  }),
+};
 
 // ─── DraggableContainer ───────────────────────────────────────────────────────
 export const DraggableContainer = ({
@@ -173,21 +192,28 @@ export const GridBody = memo(
 GridBody.displayName = 'GridBody';
 
 // ─── GridItem ─────────────────────────────────────────────────────────────────
+// Uses motion.div with staggered scale+fade entrance (matches reference template).
 export const GridItem = ({
   children,
   className,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
   style,
 }: {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   style?: React.CSSProperties;
 }) => {
   const variant = useContext(GridVariantContext);
 
   const gridItemStyles = cva(
-    'overflow-hidden cursor-pointer w-full h-full',
+    // will-change-transform removed: tiles are static after entrance animation;
+    // only the parent draggable canvas needs it. 36+ promoted layers = wasted GPU RAM.
+    'overflow-hidden cursor-pointer w-full h-full relative',
     {
       variants: {
         variant: {
@@ -202,12 +228,18 @@ export const GridItem = ({
   );
 
   return (
-    <div
+    <motion.div
       className={cn(gridItemStyles({ variant }), className)}
       style={style}
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      variants={tileVariants}
+      initial="initial"
+      animate="animate"
+      custom={undefined}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };

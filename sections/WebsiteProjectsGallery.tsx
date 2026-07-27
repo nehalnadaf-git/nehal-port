@@ -10,60 +10,70 @@ import SectionHeader from '@/components/SectionHeader';
 import ArcCarousel from '@/components/ui/ArcCarousel';
 import type { ArcCarouselItem } from '@/components/ui/ArcCarousel';
 import { MagicText } from '@/components/ui/magic-text';
+import { cldVideo, cldPoster } from '@/lib/cloudinary';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const websiteProjects: ArcCarouselItem[] = [
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355456/AutoGlam_kaenne.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355456/AutoGlam_kaenne.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355456/AutoGlam_kaenne.mp4'),
     alt: 'Auto Glam Detailing Studio',
     category: 'Automotive',
     url: 'auto-glam.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355455/Cardee_hluecv.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355455/Cardee_hluecv.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355455/Cardee_hluecv.mp4'),
     alt: 'CARDEE The Detailing Studio',
     category: 'Automotive',
     url: 'cardee-detailing-studio.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355445/Baba_zfvjq8.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355445/Baba_zfvjq8.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355445/Baba_zfvjq8.mp4'),
     alt: 'Baba Royal Garage',
     category: 'Automotive',
     url: 'baba-royal-garage-m6hv.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355436/Apex_tfdm6t.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355436/Apex_tfdm6t.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355436/Apex_tfdm6t.mp4'),
     alt: 'Apex Dental Clinic',
     category: 'Healthcare',
     url: 'apex-dental-five.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/Empire_prxg4l.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/Empire_prxg4l.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/Empire_prxg4l.mp4'),
     alt: 'Empire Restaurant',
     category: 'Hospitality',
     url: 'empire-restaurant.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355427/Annachi_yma3us.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355427/Annachi_yma3us.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355427/Annachi_yma3us.mp4'),
     alt: 'Annachi Tiffin Centre',
     category: 'Hospitality',
     url: 'annachi-tiffin-centre.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
     alt: 'Hosatti Home Services',
     category: 'Home Service',
     url: 'hosatti.com',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355431/Arshan_h0xb6d.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355431/Arshan_h0xb6d.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355431/Arshan_h0xb6d.mp4'),
     alt: 'Custom Resume Website',
     category: 'Personal',
     url: 'arshan-girniwale-resume.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4'),
     alt: 'LNS Industrial Piping',
     category: 'Industrial',
     url: 'lns-piping.vercel.app',

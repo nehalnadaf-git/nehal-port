@@ -22,7 +22,10 @@ export default function Footer() {
   };
 
   return (
-    <footer className="container-padding pt-24 pb-8">
+    <footer
+      className="container-padding pt-24"
+      style={{ paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}
+    >
       {/* Top border line — clip-path sweep */}
       <div
         ref={lineRef}
@@ -94,6 +97,15 @@ export default function Footer() {
           style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
         >
           Instagram <ArrowUpRight size={12} />
+        </a>
+        <a
+          href="https://x.com/NadafNehal"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
+          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
+        >
+          X (Twitter) <ArrowUpRight size={12} />
         </a>
       </div>
 

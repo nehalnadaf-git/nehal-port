@@ -1,26 +1,34 @@
 /**
  * /videos page metadata — server component layout.
  * Provides unique, keyword-rich SEO for the video production portfolio page.
- * BreadcrumbList JSON-LD included for rich breadcrumb results in Google.
+ * BreadcrumbList + ItemList JSON-LD for rich results in Google.
  */
 
 import { buildMetadata, SEO } from '@/lib/seo';
 
 export const metadata = buildMetadata({
-  title: 'Video Projects — Nehal Nadaf | Cinematic Video Editor Hubli Karnataka',
+  title: 'Video Projects — Nehal Nadaf | Cinematic Video Editor Hubli Karnataka India',
   description:
-    'Professional video editing portfolio by Nehal Nadaf — brand videos, Instagram Reels, YouTube content, product promos. Cinematic colour grading in DaVinci Resolve. Based in Hubli, Karnataka.',
+    'Professional video editing portfolio by Nehal Nadaf — cinematic video editor in Hubli, Karnataka. Brand films, Instagram Reels, YouTube content, product promos, colour grading in DaVinci Resolve. Serving clients across Karnataka and India.',
   canonicalPath: '/videos',
   keywords: [
     'video editor portfolio Hubli',
+    'video editor portfolio Karnataka',
     'cinematic video editing Karnataka',
+    'cinematic video editor India',
     'DaVinci Resolve colour grading India',
+    'DaVinci Resolve editor Karnataka',
     'brand video production Hubli',
+    'brand video production Karnataka',
     'Instagram Reels editor India',
+    'Instagram Reels video editor Hubli',
     'YouTube video editor Karnataka',
+    'YouTube video editor India',
     'product promo video Hubli',
     'social media video production India',
-    'professional video editor freelance',
+    'professional video editor freelance India',
+    'commercial video editor Karnataka',
+    'brand film production India',
   ],
 });
 
@@ -43,23 +51,51 @@ const breadcrumbSchema = {
   ],
 };
 
-// ItemList schema — exposes all video portfolio works to Google structured data
+// ItemList schema — exposes all 6 actual video works to Google structured data
 const videoListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
-  name: 'Video Production Portfolio by Nehal Nadaf',
-  description: 'Professional video editing and production portfolio by Nehal Nadaf — cinematic video editor based in Hubli, Karnataka.',
+  name: 'Video Production Portfolio by Nehal Nadaf — Cinematic Video Editor Hubli Karnataka',
+  description: 'Professional video editing and production portfolio by Nehal Nadaf — cinematic video editor based in Hubli, Karnataka, India. Colour grading in DaVinci Resolve.',
   url: `${SEO.baseUrl}/videos`,
-  numberOfItems: 8,
+  numberOfItems: 6,
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Brand Reel — Cinematic Video Editing', description: 'Cinematic brand video edited and colour-graded in DaVinci Resolve' },
-    { '@type': 'ListItem', position: 2, name: 'Cinematic Brand Film', description: 'Professional cinematic brand film with DaVinci Resolve colour grading' },
-    { '@type': 'ListItem', position: 3, name: 'Short Form Social Media Video', description: 'Short-form social media video content produced for brand promotion' },
-    { '@type': 'ListItem', position: 4, name: 'Social Media — Instagram Reels', description: 'Instagram Reels video production for social media marketing' },
-    { '@type': 'ListItem', position: 5, name: 'Brand Film Production', description: 'Professional brand film production with advanced colour grading' },
-    { '@type': 'ListItem', position: 6, name: 'Creative Video Reel', description: 'Creative video reel showcasing production quality and editing style' },
-    { '@type': 'ListItem', position: 7, name: 'Portfolio Video Showreel', description: 'Video portfolio showreel demonstrating freelance video editing capabilities' },
-    { '@type': 'ListItem', position: 8, name: 'YouTube and Brand Video', description: 'YouTube content and brand video production for digital marketing' },
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'TPF Tajweed — Brand Reel',
+      description: 'Brand reel video production for TPF Tajweed — cinematic editing and colour grading in DaVinci Resolve',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Empire Commercial — Cinematic Brand Film',
+      description: 'Cinematic commercial video for Empire Restaurant — professional colour grading in DaVinci Resolve',
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Al Moon Academy — Short Form Video',
+      description: 'Short-form social media video content for Al Moon Academy — Instagram Reels and YouTube production',
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      name: 'Brand Reel — Social Media Video Production',
+      description: 'Social media brand reel produced for Instagram — cinematic editing and motion graphics',
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      name: 'Brand Film Production',
+      description: 'Professional brand film with advanced colour grading — DaVinci Resolve, Hubli Karnataka',
+    },
+    {
+      '@type': 'ListItem',
+      position: 6,
+      name: 'Creative Video Reel — Portfolio Showreel',
+      description: 'Video portfolio showreel demonstrating cinematic video editing capabilities — DaVinci Resolve, India',
+    },
   ],
 };
 

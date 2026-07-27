@@ -57,6 +57,8 @@ export default function ExperienceSection() {
                       alt={`${exp.company} logo`}
                       width="48"
                       height="48"
+                      loading="lazy"
+                      decoding="async"
                       style={{
                         objectFit: 'contain',
                         flexShrink: 0,

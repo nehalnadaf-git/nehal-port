@@ -44,34 +44,38 @@ export default function HeroSection() {
       );
     }
 
-    // Subtle parallax on the background morph text while scrolling
-    if (morphRef.current) {
-      gsap.to(morphRef.current, {
-        yPercent: -18,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.2,
-          invalidateOnRefresh: true,
-        },
-      });
-    }
+    // Parallax — desktop only; mobile uses native scroll momentum, skip expensive scrub
+    const isTouch = window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouch) {
+      // Subtle parallax on the background morph text while scrolling
+      if (morphRef.current) {
+        gsap.to(morphRef.current, {
+          yPercent: -18,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.2,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
 
-    // Slight parallax on hero image — moves slower than scroll (depth)
-    if (imageRef.current) {
-      gsap.to(imageRef.current, {
-        yPercent: 12,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.8,
-          invalidateOnRefresh: true,
-        },
-      });
+      // Slight parallax on hero image — moves slower than scroll (depth)
+      if (imageRef.current) {
+        gsap.to(imageRef.current, {
+          yPercent: 12,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.8,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
     }
   }, { scope: containerRef });
 

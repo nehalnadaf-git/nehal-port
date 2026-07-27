@@ -17,7 +17,11 @@ export default function Navigation() {
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => {
+      // Only call setState when the threshold is actually crossed (prevents 60+ re-renders/sec)
+      const s = window.scrollY > 10;
+      setScrolled(prev => (prev === s ? prev : s));
+    };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -37,9 +41,13 @@ export default function Navigation() {
         paddingBottom: 'clamp(28px, 5vw, 56px)',
         pointerEvents: 'none',
         transition: 'all 0.4s ease',
+        /* GPU compositor layer: backdrop-filter no longer triggers full-page repaint on scroll */
+        transform: 'translateZ(0)',
+        willChange: 'transform',
         /* Frosted glass */
         backdropFilter: 'blur(28px) saturate(200%) brightness(1.05)',
-        WebkitBackdropFilter: 'blur(28px) saturate(200%) brightness(1.05)',
+        /* iOS 15 fix: brightness() causes WebKit compositing glitch; omit it for -webkit- */
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
         background: scrolled
           ? 'rgba(255, 255, 255, 0.72)'
           : 'rgba(255, 255, 255, 0.60)',

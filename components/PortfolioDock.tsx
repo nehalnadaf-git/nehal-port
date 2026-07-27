@@ -150,7 +150,8 @@ export default function PortfolioDock() {
     <div
       className="fixed left-0 right-0 z-[200] flex justify-center pointer-events-none"
       style={{
-        bottom: 'calc(16px + env(safe-area-inset-bottom, 0px))',
+        // 20px base clears Android Chrome bottom bar; safe-area-inset handles iOS home indicator
+        bottom: 'calc(20px + env(safe-area-inset-bottom, 0px))',
       }}
       role="navigation"
       aria-label="Page navigation dock"

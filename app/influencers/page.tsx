@@ -81,9 +81,6 @@ export default function InfluencersPage() {
                 key={i}
                 className="w-[280px] h-[360px] relative max-w-full"
                 onClick={() => window.open(inf.instagramUrl, '_blank', 'noopener,noreferrer')}
-                style={{
-                  animation: `tileIn 0.65s cubic-bezier(0.16,1,0.3,1) ${i * 60}ms both`,
-                }}
               >
                 {/* ── Transparent card — no white bg ─────────────────── */}
                 <div style={{
@@ -181,9 +178,11 @@ export default function InfluencersPage() {
         transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
-          /* Same frosted glass as Navigation */
-          backdropFilter: 'blur(28px) saturate(200%) brightness(1.06)',
-          WebkitBackdropFilter: 'blur(28px) saturate(200%) brightness(1.06)',
+          /* GPU compositor layer: backdrop-filter stays on its own layer */
+          transform: 'translateZ(0)',
+          willChange: 'transform',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
           background: 'rgba(255, 255, 255, 0.55)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9)',
           /* Feathered bottom edge */
@@ -209,8 +208,14 @@ export default function InfluencersPage() {
                 color: 'rgba(0,0,0,0.6)', background: 'none', border: 'none',
                 cursor: 'pointer', padding: 0, transition: 'color 0.2s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#000')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(0,0,0,0.6)')}
+              onMouseEnter={e => {
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                (e.currentTarget as HTMLElement).style.color = '#000';
+              }}
+              onMouseLeave={e => {
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                (e.currentTarget as HTMLElement).style.color = 'rgba(0,0,0,0.6)';
+              }}
             >
               <ArrowLeft size={13} /> Back
             </button>
@@ -267,7 +272,7 @@ export default function InfluencersPage() {
 
       <style>{`
         .grid-tile-overlay { opacity: 0 !important; transition: opacity 0.25s ease !important; }
-        div:hover > .grid-tile-overlay { opacity: 1 !important; }
+        @media (hover: hover) { div:hover > .grid-tile-overlay { opacity: 1 !important; } }
       `}</style>
     </div>
   );

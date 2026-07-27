@@ -8,6 +8,7 @@ import PortfolioLightbox, { type LightboxItem } from '@/components/ui/PortfolioL
 
 export interface VideoArcItem {
   src: string;
+  poster?: string;
   title: string;
   label?: string;
   aspectRatio?: 'vertical' | 'horizontal';
@@ -29,7 +30,11 @@ function clamp(v: number, min: number, max: number) {
 }
 
 function getCardSize(vw: number): { w: number; h: number } {
-  if (vw < 480) return { w: 160, h: 284 };
+  // Vertical (9:16) cards — ensure minimum 16px side margin on narrowest phones
+  if (vw < 480) {
+    const w = Math.min(vw * 0.42, 160);
+    return { w: Math.round(w), h: Math.round(w * 16 / 9) };
+  }
   if (vw < 768) return { w: 200, h: 356 };
   if (vw < 1200) return { w: 240, h: 427 };
   return { w: 280, h: 498 };
@@ -60,27 +65,32 @@ export default function VideoArcCarousel({
   const pointerMovedRef = useRef(false);
   // Tracks which card index is currently hovered (for pop effect)
   const hoveredCardIndexRef = useRef(-1);
+  // Bidirectional visibility: pauses RAF when section scrolls off screen
+  const isInViewRef = useRef(true);
+  // Tracks last rendered active index — prevents 60 React re-renders/sec
+  const prevActiveRef = useRef(-1);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [vw, setVw] = useState(1200);
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // ─── Imperatively play active video, pause others ───────────────────────────
+  // iOS Fix: autoPlay attribute is ignored when src is already present at mount.
+  // Explicitly call play() on all videos once the carousel enters the viewport.
   useEffect(() => {
-    videosRef.current.forEach((vid, i) => {
-      if (!vid) return;
-      if (i === activeIndex) {
-        vid.play().catch(() => {});
-      } else {
-        vid.pause();
+    if (!isVisible) return;
+    videosRef.current.forEach(v => {
+      if (v && v.paused) {
+        v.play().catch(() => { /* autoplay blocked by browser policy — poster shown as fallback */ });
       }
     });
-  }, [activeIndex]);
+  }, [isVisible]);
+
 
   const totalCards = items.length;
   const cardSize = getCardSize(vw);
@@ -140,13 +150,22 @@ export default function VideoArcCarousel({
 
     const raw = Math.round(offset) % totalCards;
     const active = ((raw % totalCards) + totalCards) % totalCards;
-    setActiveIndex(active);
+    // Only trigger React re-render when active card actually changes (eliminates 60fps re-renders)
+    if (active !== prevActiveRef.current) {
+      prevActiveRef.current = active;
+      setActiveIndex(active);
+    }
   }, [vw, arcRadius, angleStepDeg, cardSize.w, totalCards]);
 
   // ─── RAF animation loop ────────────────────────────────────────────────────
 
   const animate = useCallback(() => {
-    // If lightbox is open, we can stop the background motion to preserve performance
+    // Pause RAF loop when section is off-screen — saves CPU on mobile & desktop
+    if (!isInViewRef.current) {
+      rafId.current = null;
+      return;
+    }
+    // If lightbox is open, keep loop ticking but skip position updates
     if (lightboxItem) {
       rafId.current = requestAnimationFrame(animate);
       return;
@@ -299,10 +318,26 @@ export default function VideoArcCarousel({
     const onResize = () => setVw(window.innerWidth);
     window.addEventListener('resize', onResize);
 
+    // ─── IntersectionObserver: only load video data when carousel is near viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // One-shot lazy-load: only goes true, triggers video preload
+        if (entry.isIntersecting) setIsVisible(true);
+        // Bidirectional: pause RAF when scrolled away, resume when back in view
+        isInViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && rafId.current === null) {
+          rafId.current = requestAnimationFrame(animate);
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       window.removeEventListener('resize', onResize);
       if (snapTimer.current) clearTimeout(snapTimer.current);
+      observer.disconnect();
     };
   }, [animate]);
 
@@ -326,6 +361,8 @@ export default function VideoArcCarousel({
             height: `${cardSize.h + arcRadius * 0.38 + (vw < 768 ? 24 : 60)}px`,
             overflow: 'hidden',
             userSelect: 'none',
+            // Ensure browser allows horizontal drag without fighting vertical scroll
+            touchAction: 'pan-y',
           }}
         >
           {items.map((item, i) => {
@@ -352,7 +389,7 @@ export default function VideoArcCarousel({
                   height: `${h}px`,
                   borderRadius: '0px',
                   overflow: 'hidden',
-                  willChange: 'transform, opacity',
+                  willChange: 'transform',
                   transformOrigin: 'center bottom',
                   border: '3px solid #000000',
                   boxShadow: isActive
@@ -371,10 +408,12 @@ export default function VideoArcCarousel({
                   ref={(el) => { videosRef.current[i] = el; }}
                   key={item.src}
                   src={item.src}
+                  poster={item.poster}
+                  autoPlay
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload={isVisible ? 'metadata' : 'none'}
                   style={{
                     position: 'absolute',
                     top: 0,

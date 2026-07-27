@@ -51,10 +51,12 @@ export default function CTASection() {
           whiteSpace: 'nowrap',
         } as React.CSSProperties}
         onMouseEnter={e => {
+          if (!window.matchMedia('(hover: hover)').matches) return;
           e.currentTarget.style.transform = 'translate(-2px, -2px)';
           e.currentTarget.style.boxShadow = '6px 6px 0px 0px #000000';
         }}
         onMouseLeave={e => {
+          if (!window.matchMedia('(hover: hover)').matches) return;
           e.currentTarget.style.transform = 'translate(0, 0)';
           e.currentTarget.style.boxShadow = '4px 4px 0px 0px #000000';
         }}

@@ -52,14 +52,16 @@ export default function BioStatementSection() {
           style={{
             transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1)',
           }}
-          onMouseEnter={e => {
-            e.currentTarget.style.transform = 'translate(-1px, -1px)';
-            e.currentTarget.style.boxShadow = '5px 5px 0px 0px #000000';
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.transform = 'translate(0, 0)';
-            e.currentTarget.style.boxShadow = '4px 4px 0px 0px #000000';
-          }}
+        onMouseEnter={e => {
+          if (!window.matchMedia('(hover: hover)').matches) return;
+          e.currentTarget.style.transform = 'translate(-1px, -1px)';
+          e.currentTarget.style.boxShadow = '5px 5px 0px 0px #000000';
+        }}
+        onMouseLeave={e => {
+          if (!window.matchMedia('(hover: hover)').matches) return;
+          e.currentTarget.style.transform = 'translate(0, 0)';
+          e.currentTarget.style.boxShadow = '4px 4px 0px 0px #000000';
+        }}
         >
           Download Resume
         </a>

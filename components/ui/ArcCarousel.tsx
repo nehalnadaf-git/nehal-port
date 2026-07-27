@@ -8,6 +8,7 @@ import PortfolioLightbox, { type LightboxItem } from '@/components/ui/PortfolioL
 
 export interface ArcCarouselItem {
   src: string;
+  poster?: string;
   alt: string;
   category?: string;
   url?: string;
@@ -29,7 +30,11 @@ function clamp(v: number, min: number, max: number) {
 }
 
 function getCardSize(vw: number): { w: number; h: number } {
-  if (vw < 480) return { w: 320, h: 180 };
+  // On narrow phones (320px iPhone SE), ensure 16px margin on each side so adjacent cards remain visible
+  if (vw < 480) {
+    const w = Math.min(vw - 32, 300);
+    return { w, h: Math.round(w * 9 / 16) };
+  }
   if (vw < 768) return { w: 480, h: 270 };
   if (vw < 1200) return { w: 640, h: 360 };
   return { w: 760, h: 428 };
@@ -60,27 +65,32 @@ export default function ArcCarousel({
   const pointerMovedRef = useRef(false);
   // Tracks which card index is currently hovered (for pop effect)
   const hoveredCardIndexRef = useRef(-1);
+  // Bidirectional visibility: pauses RAF when section scrolls off screen
+  const isInViewRef = useRef(true);
+  // Tracks last rendered active index — prevents 60 React re-renders/sec
+  const prevActiveRef = useRef(-1);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [vw, setVw] = useState(1200);
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // ─── Imperatively play active video, pause others ───────────────────────────
+  // iOS Fix: autoPlay attribute is ignored when src is already present at mount.
+  // Explicitly call play() on all videos once the carousel enters the viewport.
   useEffect(() => {
-    videosRef.current.forEach((vid, i) => {
-      if (!vid) return;
-      if (i === activeIndex) {
-        vid.play().catch(() => {});
-      } else {
-        vid.pause();
+    if (!isVisible) return;
+    videosRef.current.forEach(v => {
+      if (v && v.paused) {
+        v.play().catch(() => { /* autoplay blocked by browser policy — poster shown as fallback */ });
       }
     });
-  }, [activeIndex]);
+  }, [isVisible]);
+
 
   const totalCards = items.length;
   const cardSize = getCardSize(vw);
@@ -133,12 +143,21 @@ export default function ArcCarousel({
 
     const raw = Math.round(offset) % totalCards;
     const active = ((raw % totalCards) + totalCards) % totalCards;
-    setActiveIndex(active);
+    // Only trigger React re-render when active card actually changes (eliminates 60fps re-renders)
+    if (active !== prevActiveRef.current) {
+      prevActiveRef.current = active;
+      setActiveIndex(active);
+    }
   }, [vw, arcRadius, angleStepDeg, cardSize.w, totalCards]);
 
   // ─── RAF animation loop ────────────────────────────────────────────────────
 
   const animate = useCallback(() => {
+    // Pause RAF loop when section is off-screen — saves CPU on mobile & desktop
+    if (!isInViewRef.current) {
+      rafId.current = null;
+      return;
+    }
     if (isDragging.current) {
       offsetRef.current += (targetRef.current - offsetRef.current) * 0.18;
     } else if (isDrifting.current) {
@@ -288,10 +307,26 @@ export default function ArcCarousel({
     const onResize = () => setVw(window.innerWidth);
     window.addEventListener('resize', onResize);
 
+    // ─── IntersectionObserver: only load video data when carousel is near viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // One-shot lazy-load: only goes true, triggers video preload
+        if (entry.isIntersecting) setIsVisible(true);
+        // Bidirectional: pause RAF when scrolled away, resume when back in view
+        isInViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && rafId.current === null) {
+          rafId.current = requestAnimationFrame(animate);
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    if (containerRef.current) observer.observe(containerRef.current);
+
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       window.removeEventListener('resize', onResize);
       if (snapTimer.current) clearTimeout(snapTimer.current);
+      observer.disconnect();
     };
   }, [animate]);
 
@@ -319,6 +354,8 @@ export default function ArcCarousel({
             height: `${viewportH}px`,
             overflow: 'hidden',
             userSelect: 'none',
+            // Ensure browser allows horizontal drag without fighting vertical scroll
+            touchAction: 'pan-y',
           }}
         >
           {items.map((item, i) => {
@@ -342,7 +379,7 @@ export default function ArcCarousel({
                   height: `${cardSize.h}px`,
                   borderRadius: '0px',
                   overflow: 'hidden',
-                  willChange: 'transform, opacity',
+                  willChange: 'transform',
                   transformOrigin: 'center bottom',
                   border: '3px solid #000000',
                   background: '#000000',
@@ -360,11 +397,12 @@ export default function ArcCarousel({
                 <video
                   ref={(el) => { videosRef.current[i] = el; }}
                   src={item.src}
-                  autoPlay={isActive}
+                  poster={item.poster}
+                  autoPlay
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload={isVisible ? 'metadata' : 'none'}
                   style={{
                     width: '100%',
                     height: '100%',

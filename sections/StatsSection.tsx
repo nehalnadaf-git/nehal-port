@@ -62,7 +62,8 @@ export default function StatsSection() {
           });
         });
       },
-      { threshold: 0.3 } // fire when 30% of the stats grid is visible
+      // 0.15 threshold fires reliably on small phone viewports (0.3 could never trigger)
+      { threshold: 0.15 }
     );
 
     observer.observe(el);

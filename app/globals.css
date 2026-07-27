@@ -355,6 +355,10 @@ body {
   z-index: 9999;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  /* GPU layer isolation: prevents scroll repaints from hitting this fixed overlay */
+  transform: translateZ(0);
+  will-change: transform;
+  contain: strict;
 }
 
 /* Grid Lines */
@@ -423,7 +427,8 @@ html.lenis, html.lenis body { height: auto; }
   opacity: 0;
   transition: opacity var(--rv-duration) var(--ease-out-expo), transform var(--rv-duration) var(--ease-out-expo);
   transition-delay: var(--rv-delay, 0ms);
-  will-change: opacity, transform;
+  /* will-change removed: 30+ simultaneous GPU layers pressure mobile RAM.
+     Transitions still run correctly without it — browser composites on-demand. */
 }
 .rv-up    { transform: translateY(36px); }
 .rv-left  { transform: translateX(-28px); }
@@ -432,7 +437,7 @@ html.lenis, html.lenis body { height: auto; }
 .rv-fade  { transform: translateY(0); }
 .rv-clip  { clip-path: inset(0 100% 0 0); opacity: 1; transform: none; transition: clip-path 0.9s var(--ease-out-expo), opacity 0.3s ease; transition-delay: var(--rv-delay, 0ms); }
 
-.rv-visible.rv-up, .rv-visible.rv-left, .rv-visible.rv-right, .rv-visible.rv-scale, .rv-visible.rv-fade { opacity: 1; transform: none; will-change: auto; }
+.rv-visible.rv-up, .rv-visible.rv-left, .rv-visible.rv-right, .rv-visible.rv-scale, .rv-visible.rv-fade { opacity: 1; transform: none; }
 .rv-visible.rv-clip { clip-path: inset(0 0% 0 0); opacity: 1; }
 
 .rv-fast { --rv-duration: 0.48s; }
@@ -650,6 +655,11 @@ div:hover > .grid-tile-overlay { opacity: 1 !important; }
 /* ── MorphingText — optimize SVG threshold filter on touch/mobile ── */
 @media (pointer: coarse) {
   .morphing-text-root {
+    filter: none;
+    -webkit-filter: none;
+  }
+  /* Also disable the SVG feBlend filter computation on iOS/Android */
+  .morphing-text-root svg {
     filter: none;
     -webkit-filter: none;
   }

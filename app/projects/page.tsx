@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -11,10 +11,12 @@ import {
   GridBody,
   GridItem,
 } from '@/components/ui/infinite-drag-scroll';
+import { cldVideo, cldPoster } from '@/lib/cloudinary';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 interface WebsiteItem {
   src: string;
+  poster: string;
   alt: string;
   category: string;
   url: string;
@@ -22,60 +24,146 @@ interface WebsiteItem {
 
 const websiteItems: WebsiteItem[] = [
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355456/AutoGlam_kaenne.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355456/AutoGlam_kaenne.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355456/AutoGlam_kaenne.mp4'),
     alt: 'Auto Glam Detailing Studio',
     category: 'Automotive',
     url: 'https://auto-glam.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355455/Cardee_hluecv.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355455/Cardee_hluecv.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355455/Cardee_hluecv.mp4'),
     alt: 'CARDEE The Detailing Studio',
     category: 'Automotive',
     url: 'https://cardee-detailing-studio.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355445/Baba_zfvjq8.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355445/Baba_zfvjq8.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355445/Baba_zfvjq8.mp4'),
     alt: 'Baba Royal Garage',
     category: 'Automotive',
     url: 'https://baba-royal-garage-m6hv.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355436/Apex_tfdm6t.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355436/Apex_tfdm6t.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355436/Apex_tfdm6t.mp4'),
     alt: 'Apex Dental Clinic',
     category: 'Healthcare',
     url: 'https://apex-dental-five.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/Empire_prxg4l.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/Empire_prxg4l.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/Empire_prxg4l.mp4'),
     alt: 'Empire Restaurant',
     category: 'Hospitality',
     url: 'https://empire-restaurant.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355427/Annachi_yma3us.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355427/Annachi_yma3us.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355427/Annachi_yma3us.mp4'),
     alt: 'Annachi Tiffin Centre',
     category: 'Hospitality',
     url: 'https://annachi-tiffin-centre.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
     alt: 'Hosatti Home Services',
     category: 'Home Service',
     url: 'https://hosatti.com',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355431/Arshan_h0xb6d.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355431/Arshan_h0xb6d.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355431/Arshan_h0xb6d.mp4'),
     alt: 'Custom Resume Website',
     category: 'Personal',
     url: 'https://arshan-girniwale-resume.vercel.app',
   },
   {
-    src: 'https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4'),
     alt: 'LNS Industrial Piping',
     category: 'Industrial',
     url: 'https://lns-piping.vercel.app',
   },
 ];
+
+// ─── ProjectCard — continuous autoplay looping video ──────────────────────────
+function ProjectCard({
+  item,
+  onOpen,
+}: {
+  item: WebsiteItem;
+  onOpen: (lightbox: LightboxItem) => void;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {});
+  }, []);
+
+  return (
+    <GridItem
+      className="w-[300px] h-[169px]"
+      onClick={() => onOpen({
+        src: item.src,
+        title: item.alt,
+        category: item.category,
+        url: item.url,
+        aspectRatio: 'horizontal',
+      })}
+      style={{
+        border: '3px solid #000000',
+        boxShadow: '6px 6px 0px #000000',
+        borderRadius: '0px',
+        background: '#000000',
+        overflow: 'hidden',
+      }}
+    >
+      <video
+        ref={videoRef}
+        src={item.src}
+        poster={item.poster}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        style={{
+          position: 'absolute', top: 0, left: 0,
+          width: '100%', height: '100%',
+          objectFit: 'cover', pointerEvents: 'none',
+          borderRadius: '0px', background: '#000000',
+        }}
+      />
+      {/* Hover overlay */}
+      <div
+        className="grid-tile-overlay"
+        style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
+          padding: '16px',
+          opacity: 0,
+          transition: 'opacity 0.25s ease',
+        }}
+      >
+        <span style={{ fontSize: '13px', fontWeight: 700, color: '#fff', letterSpacing: '-0.01em' }}>
+          {item.alt}
+        </span>
+        <span style={{
+          fontSize: '10px', color: 'rgba(255,255,255,0.6)',
+          fontFamily: "'Inter', sans-serif", fontWeight: 600,
+          letterSpacing: '0.08em', marginTop: '2px',
+        }}>
+          {item.category} · Click to preview ↗
+        </span>
+      </div>
+    </GridItem>
+  );
+}
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function WebsiteProjectsPage() {
@@ -94,77 +182,23 @@ export default function WebsiteProjectsPage() {
         <DraggableContainer variant="default" bgColor="#F2F1E6">
           <GridBody columns={4}>
             {websiteItems.map((item, i) => (
-              <GridItem
-                key={i}
-                className="w-[300px] h-[169px]"
-                onClick={() => setActiveProject({
-                  src: item.src,
-                  title: item.alt,
-                  category: item.category,
-                  url: item.url,
-                  aspectRatio: 'horizontal',
-                })}
-                style={{
-                  border: '3px solid #000000',
-                  boxShadow: '6px 6px 0px #000000',
-                  borderRadius: '0px',
-                  background: '#000000',
-                  overflow: 'hidden',
-                  animation: `tileIn 0.65s cubic-bezier(0.16,1,0.3,1) ${i * 55}ms both`,
-                }}
-              >
-                <video
-                  src={item.src}
-                  poster={item.src.replace(/\.mp4$/, '.jpg')}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  className="pointer-events-none absolute h-full w-full object-cover"
-                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'auto', borderRadius: '0px', background: '#000000' }}
-                />
-                {/* Hover overlay */}
-                <div
-                  className="grid-tile-overlay"
-                  style={{
-                    position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 55%)',
-                    display: 'flex', flexDirection: 'column', justifyContent: 'flex-end',
-                    padding: '16px',
-                    opacity: 0,
-                    transition: 'opacity 0.25s ease',
-                  }}
-                >
-                  <span style={{
-                    fontSize: '13px', fontWeight: 700, color: '#fff',
-                    letterSpacing: '-0.01em',
-                  }}>
-                    {item.alt}
-                  </span>
-                  <span style={{
-                    fontSize: '10px', color: 'rgba(255,255,255,0.6)',
-                    fontFamily: "'Inter', sans-serif", fontWeight: 600,
-                    letterSpacing: '0.08em', marginTop: '2px',
-                  }}>
-                    {item.category} · Click to preview ↗
-                  </span>
-                </div>
-              </GridItem>
+              <ProjectCard key={i} item={item} onOpen={setActiveProject} />
             ))}
           </GridBody>
         </DraggableContainer>
       </div>
 
-      {/* ── Frosted glass header ─────────────────────────────────────────── */}
+      {/* ── Frosted glass header — GPU-isolated compositor layer ─────────── */}
       <motion.div
         initial={{ opacity: 0, y: -28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
-          backdropFilter: 'blur(28px) saturate(200%) brightness(1.06)',
-          WebkitBackdropFilter: 'blur(28px) saturate(200%) brightness(1.06)',
+          transform: 'translateZ(0)',
+          willChange: 'transform',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
           background: 'rgba(255, 255, 255, 0.55)',
           boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.9)',
           maskImage: 'linear-gradient(to bottom, black 0%, black 42%, rgba(0,0,0,0.85) 58%, rgba(0,0,0,0.55) 72%, rgba(0,0,0,0.25) 84%, transparent 100%)',
@@ -189,8 +223,14 @@ export default function WebsiteProjectsPage() {
                 color: 'rgba(0,0,0,0.6)', background: 'none', border: 'none',
                 cursor: 'pointer', padding: 0, transition: 'color 0.2s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.color = '#000')}
-              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(0,0,0,0.6)')}
+              onMouseEnter={e => {
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                (e.currentTarget as HTMLElement).style.color = '#000';
+              }}
+              onMouseLeave={e => {
+                if (!window.matchMedia('(hover: hover)').matches) return;
+                (e.currentTarget as HTMLElement).style.color = 'rgba(0,0,0,0.6)';
+              }}
             >
               <ArrowLeft size={13} /> Back
             </button>
@@ -252,11 +292,7 @@ export default function WebsiteProjectsPage() {
 
       <style>{`
         .grid-tile-overlay { opacity: 0 !important; transition: opacity 0.25s ease !important; }
-        div:hover > .grid-tile-overlay { opacity: 1 !important; }
-        @keyframes tileIn {
-          from { opacity: 0; transform: scale(0.92) translateY(12px); }
-          to   { opacity: 1; transform: scale(1)    translateY(0); }
-        }
+        @media (hover: hover) { div:hover > .grid-tile-overlay { opacity: 1 !important; } }
       `}</style>
     </div>
   );

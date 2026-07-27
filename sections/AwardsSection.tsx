@@ -88,6 +88,8 @@ export default function AgencySection() {
                         alt={`${item.role} logo`}
                         width="48"
                         height="48"
+                        loading="lazy"
+                        decoding="async"
                         style={{
                           objectFit: 'contain',
                           flexShrink: 0,
