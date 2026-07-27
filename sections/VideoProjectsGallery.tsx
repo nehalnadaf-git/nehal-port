@@ -41,9 +41,9 @@ const verticalVideoProjects: VideoArcItem[] = [
     aspectRatio: 'vertical',
   },
   {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351904/AQPWxjmQyfz1h6eBdHlY-5mnFDs0zbqeMofj3SEFBpT_cL4Zt_BptaBJoSQImyUTxPj7BW_kcB2eqOBafVA_qIUcrStuLkeUE1jYdDU_x3pyea.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351904/AQPWxjmQyfz1h6eBdHlY-5mnFDs0zbqeMofj3SEFBpT_cL4Zt_BptaBJoSQImyUTxPj7BW_kcB2eqOBafVA_qIUcrStuLkeUE1jYdDU_x3pyea.mp4'),
-    title: 'Brand Reel 05',
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785126518/YC5_slkuzx.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785126518/YC5_slkuzx.mp4'),
+    title: 'YC5 Brand Film',
     label: 'Brand Film • 9:16',
     aspectRatio: 'vertical',
   },
