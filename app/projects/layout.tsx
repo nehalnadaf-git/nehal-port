@@ -116,7 +116,7 @@ const itemListSchema = {
       '@type': 'ListItem',
       position: 9,
       name: 'LNS Industrial Piping',
-      url: 'https://lns-piping.vercel.app',
+      url: 'https://lbownetworksolutions.com',
       description: 'Industrial piping and engineering services website',
     },
   ],

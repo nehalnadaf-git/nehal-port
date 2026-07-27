@@ -76,7 +76,7 @@ const websiteProjects: ArcCarouselItem[] = [
     poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355446/LBow_vmjk0c.mp4'),
     alt: 'LNS Industrial Piping',
     category: 'Industrial',
-    url: 'lns-piping.vercel.app',
+    url: 'lbownetworksolutions.com',
   },
 ];
 
