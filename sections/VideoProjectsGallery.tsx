@@ -27,6 +27,13 @@ const verticalVideoProjects: VideoArcItem[] = [
     aspectRatio: 'vertical',
   },
   {
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785126183/True_Path_foundation_ADV_apywir.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785126183/True_Path_foundation_ADV_apywir.mp4'),
+    title: 'True Path Foundation ADV',
+    label: 'Brand Reel • 9:16',
+    aspectRatio: 'vertical',
+  },
+  {
     src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4'),
     poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4'),
     title: 'Brand Reel 04',

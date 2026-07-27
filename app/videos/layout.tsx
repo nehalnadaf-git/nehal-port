@@ -58,44 +58,15 @@ const videoListSchema = {
   name: 'Video Production Portfolio by Nehal Nadaf — Cinematic Video Editor Hubli Karnataka',
   description: 'Professional video editing and production portfolio by Nehal Nadaf — cinematic video editor based in Hubli, Karnataka, India. Colour grading in DaVinci Resolve.',
   url: `${SEO.baseUrl}/videos`,
-  numberOfItems: 6,
+  numberOfItems: 7,
   itemListElement: [
-    {
-      '@type': 'ListItem',
-      position: 1,
-      name: 'TPF Tajweed — Brand Reel',
-      description: 'Brand reel video production for TPF Tajweed — cinematic editing and colour grading in DaVinci Resolve',
-    },
-    {
-      '@type': 'ListItem',
-      position: 2,
-      name: 'Empire Commercial — Cinematic Brand Film',
-      description: 'Cinematic commercial video for Empire Restaurant — professional colour grading in DaVinci Resolve',
-    },
-    {
-      '@type': 'ListItem',
-      position: 3,
-      name: 'Al Moon Academy — Short Form Video',
-      description: 'Short-form social media video content for Al Moon Academy — Instagram Reels and YouTube production',
-    },
-    {
-      '@type': 'ListItem',
-      position: 4,
-      name: 'Brand Reel — Social Media Video Production',
-      description: 'Social media brand reel produced for Instagram — cinematic editing and motion graphics',
-    },
-    {
-      '@type': 'ListItem',
-      position: 5,
-      name: 'Brand Film Production',
-      description: 'Professional brand film with advanced colour grading — DaVinci Resolve, Hubli Karnataka',
-    },
-    {
-      '@type': 'ListItem',
-      position: 6,
-      name: 'Creative Video Reel — Portfolio Showreel',
-      description: 'Video portfolio showreel demonstrating cinematic video editing capabilities — DaVinci Resolve, India',
-    },
+    { '@type': 'ListItem', position: 1, name: 'TPF Tajweed — Brand Reel', description: 'Brand reel video production for TPF Tajweed — cinematic editing and colour grading in DaVinci Resolve' },
+    { '@type': 'ListItem', position: 2, name: 'True Path Foundation ADV — Brand Reel', description: 'Vertical brand advertisement video for True Path Foundation — cinematic editing in DaVinci Resolve' },
+    { '@type': 'ListItem', position: 3, name: 'Empire Commercial — Cinematic Brand Film', description: 'Cinematic commercial video for Empire Restaurant — professional colour grading in DaVinci Resolve' },
+    { '@type': 'ListItem', position: 4, name: 'Al Moon Academy — Short Form Video', description: 'Short-form social media video content for Al Moon Academy — Instagram Reels and YouTube production' },
+    { '@type': 'ListItem', position: 5, name: 'Brand Reel — Social Media Video Production', description: 'Social media brand reel produced for Instagram — cinematic editing and motion graphics' },
+    { '@type': 'ListItem', position: 6, name: 'Brand Film Production', description: 'Professional brand film with advanced colour grading — DaVinci Resolve, Hubli Karnataka' },
+    { '@type': 'ListItem', position: 7, name: 'Creative Video Reel — Portfolio Showreel', description: 'Video portfolio showreel demonstrating cinematic video editing capabilities — DaVinci Resolve, India' },
   ],
 };
 
