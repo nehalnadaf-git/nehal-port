@@ -23,6 +23,7 @@ import {
   memo,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
   createContext,
@@ -36,14 +37,19 @@ export type GridVariant = 'default' | 'masonry' | 'polaroid';
 // ─── Context ──────────────────────────────────────────────────────────────────
 const GridVariantContext = createContext<GridVariant | undefined>(undefined);
 
-// ─── Entrance animation variants (matches the reference template exactly) ─────
+// ─── Entrance animation variants ─────────────────────────────────────────────
+// `custom` receives the stable per-tile delay computed once in GridItem.
+// Previously Math.random() was called inside the factory (on every render),
+// which caused Framer Motion to restart the animation with a new delay each
+// time any parent re-rendered — leading to continuous re-animation storms on
+// 36-tile canvases. Now the delay is fixed for the lifetime of each tile.
 const tileVariants = {
   initial: { opacity: 0, scale: 0.3 },
-  animate: () => ({
+  animate: (delay: number) => ({
     opacity: 1,
     scale: 1,
     transition: {
-      delay: Math.random() + 1.5,
+      delay,
       duration: 1.4,
       ease: [0.18, 0.71, 0.11, 1] as [number, number, number, number],
     },
@@ -227,6 +233,11 @@ export const GridItem = ({
     },
   );
 
+  // Stable per-tile delay — computed once on mount, never changes on re-render.
+  // This prevents Framer Motion from restarting the entrance animation every
+  // time a parent component re-renders (e.g. when activeProject state changes).
+  const delay = useMemo(() => Math.random() + 1.5, []);
+
   return (
     <motion.div
       className={cn(gridItemStyles({ variant }), className)}
@@ -237,7 +248,7 @@ export const GridItem = ({
       variants={tileVariants}
       initial="initial"
       animate="animate"
-      custom={undefined}
+      custom={delay}
     >
       {children}
     </motion.div>

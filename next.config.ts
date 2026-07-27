@@ -13,6 +13,7 @@ const withSerwist = withSerwistInit({
 });
 
 const nextConfig: NextConfig = {
+  turbopack: {},
   // Match Vite's build behavior — TS errors don't block production builds
   // (Three.js texture.image types and similar are known strictness gaps)
   typescript: {

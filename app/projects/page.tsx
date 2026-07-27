@@ -88,7 +88,10 @@ const websiteItems: WebsiteItem[] = [
   },
 ];
 
-// ─── ProjectCard — continuous autoplay looping video ──────────────────────────
+// ─── ProjectCard — plays only when visible in the viewport ────────────────────
+// Uses IntersectionObserver to play/pause the video tile based on visibility.
+// This caps concurrent video decoders to only the tiles currently on screen
+// instead of all 36 (9 items × 4 grid copies) firing simultaneously on mount.
 function ProjectCard({
   item,
   onOpen,
@@ -101,7 +104,28 @@ function ProjectCard({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play().catch(() => {});
+
+    // Only play/pause based on viewport intersection — avoids off-screen decoding.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Load and play only when the tile enters the viewport
+          v.play().catch(() => {});
+        } else {
+          // Pause and unload src when fully off-screen to free decoder memory
+          v.pause();
+        }
+      },
+      {
+        // Fire when even 10% of the tile is visible
+        threshold: 0.1,
+        // Small margin so play starts just before the tile is fully visible
+        rootMargin: '50px',
+      },
+    );
+
+    observer.observe(v);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -124,13 +148,17 @@ function ProjectCard({
     >
       <video
         ref={videoRef}
+        // data attribute lets the page effect find and pause all grid videos
+        // when the lightbox opens, freeing GPU/CPU for the lightbox player.
+        data-grid-video="true"
         src={item.src}
         poster={item.poster}
-        autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
+        // preload="none" — browser fetches zero bytes until play() is called.
+        // Eliminates 36 × partial prefetch network hits on page load.
+        preload="none"
         style={{
           position: 'absolute', top: 0, left: 0,
           width: '100%', height: '100%',
@@ -173,6 +201,34 @@ export default function WebsiteProjectsPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
+  // ── Pause all grid videos while the lightbox is open ────────────────────────
+  // When a lightbox video plays, having 36 background videos also decoding
+  // causes GPU/CPU memory pressure that crashes mobile browsers. Pausing them
+  // while the overlay is open and resuming when it closes keeps resource usage
+  // within safe bounds on low-memory devices.
+  useEffect(() => {
+    const gridVideos = document.querySelectorAll<HTMLVideoElement>(
+      'video[data-grid-video="true"]',
+    );
+    if (activeProject) {
+      // Lightbox opened — pause every background tile video
+      gridVideos.forEach((v) => v.pause());
+    } else {
+      // Lightbox closed — resume only the tiles currently intersecting the viewport.
+      gridVideos.forEach((v) => {
+        const rect = v.getBoundingClientRect();
+        const inView =
+          rect.bottom > 0 &&
+          rect.right > 0 &&
+          rect.top < window.innerHeight &&
+          rect.left < window.innerWidth;
+        if (inView) {
+          v.play().catch(() => {});
+        }
+      });
+    }
+  }, [activeProject]);
+
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#F2F1E6', overflow: 'hidden' }}>
       <GrainOverlay />
@@ -195,8 +251,10 @@ export default function WebsiteProjectsPage() {
         transition={{ duration: 0.52, ease: [0.16, 1, 0.3, 1] }}
         style={{
           position: 'absolute', top: 0, left: 0, right: 0, zIndex: 20,
+          // Promote to its own GPU layer so backdrop-filter doesn't recomposite
+          // the entire viewport on every animation frame. Critical on mobile GPUs.
           transform: 'translateZ(0)',
-          willChange: 'transform',
+          willChange: 'transform, opacity',
           backdropFilter: 'blur(20px) saturate(180%)',
           WebkitBackdropFilter: 'blur(20px) saturate(180%)',
           background: 'rgba(255, 255, 255, 0.55)',
