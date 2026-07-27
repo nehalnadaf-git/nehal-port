@@ -85,6 +85,16 @@ export default function HeroSection() {
       ref={containerRef}
       className="min-h-screen flex flex-col items-center justify-center pt-24 pb-16 relative overflow-hidden"
     >
+      {/*
+        Visually-hidden H1 — required for SEO (one H1 per page rule).
+        The morphing "Nehal / Nadaf" text below is a <div> for animation purposes.
+        This hidden H1 gives Googlebot the semantic heading it expects on the homepage
+        without affecting the visual design.
+      */}
+      <h1 className="sr-only">
+        Nehal Nadaf — Freelance Web Developer, UI/UX Designer &amp; Video Editor in Hubli, Karnataka
+      </h1>
+
       {/* Centered Stacking Wrapper */}
       <div className="relative flex items-center justify-center w-full my-auto select-none">
 

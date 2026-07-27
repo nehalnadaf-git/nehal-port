@@ -1,10 +1,11 @@
 /**
  * /videos page metadata — server component layout.
  * Provides unique, keyword-rich SEO for the video production portfolio page.
- * BreadcrumbList + ItemList JSON-LD for rich results in Google.
+ * BreadcrumbList + ItemList + VideoObject JSON-LD for rich results in Google.
  */
 
 import { buildMetadata, SEO } from '@/lib/seo';
+import { cldPoster, cldVideo } from '@/lib/cloudinary';
 
 export const metadata = buildMetadata({
   title: 'Video Projects — Nehal Nadaf | Cinematic Video Editor Hubli Karnataka India',
@@ -51,7 +52,82 @@ const breadcrumbSchema = {
   ],
 };
 
-// ItemList schema — exposes all 6 actual video works to Google structured data
+// VideoObject schema — allows Google to show individual videos in Search & Discover
+// Each VideoObject needs: name, description, thumbnailUrl, uploadDate, contentUrl
+const videoObjectSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Video Production Portfolio — Nehal Nadaf',
+  url: `${SEO.baseUrl}/videos`,
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      item: {
+        '@type': 'VideoObject',
+        name: 'TPF Tajweed — Brand Reel',
+        description: 'Brand reel video production for TPF Tajweed — cinematic editing and colour grading in DaVinci Resolve by Nehal Nadaf, Hubli Karnataka.',
+        thumbnailUrl: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4'),
+        contentUrl: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4'),
+        uploadDate: '2025-05-18',
+        author: { '@id': `${SEO.baseUrl}/#person` },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      item: {
+        '@type': 'VideoObject',
+        name: 'True Path Foundation ADV — Brand Reel',
+        description: 'Vertical brand advertisement video for True Path Foundation — cinematic editing in DaVinci Resolve by Nehal Nadaf.',
+        thumbnailUrl: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785126183/True_Path_foundation_ADV_apywir.mp4'),
+        contentUrl: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785126183/True_Path_foundation_ADV_apywir.mp4'),
+        uploadDate: '2025-05-27',
+        author: { '@id': `${SEO.baseUrl}/#person` },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      item: {
+        '@type': 'VideoObject',
+        name: 'Empire Commercial — Cinematic Brand Film',
+        description: 'Cinematic commercial video for Empire Restaurant — professional colour grading in DaVinci Resolve by Nehal Nadaf, Hubli.',
+        thumbnailUrl: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353306/Empire_Commercial_Video_3_fuccwf.mp4'),
+        contentUrl: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353306/Empire_Commercial_Video_3_fuccwf.mp4'),
+        uploadDate: '2025-05-18',
+        author: { '@id': `${SEO.baseUrl}/#person` },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 4,
+      item: {
+        '@type': 'VideoObject',
+        name: 'Al Moon Academy — Short Form Video',
+        description: 'Short-form social media video for Al Moon Academy — Instagram and YouTube content production by Nehal Nadaf.',
+        thumbnailUrl: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4'),
+        contentUrl: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4'),
+        uploadDate: '2025-05-18',
+        author: { '@id': `${SEO.baseUrl}/#person` },
+      },
+    },
+    {
+      '@type': 'ListItem',
+      position: 5,
+      item: {
+        '@type': 'VideoObject',
+        name: 'YC5 Brand Film Production',
+        description: 'Professional brand film with advanced colour grading — DaVinci Resolve, produced by Nehal Nadaf, Hubli Karnataka.',
+        thumbnailUrl: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785126518/YC5_slkuzx.mp4'),
+        contentUrl: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785126518/YC5_slkuzx.mp4'),
+        uploadDate: '2025-05-27',
+        author: { '@id': `${SEO.baseUrl}/#person` },
+      },
+    },
+  ],
+};
+
 const videoListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
@@ -84,6 +160,10 @@ export default function VideosLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(videoListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObjectSchema) }}
       />
       {children}
     </>

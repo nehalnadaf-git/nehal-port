@@ -1,0 +1,96 @@
+# Nehal Nadaf — Creative Portfolio
+
+> Nehal Nadaf is a freelance web developer, UI/UX designer, video editor, and social media agency founder based in Hubli, Karnataka, India. He builds premium websites, produces cinematic brand videos, and runs influencer marketing campaigns for businesses across India and worldwide.
+
+## Who is Nehal Nadaf?
+
+Nehal Nadaf is a multi-disciplinary creative professional with 5+ years of experience delivering end-to-end digital work for businesses. He operates from Hubli, Karnataka, India, serving clients locally, remotely across India, and internationally.
+
+He is the founder of a boutique creative agency in Hubli that provides web development, video production, social media management, and influencer marketing as a single cohesive offering.
+
+## Services
+
+### Web Development
+- Custom websites and web applications using React.js, Next.js, TypeScript, Tailwind CSS, and GSAP
+- All projects deployed on Vercel with sub-second load times, 90+ Lighthouse scores, and full SEO optimisation
+- Serving small businesses, startups, and entrepreneurs across India and worldwide
+
+### UI/UX Design
+- Conversion-focused digital experiences with modern typography, micro-animations, and user-centred design
+- Tools: Figma
+- Available for international projects remotely
+
+### Video Production & Editing
+- Cinematic video editing and professional colour grading using DaVinci Resolve
+- Specialities: brand films, Instagram Reels, YouTube content, product promos
+- Clients include automotive detailing studios, restaurants, dental clinics, and educational institutions
+
+### Social Media Management & Marketing
+- Full-service social media content production, strategy, and management
+- Instagram Reels production, branded graphics, YouTube video editing
+- Serving brands in Hubli, Karnataka, and across India
+
+### Influencer Marketing
+- Connects brands with Instagram and YouTube content creators in Hubli, Karnataka, and across India
+- Influencers average 50K–100K+ views per post
+- End-to-end campaign management: strategy, creator matching, content review, performance tracking
+
+## Portfolio
+
+### Website Projects (9+ delivered)
+- Auto Glam Detailing Studio — https://auto-glam.vercel.app
+- CARDEE The Detailing Studio — https://cardee-detailing-studio.vercel.app
+- Baba Royal Garage — https://baba-royal-garage-m6hv.vercel.app
+- Apex Dental Clinic — https://apex-dental-five.vercel.app
+- Empire Restaurant — https://empire-restaurant.vercel.app
+- Annachi Tiffin Centre — https://annachi-tiffin-centre.vercel.app
+- Hosatti Home Services — https://hosatti.com
+- Custom Resume Website (Arshan Girniwale) — https://arshan-girniwale-resume.vercel.app
+- LNS Industrial Piping — https://lns-piping.vercel.app
+
+### Video Projects
+- TPF Tajweed — Brand Reel
+- True Path Foundation ADV — Brand Reel
+- Empire Commercial — Cinematic Brand Film
+- Al Moon Academy — Short Form Social Media Video
+- Brand Reel — Social Media Video Production
+- Brand Film Production — DaVinci Resolve Colour Grade
+
+### Influencer Collaborations (Karnataka-based)
+- @kaifofficial_19 — 60K+ avg views/post
+- @afozz_ae — 70K+ avg views/post
+- @hubballitimes — 70K+ avg views/post (Hubballi local news)
+- @nadeem_pov — 50K+ avg views/post
+- @sahil_hvines — 100K+ avg views/post
+- @yavvooshahid — 70K+ avg views/post
+
+## Technology Stack
+
+**Web:** React.js, Next.js 16, TypeScript, Tailwind CSS v4, GSAP, Framer Motion, Vercel, PWA
+**Design:** Figma, Adobe Photoshop
+**Video:** DaVinci Resolve, Adobe Premiere Pro, CapCut Pro
+**Social:** Instagram, YouTube, Meta Business Suite
+
+## Location & Availability
+
+- **Based in:** Hubli, Karnataka, India (PIN: 580029)
+- **Local service area:** Hubli, Dharwad, Bangalore (on-site & remote)
+- **India-wide:** Remote work for any client across India
+- **International:** Remote work worldwide
+- **Working hours:** Monday–Saturday, 09:00–21:00 IST
+
+## Contact
+
+- **Website:** https://nehalnadaf.me
+- **Email:** nehalnadaff@gmail.com
+- **Phone / WhatsApp:** +91 6363278962
+- **LinkedIn:** https://linkedin.com/in/nehal-nadaf-473800414
+- **Instagram:** https://instagram.com/nehalnadaxf
+- **X (Twitter):** https://x.com/NadafNehal
+
+## Pages
+
+- Homepage — https://nehalnadaf.me
+- Website Projects — https://nehalnadaf.me/projects
+- Video Projects — https://nehalnadaf.me/videos
+- Influencer Marketing — https://nehalnadaf.me/influencers

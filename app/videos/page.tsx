@@ -46,7 +46,22 @@ function VideoCard({
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.play().catch(() => {});
+
+    // Play only when the tile enters the viewport — prevents 28 simultaneous
+    // decoders (7 items × 4 grid copies) from firing on mount and crashing mobile.
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      },
+      { threshold: 0.1, rootMargin: '50px' },
+    );
+
+    observer.observe(v);
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -68,13 +83,13 @@ function VideoCard({
     >
       <video
         ref={videoRef}
+        data-grid-video="true"
         src={item.src}
         poster={item.thumbSrc}
-        autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="none"
         style={{
           position: 'absolute', top: 0, left: 0,
           width: '100%', height: '100%', objectFit: 'cover',
