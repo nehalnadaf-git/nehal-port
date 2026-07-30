@@ -30,12 +30,15 @@ function clamp(v: number, min: number, max: number) {
 }
 
 function getCardSize(vw: number): { w: number; h: number } {
-  // On narrow phones (320px iPhone SE), ensure 16px margin on each side so adjacent cards remain visible
+  // Cap at 64% of viewport so adjacent cards always show ~18% on each side.
+  // A card wider than 65% of the viewport hides the neighbours behind the center card.
   if (vw < 480) {
-    const w = Math.min(vw - 32, 300);
+    const w = Math.min(Math.round(vw * 0.64), 240);
     return { w, h: Math.round(w * 9 / 16) };
   }
-  if (vw < 768) return { w: 480, h: 270 };
+  // 640px breakpoint prevents 480-639px devices from showing a 480px card (too wide)
+  if (vw < 640) return { w: 320, h: 180 };
+  if (vw < 768) return { w: 440, h: 248 };
   if (vw < 1200) return { w: 640, h: 360 };
   return { w: 760, h: 428 };
 }
@@ -94,8 +97,11 @@ export default function ArcCarousel({
 
   const totalCards = items.length;
   const cardSize = getCardSize(vw);
-  const angleStepDeg = vw < 768 ? 14 : 9.5;
-  const spacingRatio = vw < 768 ? 0.65 : 0.58;
+  // 16° step (mobile): tighter arc curve, less vertical drop per card vs 14°
+  const angleStepDeg = vw < 768 ? 16 : 9.5;
+  // 0.56 spacing (mobile): centre-to-centre = 56% of card width — cards sit closer
+  // on the fan and match the visual density of the VideoArcCarousel's 9:16 cards
+  const spacingRatio = vw < 768 ? 0.56 : 0.54;
   const arcRadius = (cardSize.w * spacingRatio) / Math.sin(angleStepDeg * DEG);
 
   // ─── Position each card on the arc ─────────────────────────────────────────
@@ -306,6 +312,8 @@ export default function ArcCarousel({
     rafId.current = requestAnimationFrame(animate);
     const onResize = () => setVw(window.innerWidth);
     window.addEventListener('resize', onResize);
+    // orientationchange fires on mobile before resize — re-evaluate vw immediately
+    window.addEventListener('orientationchange', onResize);
 
     // ─── IntersectionObserver: only load video data when carousel is near viewport
     const observer = new IntersectionObserver(
@@ -325,6 +333,7 @@ export default function ArcCarousel({
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
       if (snapTimer.current) clearTimeout(snapTimer.current);
       observer.disconnect();
     };
@@ -368,7 +377,11 @@ export default function ArcCarousel({
                 onPointerDown={onPointerDown}
                 onPointerMove={onPointerMove}
                 onPointerUp={() => onPointerUp(i)}
-                onPointerCancel={() => { isDragging.current = false; }}
+                onPointerCancel={(e) => {
+                  isDragging.current = false;
+                  // Release capture so iOS doesn't lock further pointer events
+                  try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+                }}
                 onMouseEnter={() => onCardMouseEnter(i)}
                 onMouseLeave={onCardMouseLeave}
                 style={{
@@ -437,11 +450,11 @@ export default function ArcCarousel({
             );
           })}
 
-          {/* Bottom glassmorphic blur */}
+          {/* Bottom gradient overlay — matches VideoArcCarousel for consistency */}
           <div style={{
-            position: 'absolute', left: 0, right: 0, bottom: -2, height: '160px',
+            position: 'absolute', left: 0, right: 0, bottom: -2, height: '120px',
             background: 'linear-gradient(to top, var(--background) 40%, transparent 100%)',
-            pointerEvents: 'none', zIndex: 100, backdropFilter: 'blur(4px)',
+            pointerEvents: 'none', zIndex: 100,
           }} />
         </div>
 
@@ -453,16 +466,18 @@ export default function ArcCarousel({
               onClick={() => goToCard(i)}
               aria-label={`Go to project ${i + 1}`}
               style={{
-                minWidth: '28px',
-                minHeight: '28px',
+                // 44×44 min tap target (WCAG 2.5.5 / Apple HIG)
+                minWidth: '44px',
+                minHeight: '44px',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: '4px',
+                padding: '6px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
               }}
             >
               <span style={{
@@ -508,16 +523,20 @@ export default function ArcCarousel({
         </div>
 
         {/* Mobile swipe hint — hidden on desktop via CSS pointer media query */}
-        <p className="arc-swipe-hint" style={{
-          textAlign: 'center',
-          fontSize: '10px',
-          letterSpacing: '0.12em',
-          color: 'var(--muted-foreground)',
-          fontFamily: "'JetBrains Mono', monospace",
-          opacity: 0.55,
-          paddingBottom: '8px',
-          marginTop: '-4px',
-        }}>
+        <p
+          className="arc-swipe-hint"
+          aria-hidden="true"
+          style={{
+            textAlign: 'center',
+            fontSize: '10px',
+            letterSpacing: '0.12em',
+            color: 'var(--muted-foreground)',
+            fontFamily: "'JetBrains Mono', monospace",
+            opacity: 0.55,
+            paddingBottom: '8px',
+            marginTop: '-4px',
+          }}
+        >
           ← swipe to explore →
         </p>
       </div>

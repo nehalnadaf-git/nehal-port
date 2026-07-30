@@ -63,12 +63,13 @@ export default function VideoArcCarousel({
   const rafId = useRef<number | null>(null);
   const snapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pointerMovedRef = useRef(false);
-  // Tracks which card index is currently hovered (for pop effect)
   const hoveredCardIndexRef = useRef(-1);
   // Bidirectional visibility: pauses RAF when section scrolls off screen
   const isInViewRef = useRef(true);
   // Tracks last rendered active index — prevents 60 React re-renders/sec
   const prevActiveRef = useRef(-1);
+  // Lightbox ref — avoids adding lightboxItem to animate deps (which restarts RAF on every open/close)
+  const lightboxItemRef = useRef<LightboxItem | null>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [vw, setVw] = useState(1200);
@@ -91,6 +92,10 @@ export default function VideoArcCarousel({
     });
   }, [isVisible]);
 
+  // Sync lightbox ref so animate loop doesn't need it as a dep
+  useEffect(() => {
+    lightboxItemRef.current = lightboxItem;
+  }, [lightboxItem]);
 
   const totalCards = items.length;
   const cardSize = getCardSize(vw);
@@ -103,12 +108,15 @@ export default function VideoArcCarousel({
   const updateCards = useCallback(() => {
     const offset = offsetRef.current;
     const centerX = vw / 2;
+    // Top breathing room — mirrors ArcCarousel
+    const topPad = vw < 768 ? 20 : 40;
 
     cardsRef.current.forEach((el, i) => {
       if (!el) return;
 
       const item = items[i];
-      const isHorizontal = item?.aspectRatio === 'horizontal' || item?.title === 'Al Moon Academy' || item?.title === 'Empire Commercial';
+      // Use aspectRatio field consistently — no title-matching hacks
+      const isHorizontal = item?.aspectRatio === 'horizontal';
       const w = isHorizontal ? Math.round(cardSize.h * 1.1) : cardSize.w;
       const h = isHorizontal ? Math.round(cardSize.w * 0.72) : cardSize.h;
 
@@ -121,13 +129,12 @@ export default function VideoArcCarousel({
       const angleRad = angleDeg * DEG;
 
       const x = arcRadius * Math.sin(angleRad);
-      const y = arcRadius * (1 - Math.cos(angleRad));
+      const y = topPad + arcRadius * (1 - Math.cos(angleRad));
       const rotateZ = angleDeg;
 
       const distFromCenter = Math.abs(indexOffset);
       const scale = clamp(1 - distFromCenter * 0.05, 0.65, 1);
 
-      const opacity = 1;
       const zIndex = Math.round((totalCards - distFromCenter) * 10);
 
       el.style.transform = `translate3d(${centerX + x - w / 2}px, ${y}px, 0) rotate(${rotateZ}deg) scale(${scale})`;
@@ -155,7 +162,7 @@ export default function VideoArcCarousel({
       prevActiveRef.current = active;
       setActiveIndex(active);
     }
-  }, [vw, arcRadius, angleStepDeg, cardSize.w, totalCards]);
+  }, [vw, arcRadius, angleStepDeg, cardSize.w, cardSize.h, totalCards, items]);
 
   // ─── RAF animation loop ────────────────────────────────────────────────────
 
@@ -166,7 +173,8 @@ export default function VideoArcCarousel({
       return;
     }
     // If lightbox is open, keep loop ticking but skip position updates
-    if (lightboxItem) {
+    // Using a ref instead of state avoids adding lightboxItem to deps (which would restart RAF on every open/close)
+    if (lightboxItemRef.current) {
       rafId.current = requestAnimationFrame(animate);
       return;
     }
@@ -197,7 +205,8 @@ export default function VideoArcCarousel({
 
     updateCards();
     rafId.current = requestAnimationFrame(animate);
-  }, [updateCards, driftSpeed, totalCards, lightboxItem]);
+  }, [updateCards, driftSpeed, totalCards]);
+  // Note: lightboxItem intentionally excluded — we use lightboxItemRef to avoid RAF restart
 
   // ─── Pointer handlers ──────────────────────────────────────────────────────
 
@@ -236,12 +245,14 @@ export default function VideoArcCarousel({
     if (!pointerMovedRef.current) {
       // Tap on any card → open lightbox & bring card to center
       const src = items[index];
-      setLightboxItem({
+      const lb: LightboxItem = {
         src: src.src,
         title: src.title,
         category: src.label,
         aspectRatio: src.aspectRatio ?? 'vertical',
-      });
+      };
+      lightboxItemRef.current = lb;
+      setLightboxItem(lb);
       isDrifting.current = false;
       if (snapTimer.current) clearTimeout(snapTimer.current);
       const currentPos = offsetRef.current;
@@ -308,7 +319,12 @@ export default function VideoArcCarousel({
     }, 2000);
   }, [totalCards]);
 
-  // ─── Escape key handled by PortfolioLightbox ───────────────────────────────
+  // ─── Close lightbox ─────────────────────────────────────────────────────────
+
+  const closeLightbox = useCallback(() => {
+    lightboxItemRef.current = null;
+    setLightboxItem(null);
+  }, []);
 
   // ─── Lifecycle ─────────────────────────────────────────────────────────────
 
@@ -317,6 +333,8 @@ export default function VideoArcCarousel({
     rafId.current = requestAnimationFrame(animate);
     const onResize = () => setVw(window.innerWidth);
     window.addEventListener('resize', onResize);
+    // orientationchange fires on mobile before resize — re-evaluate vw immediately
+    window.addEventListener('orientationchange', onResize);
 
     // ─── IntersectionObserver: only load video data when carousel is near viewport
     const observer = new IntersectionObserver(
@@ -336,6 +354,7 @@ export default function VideoArcCarousel({
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('orientationchange', onResize);
       if (snapTimer.current) clearTimeout(snapTimer.current);
       observer.disconnect();
     };
@@ -344,6 +363,15 @@ export default function VideoArcCarousel({
   useEffect(() => { updateCards(); }, [updateCards]);
 
   // ─── Render ────────────────────────────────────────────────────────────────
+
+  // Proper viewport height: top breathing room + tallest card + arc drop for max visible offset + bottom pad.
+  // max visible = floor(totalCards/2); cards beyond that are intentionally clipped by the bottom gradient.
+  const topPad = vw < 768 ? 20 : 40;
+  const bottomPad = vw < 768 ? 24 : 40;
+  const maxOffset = Math.floor(totalCards / 2);
+  const maxAngleRad = maxOffset * angleStepDeg * DEG;
+  const maxDrop = arcRadius * (1 - Math.cos(maxAngleRad));
+  const viewportH = topPad + cardSize.h + maxDrop + bottomPad;
 
   return (
     <>
@@ -358,7 +386,7 @@ export default function VideoArcCarousel({
           style={{
             position: 'relative',
             width: '100%',
-            height: `${cardSize.h + arcRadius * 0.38 + (vw < 768 ? 24 : 60)}px`,
+            height: `${viewportH}px`,
             overflow: 'hidden',
             userSelect: 'none',
             // Ensure browser allows horizontal drag without fighting vertical scroll
@@ -367,7 +395,8 @@ export default function VideoArcCarousel({
         >
           {items.map((item, i) => {
             const isActive = i === activeIndex;
-            const isHorizontal = item.title === 'Al Moon Academy';
+            // Use aspectRatio field consistently — no title-matching hacks
+            const isHorizontal = item.aspectRatio === 'horizontal';
             const w = isHorizontal ? cardSize.h : cardSize.w;
             const h = isHorizontal ? cardSize.w : cardSize.h;
             return (
@@ -378,7 +407,11 @@ export default function VideoArcCarousel({
                 onPointerDown={onPointerDown}
                 onPointerMove={onPointerMove}
                 onPointerUp={() => onPointerUp(i)}
-                onPointerCancel={() => { isDragging.current = false; }}
+                onPointerCancel={(e) => {
+                  isDragging.current = false;
+                  // Release capture so iOS doesn't lock further pointer events
+                  try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+                }}
                 onMouseEnter={() => onCardMouseEnter(i)}
                 onMouseLeave={onCardMouseLeave}
                 style={{
@@ -466,26 +499,35 @@ export default function VideoArcCarousel({
               </div>
             );
           })}
+
+          {/* Bottom gradient overlay — fades out partially-visible arc cards */}
+          <div style={{
+            position: 'absolute', left: 0, right: 0, bottom: -2, height: '120px',
+            background: 'linear-gradient(to top, var(--background) 40%, transparent 100%)',
+            pointerEvents: 'none', zIndex: 100,
+          }} />
         </div>
 
         {/* Sleek minimal thin line pagination */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '16px 0 8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', padding: '16px 0 8px' }}>
           {items.map((_, i) => (
             <button
               key={i}
               onClick={() => goToCard(i)}
               aria-label={`Go to video ${i + 1}`}
               style={{
-                minWidth: '28px',
-                minHeight: '28px',
+                // 44×44 min tap target (WCAG 2.5.5 / Apple HIG)
+                minWidth: '44px',
+                minHeight: '44px',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: '4px',
+                padding: '6px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation',
               }}
             >
               <span style={{
@@ -531,16 +573,20 @@ export default function VideoArcCarousel({
         </div>
 
         {/* Mobile swipe hint */}
-        <p className="arc-swipe-hint" style={{
-          textAlign: 'center',
-          fontSize: '10px',
-          letterSpacing: '0.12em',
-          color: 'var(--muted-foreground)',
-          fontFamily: "'JetBrains Mono', monospace",
-          opacity: 0.55,
-          paddingBottom: '8px',
-          marginTop: '-4px',
-        }}>
+        <p
+          className="arc-swipe-hint"
+          aria-hidden="true"
+          style={{
+            textAlign: 'center',
+            fontSize: '10px',
+            letterSpacing: '0.12em',
+            color: 'var(--muted-foreground)',
+            fontFamily: "'JetBrains Mono', monospace",
+            opacity: 0.55,
+            paddingBottom: '8px',
+            marginTop: '-4px',
+          }}
+        >
           ← swipe to explore →
         </p>
       </div>
@@ -548,7 +594,7 @@ export default function VideoArcCarousel({
       {/* ─── Lightbox ──────────────────────────────────────────────────────── */}
       <PortfolioLightbox
         item={lightboxItem}
-        onClose={() => setLightboxItem(null)}
+        onClose={closeLightbox}
         mounted={mounted}
       />
     </>

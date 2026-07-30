@@ -391,9 +391,11 @@ html.lenis, html.lenis body { height: auto; }
   font-family: 'JetBrains Mono', monospace;
   box-shadow: 3px 3px 0px #000000;
   white-space: nowrap;
-  min-height: 40px;
+  /* 44px min-height meets WCAG 2.5.5 / Apple HIG tap target requirements */
+  min-height: 44px;
   box-sizing: border-box;
   flex-shrink: 0;
+  touch-action: manipulation;
 }
 .section-toggle-btn:hover {
   background: #F2F1E6;

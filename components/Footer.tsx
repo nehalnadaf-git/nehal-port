@@ -110,10 +110,22 @@ export default function Footer() {
       </div>
 
       {/* Large TextMorph — rv-up then self-animating */}
+      {/*
+        overflow: visible is critical — the spans use translate3d(-50%,-50%) so they
+        physically extend beyond the div bounds. Any overflow:hidden ancestor clips them.
+        The negative mx breaks out of container-padding so wide italic text (e.g. "Nadaf")
+        never hits the edge on narrow viewports.
+      */}
       <div
         ref={morphRef}
-        className="rv-scale relative flex items-center justify-center w-full mt-12 md:mt-16 py-8"
-        style={{ minHeight: 'clamp(100px, 18vw, 240px)' }}
+        className="rv-scale relative flex items-center justify-center w-full mt-12 md:mt-16 py-8 pb-10"
+        style={{
+          minHeight: 'clamp(100px, 18vw, 240px)',
+          overflow: 'visible',
+          marginLeft: 'clamp(-20px, -5vw, -80px)',
+          marginRight: 'clamp(-20px, -5vw, -80px)',
+          width: 'calc(100% + clamp(40px, 10vw, 160px))',
+        }}
       >
         <MorphingText
           texts={["Nehal", "Nadaf"]}
@@ -124,6 +136,7 @@ export default function Footer() {
             height: "clamp(55px, 18vw, 240px)",
             letterSpacing: "-0.05em",
             color: "#000",
+            overflow: 'visible',
           }}
         />
       </div>

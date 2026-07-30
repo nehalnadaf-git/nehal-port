@@ -66,9 +66,9 @@ export default function PortfolioLightbox({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         padding: 'clamp(12px, 4vw, 24px)',
-        paddingTop: 'clamp(64px, 12vh, 80px)',
+        paddingTop: 'max(env(safe-area-inset-top, 0px), clamp(12px, 3vh, 20px))',
         paddingBottom: 'clamp(24px, 6vh, 48px)',
         boxSizing: 'border-box',
         overflowY: 'auto',
@@ -76,43 +76,54 @@ export default function PortfolioLightbox({
         animation: 'lbFadeIn 0.25s ease both',
       }}
     >
-      {/* ── Close button ─────────────────────────────────────────────────── */}
-      <button
-        onClick={(e) => { e.stopPropagation(); onClose(); }}
-        aria-label="Close lightbox"
+      {/* ── Close button ────────────────────────────────────────────────────── */}
+      {/* position:absolute (not fixed) — stays within the scroll container so it
+          never floats over native UI on iOS Safari or Android Chrome */}
+      <div
+        onClick={(e) => e.stopPropagation()}
         style={{
-          position: 'fixed',
-          top: 'max(env(safe-area-inset-top, 0px), clamp(12px, 3vh, 20px))',
-          right: 'clamp(12px, 3vw, 20px)',
-          background: 'rgba(255,255,255,0.12)',
-          border: '1.5px solid rgba(255,255,255,0.25)',
-          borderRadius: '50%',
-          width: '46px',
-          height: '46px',
-          minWidth: '44px',
-          minHeight: '44px',
+          width: '100%',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          color: '#fff',
-          zIndex: 1000000,
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          transition: 'transform 0.2s ease, background 0.2s ease',
-          WebkitTapHighlightColor: 'transparent',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(255,255,255,0.22)';
-          e.currentTarget.style.transform = 'scale(1.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
-          e.currentTarget.style.transform = 'scale(1)';
+          justifyContent: 'flex-end',
+          marginBottom: '12px',
+          flexShrink: 0,
         }}
       >
-        <X size={20} />
-      </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); onClose(); }}
+          aria-label="Close lightbox"
+          style={{
+            background: 'rgba(255,255,255,0.12)',
+            border: '1.5px solid rgba(255,255,255,0.25)',
+            borderRadius: '50%',
+            width: '46px',
+            height: '46px',
+            minWidth: '44px',
+            minHeight: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: '#fff',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            transition: 'transform 0.2s ease, background 0.2s ease',
+            WebkitTapHighlightColor: 'transparent',
+            // Eliminates 300ms tap delay on iOS/Android
+            touchAction: 'manipulation',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.22)';
+            e.currentTarget.style.transform = 'scale(1.08)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
+            e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          <X size={20} />
+        </button>
+      </div>
 
       {/* ── Video container ───────────────────────────────────────────────── */}
       <div

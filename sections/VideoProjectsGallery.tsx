@@ -159,7 +159,9 @@ export default function VideoProjectsGallery() {
 
       setIsExpanded(true);
 
-      requestAnimationFrame(() => {
+      // Double-RAF: first frame lets React commit the re-render,
+      // second frame lets the browser measure the new scrollHeight reliably.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         if (!content) return;
         const targetH = content.scrollHeight;
         gsap.set(content, { height: 0, opacity: 0, overflow: 'hidden' });
@@ -174,7 +176,7 @@ export default function VideoProjectsGallery() {
             ScrollTrigger.refresh();
           },
         });
-      });
+      }));
     }
   }, [isExpanded]);
 
@@ -244,7 +246,7 @@ export default function VideoProjectsGallery() {
       <div
         ref={teaserRef}
         className="container-padding"
-        style={{ paddingBottom: '40px' }}
+        style={{ display: 'none', paddingBottom: '40px' }}
       >
         <p
           style={{

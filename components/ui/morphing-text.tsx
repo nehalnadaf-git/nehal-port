@@ -139,6 +139,8 @@ export function MorphingText({ texts, className, style }: MorphingTextProps) {
       style={{
         filter: `url(#${filterId}) blur(0.4px)`,
         WebkitFilter: `url(#${filterId}) blur(0.4px)`,
+        // overflow:visible prevents the translated spans from being clipped by this div's bounds
+        overflow: 'visible',
         ...style,
       }}
     >

@@ -175,8 +175,9 @@ export default function WebsiteProjectsGallery() {
 
       setIsExpanded(true);
 
-      // We need a frame for React to render the content
-      requestAnimationFrame(() => {
+      // Double-RAF: first frame lets React commit the re-render,
+      // second frame lets the browser measure the new scrollHeight reliably.
+      requestAnimationFrame(() => requestAnimationFrame(() => {
         if (!content) return;
         const targetH = content.scrollHeight;
         gsap.set(content, { height: 0, opacity: 0, overflow: 'hidden' });
@@ -192,7 +193,7 @@ export default function WebsiteProjectsGallery() {
             ScrollTrigger.refresh();
           },
         });
-      });
+      }));
     }
   }, [isExpanded]);
 

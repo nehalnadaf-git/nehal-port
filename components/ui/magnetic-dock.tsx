@@ -31,6 +31,8 @@ interface MagneticDockProps {
   showLabels?: boolean
   variant?: "glass" | "solid" | "transparent"
   className?: string
+  /** Pass isMobile from the parent to avoid duplicate state / hydration mismatch */
+  isMobile?: boolean
 }
 
 interface DockItemProps {
@@ -58,8 +60,9 @@ function DockItem({
   const ref = React.useRef<HTMLButtonElement>(null)
   const [isHovered, setIsHovered] = React.useState(false)
 
+  // ── Magnetic distance calculation ──────────────────────────────────────────
   const distance = useTransform(mouseX, (val: number) => {
-    if (!ref.current) return magneticDistance + 1
+    if (isMobile || !ref.current) return magneticDistance + 1
     const rect = ref.current.getBoundingClientRect()
     return val - (rect.left + rect.width / 2)
   })
@@ -67,36 +70,60 @@ function DockItem({
   const scale = useTransform(
     distance,
     [-magneticDistance, 0, magneticDistance],
-    [1, maxScale, 1],
+    isMobile ? [1, 1, 1] : [1, maxScale, 1],
   )
 
   const springCfg = { damping: 22, stiffness: 320, mass: 0.45 }
   const smoothScale = useSpring(scale, springCfg)
   const size = useTransform(smoothScale, (s) => s * iconSize)
+  // Only apply Y lift on desktop — keeps mobile dock flat and stable
   const rawY = useTransform(smoothScale, (s) => (isMobile ? 0 : (s - 1) * -10))
   const smoothY = useSpring(rawY, springCfg)
+
+  // ── Touch-device: simulate hover on tap ────────────────────────────────────
+  const handleTouchStart = React.useCallback(() => {
+    setIsHovered(true)
+  }, [])
+  const handleTouchEnd = React.useCallback(() => {
+    // Brief highlight, then fade
+    setTimeout(() => setIsHovered(false), 200)
+  }, [])
 
   return (
     <motion.button
       ref={ref}
       onClick={item.onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => !isMobile && setIsHovered(true)}
+      onMouseLeave={() => !isMobile && setIsHovered(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       aria-label={item.label}
+      aria-current={item.isActive ? "page" : undefined}
       className="relative flex items-center justify-center flex-shrink-0 rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2"
-      style={{ width: size, height: size, y: smoothY }}
+      style={{
+        width: size,
+        height: size,
+        y: smoothY,
+        // Eliminate 300ms tap delay on all mobile browsers
+        touchAction: "manipulation",
+        // Prevent text/icon selection on long-press
+        userSelect: "none",
+        WebkitUserSelect: "none",
+        // GPU compositing hint for smooth animation
+        willChange: "transform",
+      }}
       whileTap={{ scale: 0.85 }}
     >
-      {/* ── Icon shell: Neo-brutalist style ── */}
+      {/* ── Icon shell ── */}
       <motion.div
-        className="relative w-full h-full rounded-2xl overflow-hidden flex items-center justify-center"
+        className="relative w-full h-full rounded-2xl flex items-center justify-center overflow-hidden"
         style={{
           background: isHovered ? "#7C3AED" : "#ffffff",
           boxShadow: isHovered
             ? "4px 4px 0px 0px #000000"
             : "2px 2px 0px 0px #000000",
           border: "2px solid #000000",
-          transition: "background 0.2s ease, box-shadow 0.2s ease, border 0.2s ease",
+          transition: "background 0.2s ease, box-shadow 0.2s ease",
         }}
       >
         {/* Icon */}
@@ -126,7 +153,7 @@ function DockItem({
         )}
       </AnimatePresence>
 
-      {/* ── Active dot ── */}
+      {/* ── Active dot — visible on all backgrounds via dark ring ── */}
       <AnimatePresence>
         {item.isActive && (
           <motion.span
@@ -134,15 +161,13 @@ function DockItem({
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="absolute -bottom-2.5 w-1.5 h-1.5 rounded-full"
-            style={{
-              background: "#ffffff",
-            }}
+            className="absolute -bottom-2.5 w-1.5 h-1.5 rounded-full border border-black/30"
+            style={{ background: "#ffffff" }}
           />
         )}
       </AnimatePresence>
 
-      {/* ── Tooltip (desktop only) ── */}
+      {/* ── Tooltip — desktop only, rendered outside icon shell to avoid clipping ── */}
       <AnimatePresence>
         {showLabels && isHovered && !isMobile && (
           <motion.div
@@ -151,7 +176,8 @@ function DockItem({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.88 }}
             transition={{ duration: 0.14, ease: "easeOut" }}
-            className="absolute -top-10 left-1/2 -translate-x-1/2 z-50 px-2.5 py-1.5 rounded-lg whitespace-nowrap pointer-events-none"
+            // Use fixed positioning via translate trick — stays above overflow boundaries
+            className="absolute -top-10 left-1/2 -translate-x-1/2 z-[300] px-2.5 py-1.5 rounded-lg whitespace-nowrap pointer-events-none"
             style={{
               background: "#ffffff",
               border: "2px solid #000000",
@@ -189,16 +215,9 @@ export function MagneticDock({
   showLabels = true,
   variant = "glass",
   className,
+  isMobile = false,
 }: MagneticDockProps) {
   const mouseX = useMotionValue(Infinity)
-  const [isMobile, setIsMobile] = React.useState(false)
-
-  React.useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640)
-    check()
-    window.addEventListener("resize", check)
-    return () => window.removeEventListener("resize", check)
-  }, [])
 
   const variantStyles: Record<NonNullable<MagneticDockProps["variant"]>, React.CSSProperties> = {
     glass: {
@@ -221,14 +240,21 @@ export function MagneticDock({
 
   return (
     <motion.div
-      onMouseMove={(e) => mouseX.set(e.clientX)}
+      onMouseMove={(e) => !isMobile && mouseX.set(e.clientX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "inline-flex items-end rounded-3xl",
+        // items-center keeps icons vertically stable during scale animation;
+        // items-end caused drift on mobile where y-lift is disabled
+        "inline-flex items-center rounded-3xl",
+        // Ensure tooltips (absolutely positioned children) are not clipped
+        "overflow-visible",
         isMobile ? "gap-1.5 px-3 py-2.5" : "gap-2 px-4 py-3",
         className,
       )}
-      style={variantStyles[variant ?? "glass"]}
+      style={{
+        ...variantStyles[variant ?? "glass"],
+        willChange: "transform, opacity",
+      }}
       initial={{ opacity: 0, y: 28, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
