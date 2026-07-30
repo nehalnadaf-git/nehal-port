@@ -58,6 +58,13 @@ const websiteProjects: ArcCarouselItem[] = [
     url: 'annachi-tiffin-centre.vercel.app',
   },
   {
+    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785392081/tippu-shaheed_wayjlm.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785392081/tippu-shaheed_wayjlm.mp4'),
+    alt: 'Tippu Shaheed Education Trust',
+    category: 'Education',
+    url: 'tippu-shaheed.vercel.app',
+  },
+  {
     src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
     poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
     alt: 'Hosatti Home Services',
@@ -270,7 +277,7 @@ export default function WebsiteProjectsGallery() {
             maxWidth: '560px',
           }}
         >
-          9+ live client websites across automotive, healthcare, hospitality, home-service &amp; industrial industries — built with React.js, Next.js, and Tailwind CSS.
+          10+ live client websites across automotive, education, healthcare, hospitality, home-service &amp; industrial industries — built with React.js, Next.js, and Tailwind CSS.
           <span
             style={{
               display: 'inline-block',
@@ -301,7 +308,7 @@ export default function WebsiteProjectsGallery() {
               lineHeight: 1.6,
             }}
           >
-            9+ live client websites across automotive, healthcare, hospitality, home-service, and industrial industries — built with React.js, Next.js, and Tailwind CSS.
+            10+ live client websites across automotive, education, healthcare, hospitality, home-service, and industrial industries — built with React.js, Next.js, and Tailwind CSS.
           </p>
         </div>
 

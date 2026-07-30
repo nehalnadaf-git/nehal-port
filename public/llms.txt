@@ -37,13 +37,14 @@ He is the founder of a boutique creative agency in Hubli that provides web devel
 
 ## Portfolio
 
-### Website Projects (9+ delivered)
+### Website Projects (10+ delivered)
 - Auto Glam Detailing Studio — https://auto-glam.vercel.app
 - CARDEE The Detailing Studio — https://cardee-detailing-studio.vercel.app
 - Baba Royal Garage — https://baba-royal-garage-m6hv.vercel.app
 - Apex Dental Clinic — https://apex-dental-five.vercel.app
 - Empire Restaurant — https://empire-restaurant.vercel.app
 - Annachi Tiffin Centre — https://annachi-tiffin-centre.vercel.app
+- Tippu Shaheed Education Trust — https://tippu-shaheed.vercel.app
 - Hosatti Home Services — https://hosatti.com
 - Custom Resume Website (Arshan Girniwale) — https://arshan-girniwale-resume.vercel.app
 - LNS Industrial Piping — https://lbownetworksolutions.com

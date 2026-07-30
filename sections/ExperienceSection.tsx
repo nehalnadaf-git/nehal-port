@@ -10,7 +10,7 @@ const experiences = [
     role: 'WEB DEVELOPER • UI/UX DESIGNER • VIDEO EDITOR',
     date: '2021 - PRESENT',
     description:
-      'Designed, engineered, and deployed 8+ professional business websites across automotive detailing, dental healthcare, food service, and home-appliance industries. Built performance-optimised, mobile-first sites using React.js, Next.js, Tailwind CSS, and GSAP — deployed on Vercel. Concurrently delivered 5+ years of professional video editing in DaVinci Resolve: brand videos, Instagram Reels, YouTube content, and product promos with advanced colour grading and audio mastering.',
+      'Designed, engineered, and deployed 10+ professional business websites across automotive detailing, education, dental healthcare, food service, and home-appliance industries. Built performance-optimised, mobile-first sites using React.js, Next.js, Tailwind CSS, and GSAP — deployed on Vercel. Concurrently delivered 5+ years of professional video editing in DaVinci Resolve: brand videos, Instagram Reels, YouTube content, and product promos with advanced colour grading and audio mastering.',
   },
   {
     company: 'Social Media Agency',

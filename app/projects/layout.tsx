@@ -9,7 +9,7 @@ import { buildMetadata, SEO } from '@/lib/seo';
 export const metadata = buildMetadata({
   title: 'Website Projects — Nehal Nadaf | Web Developer Hubli Karnataka India',
   description:
-    'Explore 9+ professional business websites built by Nehal Nadaf — web developer in Hubli, Karnataka. Projects span automotive detailing, dental healthcare, restaurants, food service, and home-appliance industries. Built with React.js, Next.js, Tailwind CSS, GSAP, deployed on Vercel.',
+    'Explore 10+ professional business websites built by Nehal Nadaf — web developer in Hubli, Karnataka. Projects span automotive detailing, education, dental healthcare, restaurants, food service, and home-appliance industries. Built with React.js, Next.js, Tailwind CSS, GSAP, deployed on Vercel.',
   canonicalPath: '/projects',
   keywords: [
     'website portfolio Hubli',
@@ -47,14 +47,14 @@ const breadcrumbSchema = {
   ],
 };
 
-// ItemList schema — exposes all 9 portfolio websites to Google structured data
+// ItemList schema — exposes all 10 portfolio websites to Google structured data
 const itemListSchema = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
   name: 'Website Projects by Nehal Nadaf — Web Developer Hubli Karnataka',
-  description: '9+ professional business websites built by Nehal Nadaf — web developer based in Hubli, Karnataka, India. Stacks: React.js, Next.js, Tailwind CSS, GSAP, Vercel.',
+  description: '10+ professional business websites built by Nehal Nadaf — web developer based in Hubli, Karnataka, India. Stacks: React.js, Next.js, Tailwind CSS, GSAP, Vercel.',
   url: `${SEO.baseUrl}/projects`,
-  numberOfItems: 9,
+  numberOfItems: 10,
   itemListElement: [
     {
       '@type': 'ListItem',
@@ -101,20 +101,27 @@ const itemListSchema = {
     {
       '@type': 'ListItem',
       position: 7,
+      name: 'Tippu Shaheed Education Trust',
+      url: 'https://tippu-shaheed.vercel.app',
+      description: 'Educational trust & school website — React.js, Next.js, Tailwind CSS',
+    },
+    {
+      '@type': 'ListItem',
+      position: 8,
       name: 'Hosatti Home Services',
       url: 'https://hosatti.com',
       description: 'Home appliance repair and refrigeration service website',
     },
     {
       '@type': 'ListItem',
-      position: 8,
+      position: 9,
       name: 'Custom Resume Website — Arshan Girniwale',
       url: 'https://arshan-girniwale-resume.vercel.app',
       description: 'Personal resume and portfolio website — React.js, Next.js',
     },
     {
       '@type': 'ListItem',
-      position: 9,
+      position: 10,
       name: 'LNS Industrial Piping',
       url: 'https://lbownetworksolutions.com',
       description: 'Industrial piping and engineering services website',
