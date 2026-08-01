@@ -35,9 +35,23 @@ export default function PortfolioLightbox({
   onClose,
   mounted = true,
 }: PortfolioLightboxProps) {
-  // ── Escape key ─────────────────────────────────────────────────────────────
+  // ── Escape key + global lightbox open/close events ────────────────────────
+  //
+  // When the lightbox opens we broadcast a custom event so that any video
+  // carousel or page on the document (ArcCarousel, VideoArcCarousel, /videos
+  // page) can pause its background videos without prop-drilling or context.
+  // On close we broadcast the inverse event so they can resume.
+  // Using CustomEvent (not state) means zero React re-renders in the listeners.
   useEffect(() => {
-    if (!item) return;
+    if (!item) {
+      // Lightbox just closed
+      document.dispatchEvent(new CustomEvent('portfolio:lightbox-close'));
+      return;
+    }
+
+    // Lightbox just opened
+    document.dispatchEvent(new CustomEvent('portfolio:lightbox-open'));
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };

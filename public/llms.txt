@@ -44,7 +44,7 @@ He is the founder of a boutique creative agency in Hubli that provides web devel
 - Apex Dental Clinic — https://apex-dental-five.vercel.app
 - Empire Restaurant — https://empire-restaurant.vercel.app
 - Annachi Tiffin Centre — https://annachi-tiffin-centre.vercel.app
-- Tippu Shaheed Education Trust — https://tippu-shaheed.vercel.app
+- Tippu Shaheed Education Trust — https://tpshaheed.vercel.app
 - Hosatti Home Services — https://hosatti.com
 - Custom Resume Website (Arshan Girniwale) — https://arshan-girniwale-resume.vercel.app
 - LNS Industrial Piping — https://lbownetworksolutions.com

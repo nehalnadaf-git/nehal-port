@@ -29,6 +29,14 @@ export default function BrutalistMacCursor() {
   const clickScaleRef = useRef(1);
   const rafId = useRef<number | null>(null);
 
+  // ── Idle tracking — skip RAF work when mouse is perfectly still ──
+  const lastAppliedPos = useRef({ x: -999, y: -999 });
+  const lastAppliedScale = useRef(0);
+  const mouseMoved = useRef(false);
+
+  // ── Throttle mouseover cursor-type detection ──
+  const lastOverTime = useRef(0);
+
   useEffect(() => {
     // Mobile / touch devices: pointer:coarse — do nothing at all
     const mq = window.matchMedia('(pointer: fine)');
@@ -43,13 +51,23 @@ export default function BrutalistMacCursor() {
     const applyTransform = () => {
       if (!pointerRef.current || !svgWrapRef.current) return;
       const { x, y } = mouse.current;
-
-      // Move wrapper exactly to cursor position (no transition = 1:1 hardware sync)
-      pointerRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
-      // Apply combined scale to inner SVG wrapper (spring-animated)
       const totalScale = shakeScaleRef.current * clickScaleRef.current;
-      svgWrapRef.current.style.transform = `scale(${totalScale})`;
+
+      // Skip DOM write if nothing actually changed (saves GPU compositing when idle)
+      const posMoved = x !== lastAppliedPos.current.x || y !== lastAppliedPos.current.y;
+      const scaleChanged = Math.abs(totalScale - lastAppliedScale.current) > 0.001;
+
+      if (!posMoved && !scaleChanged) return;
+
+      if (posMoved) {
+        pointerRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        lastAppliedPos.current = { x, y };
+      }
+
+      if (scaleChanged) {
+        svgWrapRef.current.style.transform = `scale(${totalScale})`;
+        lastAppliedScale.current = totalScale;
+      }
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -57,6 +75,7 @@ export default function BrutalistMacCursor() {
       const x = e.clientX;
       const y = e.clientY;
       mouse.current = { x, y };
+      mouseMoved.current = true;
 
       // Visibility
       if (x <= 0 || y <= 0 || x >= window.innerWidth || y >= window.innerHeight) {
@@ -95,17 +114,22 @@ export default function BrutalistMacCursor() {
         x: e.clientX,
         y: e.clientY,
       };
-      setBursts((prev) => [...prev.slice(-4), burst]);
+      setBursts((prev) => [...prev.slice(-3), burst]);
       setTimeout(() => {
         setBursts((prev) => prev.filter((b) => b.id !== burst.id));
-      }, 450);
+      }, 400);
     };
 
     const handleMouseUp = () => {
       clickScaleRef.current = 1;
     };
 
+    // ── Throttled cursor type detection — max once per 40ms ──
     const handleMouseOver = (e: MouseEvent) => {
+      const now = performance.now();
+      if (now - lastOverTime.current < 40) return;
+      lastOverTime.current = now;
+
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
@@ -119,11 +143,14 @@ export default function BrutalistMacCursor() {
         'a, button, input[type="submit"], input[type="button"], [role="button"], summary, label, [tabindex], .interactive, [data-cursor="pointer"], .cursor-pointer'
       );
 
+      // Only check computed style as a fallback when no semantic match found
       let isCssPointer = false;
-      try {
-        const compCursor = window.getComputedStyle(target).cursor;
-        isCssPointer = compCursor === 'pointer';
-      } catch { /* ignore */ }
+      if (!inputEl && !grabEl && !interactiveEl) {
+        try {
+          const compCursor = window.getComputedStyle(target).cursor;
+          isCssPointer = compCursor === 'pointer';
+        } catch { /* ignore */ }
+      }
 
       if (inputEl) {
         setCursorType('ibeam');
@@ -152,7 +179,7 @@ export default function BrutalistMacCursor() {
       targetShakeScale.current += (1.0 - targetShakeScale.current) * 0.08;
       shakeScaleRef.current += (targetShakeScale.current - shakeScaleRef.current) * 0.15;
 
-      // Click spring spring back
+      // Click spring back
       const clickTarget = 1;
       clickScaleRef.current += (clickTarget - clickScaleRef.current) * 0.18;
 
@@ -223,16 +250,16 @@ export default function BrutalistMacCursor() {
           transition: 'opacity 0.15s ease',
         }}
       >
-        {/* ── SVG wrapper for scale animations ── */}
+        {/* ── SVG wrapper for scale animations ──
+            drop-shadow removed: it forces a per-frame GPU filter re-composite,
+            which is the #1 cause of cursor lag on mid-range hardware.  */}
         <div
           ref={svgWrapRef}
           style={{
             ...getHotspotStyle(),
             transformOrigin: '2px 2px',
-            filter: 'drop-shadow(2px 3px 0px rgba(0,0,0,0.85))',
             // Scale transition for smooth spring feel on cursor type change
             transition: 'margin 0.15s ease',
-            willChange: 'transform',
           }}
         >
           {cursorType === 'arrow' && <Modern3DArrowSVG />}
@@ -247,28 +274,28 @@ export default function BrutalistMacCursor() {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
- * RADIAL CLICK BURST SVG
+ * RADIAL CLICK BURST SVG — simplified to 6 rays (was 8) for lighter animation
  * ──────────────────────────────────────────────────────────────────────────── */
 function RadialClickBurstSVG() {
-  const rays = [0, 45, 90, 135, 180, 225, 270, 315];
+  const rays = [0, 60, 120, 180, 240, 300];
   return (
     <svg
-      width="60"
-      height="60"
-      viewBox="-30 -30 60 60"
+      width="52"
+      height="52"
+      viewBox="-26 -26 52 52"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ position: 'absolute', top: '-30px', left: '-30px', pointerEvents: 'none' }}
+      style={{ position: 'absolute', top: '-26px', left: '-26px', pointerEvents: 'none' }}
     >
       <style>{`
         @keyframes sparkBurst {
           0%   { opacity: 1; transform: scale(0.3) rotate(var(--angle)); }
-          65%  { opacity: 1; transform: scale(1.15) rotate(var(--angle)); }
-          100% { opacity: 0; transform: scale(1.45) rotate(var(--angle)); }
+          65%  { opacity: 1; transform: scale(1.1) rotate(var(--angle)); }
+          100% { opacity: 0; transform: scale(1.4) rotate(var(--angle)); }
         }
         .spark-ray {
           transform-origin: 0px 0px;
-          animation: sparkBurst 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          animation: sparkBurst 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
       `}</style>
       {rays.map((angle) => (
@@ -278,10 +305,10 @@ function RadialClickBurstSVG() {
           style={{ '--angle': `${angle}deg` } as React.CSSProperties}
         >
           <path
-            d="M 0 -9 C 1.4 -9, 2.0 -14, 0 -18 C -2.0 -14, -1.4 -9, 0 -9 Z"
+            d="M 0 -8 C 1.2 -8, 1.8 -12, 0 -16 C -1.8 -12, -1.2 -8, 0 -8 Z"
             fill="#A855F7"
             stroke="#000000"
-            strokeWidth="0.9"
+            strokeWidth="0.7"
           />
         </g>
       ))}

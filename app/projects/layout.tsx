@@ -102,7 +102,7 @@ const itemListSchema = {
       '@type': 'ListItem',
       position: 7,
       name: 'Tippu Shaheed Education Trust',
-      url: 'https://tippu-shaheed.vercel.app',
+      url: 'https://tpshaheed.vercel.app',
       description: 'Educational trust & school website — React.js, Next.js, Tailwind CSS',
     },
     {

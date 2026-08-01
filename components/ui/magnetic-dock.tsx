@@ -221,9 +221,9 @@ export function MagneticDock({
 
   const variantStyles: Record<NonNullable<MagneticDockProps["variant"]>, React.CSSProperties> = {
     glass: {
-      background: "rgba(124, 58, 237, 0.9)",
-      backdropFilter: "blur(20px)",
-      WebkitBackdropFilter: "blur(20px)",
+      // backdropFilter blur removed: it is the most GPU-expensive CSS property and
+      // caused stutter on mid-range hardware. Solid semi-transparent bg looks identical.
+      background: "rgba(100, 40, 200, 0.92)",
       border: "3px solid #000000",
       boxShadow: "4px 4px 0px 0px #000000",
     },
@@ -253,7 +253,9 @@ export function MagneticDock({
       )}
       style={{
         ...variantStyles[variant ?? "glass"],
-        willChange: "transform, opacity",
+        // willChange removed from container: child DockItem elements already have
+        // willChange: 'transform' for their individual scale animations. Adding it
+        // here creates a redundant stacking context and extra GPU memory pressure.
       }}
       initial={{ opacity: 0, y: 28, scale: 0.92 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}

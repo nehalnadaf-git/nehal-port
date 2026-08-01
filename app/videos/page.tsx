@@ -136,6 +136,32 @@ export default function VideoProjectsPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
+  // ── Pause all grid videos while the lightbox is open ─────────────────────────
+  // When a lightbox video plays, having 28+ background videos also decoding
+  // (7 items × 4 grid copies) causes GPU/CPU memory pressure that crashes
+  // mobile browsers. Pause all grid tiles while the overlay is open, then
+  // resume only the viewport-visible tiles when it closes.
+  useEffect(() => {
+    const gridVideos = document.querySelectorAll<HTMLVideoElement>(
+      'video[data-grid-video="true"]',
+    );
+    if (activeVideo) {
+      // Lightbox opened — pause every background tile video
+      gridVideos.forEach((v) => v.pause());
+    } else {
+      // Lightbox closed — resume only the tiles currently in the viewport
+      gridVideos.forEach((v) => {
+        const rect = v.getBoundingClientRect();
+        const inView =
+          rect.bottom > 0 &&
+          rect.right > 0 &&
+          rect.top < window.innerHeight &&
+          rect.left < window.innerWidth;
+        if (inView) v.play().catch(() => {});
+      });
+    }
+  }, [activeVideo]);
+
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#F2F1E6', overflow: 'hidden' }}>
       <GrainOverlay />

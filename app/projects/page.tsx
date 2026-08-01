@@ -70,7 +70,7 @@ const websiteItems: WebsiteItem[] = [
     poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785392081/tippu-shaheed_wayjlm.mp4'),
     alt: 'Tippu Shaheed Education Trust',
     category: 'Education',
-    url: 'https://tippu-shaheed.vercel.app',
+    url: 'https://tpshaheed.vercel.app',
   },
   {
     src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),

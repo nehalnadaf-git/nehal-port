@@ -61,8 +61,9 @@ export function useSmoothScroll() {
       const Lenis = (await import('lenis')).default;
 
       const lenis = new Lenis({
-        lerp: 0.12,
+        lerp: 0.10,           // was 0.12 — slightly more responsive scroll feel
         smoothWheel: true,
+        syncTouch: false,     // never intercept native touch momentum
         overscroll: false,
       });
 

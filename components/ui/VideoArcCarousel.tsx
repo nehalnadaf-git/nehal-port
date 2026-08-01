@@ -92,6 +92,36 @@ export default function VideoArcCarousel({
     });
   }, [isVisible]);
 
+  // ── Pause background videos while the lightbox is open ─────────────────────
+  // PortfolioLightbox dispatches 'portfolio:lightbox-open' when any project
+  // or video card is tapped. We pause all background carousel videos immediately
+  // so the GPU focuses entirely on the lightbox video decoder. On close, we
+  // resume only the videos that are currently inside the viewport.
+  useEffect(() => {
+    const handleOpen = () => {
+      videosRef.current.forEach(v => { if (v) v.pause(); });
+    };
+    const handleClose = () => {
+      videosRef.current.forEach(v => {
+        if (!v) return;
+        const rect = v.getBoundingClientRect();
+        const inView =
+          rect.bottom > 0 &&
+          rect.right > 0 &&
+          rect.top < window.innerHeight &&
+          rect.left < window.innerWidth;
+        if (inView) v.play().catch(() => {});
+      });
+    };
+
+    document.addEventListener('portfolio:lightbox-open', handleOpen);
+    document.addEventListener('portfolio:lightbox-close', handleClose);
+    return () => {
+      document.removeEventListener('portfolio:lightbox-open', handleOpen);
+      document.removeEventListener('portfolio:lightbox-close', handleClose);
+    };
+  }, []);
+
   // Sync lightbox ref so animate loop doesn't need it as a dep
   useEffect(() => {
     lightboxItemRef.current = lightboxItem;

@@ -3,8 +3,8 @@
 import { useEffect, useId, useRef } from "react";
 import { cn } from "@/lib/utils";
 
-const morphTime    = 1.6; // duration of liquid morph transition (seconds)
-const cooldownTime = 3.5; // duration word stays crystal clear (seconds)
+const morphTime    = 1.6;  // duration of liquid morph transition (seconds)
+const cooldownTime = 3.5;  // duration word stays crystal clear (seconds)
 
 // Imperatively set word & font styling on span element
 function applyWordStyles(el: HTMLSpanElement, text: string) {
@@ -68,67 +68,81 @@ export function MorphingText({ texts, className, style }: MorphingTextProps) {
     c2.style.transform = "translate3d(-50%, -50%, 0) scale(0.95)";
 
     let rafId: number;
+    let cooldownTimer: ReturnType<typeof setTimeout> | null = null;
 
-    const animate = (timestamp: number) => {
-      if (lastTimeRef.current === null) lastTimeRef.current = timestamp;
-      const dt = Math.min(0.05, (timestamp - lastTimeRef.current) / 1000);
-      lastTimeRef.current = timestamp;
-
+    // ── Morph phase — run at 60fps only during the actual transition ──
+    const runMorphRAF = () => {
       const activeEl   = isText1ActiveRef.current ? c1 : c2;
       const incomingEl = isText1ActiveRef.current ? c2 : c1;
 
-      if (phaseRef.current === "cooldown") {
-        timerRef.current -= dt;
-        // Keep active element 100% clear and static
-        activeEl.style.opacity   = "1";
-        activeEl.style.filter    = "none";
-        activeEl.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
+      const now = performance.now();
+      if (lastTimeRef.current === null) lastTimeRef.current = now;
+      const dt = Math.min(0.05, (now - lastTimeRef.current) / 1000);
+      lastTimeRef.current = now;
 
-        incomingEl.style.opacity = "0";
-        incomingEl.style.filter  = "none";
+      timerRef.current += dt;
+      const progress = Math.min(1, timerRef.current / morphTime);
+      const eased = easeInOutCubic(progress);
 
-        if (timerRef.current <= 0) {
-          phaseRef.current = "morph";
-          timerRef.current = 0;
-          // Prepare hidden incoming element with next word before morph starts
-          const nextIndex = (textIndexRef.current + 1) % texts.length;
-          applyWordStyles(incomingEl, texts[nextIndex]);
-        }
-      } else {
-        // Morphing phase
-        timerRef.current += dt;
-        const progress = Math.min(1, timerRef.current / morphTime);
-        const eased = easeInOutCubic(progress);
+      const blurActive   = (eased * 10).toFixed(2);
+      const blurIncoming = ((1 - eased) * 10).toFixed(2);
+      const scaleActive   = (1 + eased * 0.04).toFixed(3);
+      const scaleIncoming = (0.95 + eased * 0.05).toFixed(3);
 
-        const blurActive   = (eased * 10).toFixed(2);
-        const blurIncoming = ((1 - eased) * 10).toFixed(2);
+      activeEl.style.opacity   = (1 - eased).toFixed(3);
+      activeEl.style.filter    = `blur(${blurActive}px)`;
+      activeEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scaleActive})`;
 
-        const scaleActive   = (1 + eased * 0.04).toFixed(3);
-        const scaleIncoming = (0.95 + eased * 0.05).toFixed(3);
+      incomingEl.style.opacity   = eased.toFixed(3);
+      incomingEl.style.filter    = `blur(${blurIncoming}px)`;
+      incomingEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scaleIncoming})`;
 
-        activeEl.style.opacity   = (1 - eased).toFixed(3);
-        activeEl.style.filter    = `blur(${blurActive}px)`;
-        activeEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scaleActive})`;
+      if (progress >= 1) {
+        // Morph done — hand over active role, enter cooldown via setTimeout (no RAF)
+        textIndexRef.current = (textIndexRef.current + 1) % texts.length;
+        isText1ActiveRef.current = !isText1ActiveRef.current;
+        phaseRef.current = "cooldown";
+        timerRef.current = cooldownTime;
+        lastTimeRef.current = null;
 
-        incomingEl.style.opacity   = eased.toFixed(3);
-        incomingEl.style.filter    = `blur(${blurIncoming}px)`;
-        incomingEl.style.transform = `translate3d(-50%, -50%, 0) scale(${scaleIncoming})`;
+        // Ensure final state is clean
+        const nowActive   = isText1ActiveRef.current ? c1 : c2;
+        const nowIncoming = isText1ActiveRef.current ? c2 : c1;
+        nowActive.style.opacity   = "1";
+        nowActive.style.filter    = "none";
+        nowActive.style.transform = "translate3d(-50%, -50%, 0) scale(1)";
+        nowIncoming.style.opacity = "0";
+        nowIncoming.style.filter  = "none";
 
-        if (progress >= 1) {
-          // Morph completed! Seamlessly hand over active role without DOM swap
-          textIndexRef.current = (textIndexRef.current + 1) % texts.length;
-          isText1ActiveRef.current = !isText1ActiveRef.current;
-          phaseRef.current = "cooldown";
-          timerRef.current = cooldownTime;
-        }
+        scheduleCooldown();
+        return;
       }
 
-      rafId = requestAnimationFrame(animate);
+      rafId = requestAnimationFrame(runMorphRAF);
     };
 
-    rafId = requestAnimationFrame(animate);
+    // ── Cooldown — use setTimeout instead of RAF so CPU is completely idle ──
+    const scheduleCooldown = () => {
+      cooldownTimer = setTimeout(() => {
+        // Prepare next word before starting morph
+        const activeEl   = isText1ActiveRef.current ? c1 : c2;
+        const incomingEl = isText1ActiveRef.current ? c2 : c1;
+        void activeEl; // referenced above to keep TS happy
+        const nextIndex = (textIndexRef.current + 1) % texts.length;
+        applyWordStyles(incomingEl, texts[nextIndex]);
+        timerRef.current = 0;
+        lastTimeRef.current = null;
+        phaseRef.current = "morph";
+        rafId = requestAnimationFrame(runMorphRAF);
+      }, cooldownTime * 1000);
+    };
+
+    // Kick off first cooldown cycle
+    scheduleCooldown();
+
     return () => {
       cancelAnimationFrame(rafId);
+      if (cooldownTimer) clearTimeout(cooldownTimer);
       lastTimeRef.current = null;
     };
   }, [texts]);
@@ -137,8 +151,11 @@ export function MorphingText({ texts, className, style }: MorphingTextProps) {
     <div
       className={cn("morphing-text-root relative w-full h-full text-center leading-none select-none", className)}
       style={{
-        filter: `url(#${filterId}) blur(0.4px)`,
-        WebkitFilter: `url(#${filterId}) blur(0.4px)`,
+        // blur(0.4px) removed: applying a CSS filter to the root invalidates the
+        // GPU layer on every RAF frame, causing constant composite overhead.
+        // The SVG feColorMatrix threshold filter alone achieves the morph effect.
+        filter: `url(#${filterId})`,
+        WebkitFilter: `url(#${filterId})`,
         // overflow:visible prevents the translated spans from being clipped by this div's bounds
         overflow: 'visible',
         ...style,

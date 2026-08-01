@@ -94,6 +94,37 @@ export default function ArcCarousel({
     });
   }, [isVisible]);
 
+  // ── Pause background videos while the lightbox is open ─────────────────────
+  // When PortfolioLightbox opens it dispatches 'portfolio:lightbox-open' on the
+  // document. We pause all carousel videos so the GPU only decodes one stream
+  // at a time (the lightbox video). On close, 'portfolio:lightbox-close' fires
+  // and we resume only the videos that are currently in the viewport.
+  useEffect(() => {
+    const handleOpen = () => {
+      videosRef.current.forEach(v => { if (v) v.pause(); });
+    };
+    const handleClose = () => {
+      // Only resume videos that are currently visible in the viewport
+      videosRef.current.forEach(v => {
+        if (!v) return;
+        const rect = v.getBoundingClientRect();
+        const inView =
+          rect.bottom > 0 &&
+          rect.right > 0 &&
+          rect.top < window.innerHeight &&
+          rect.left < window.innerWidth;
+        if (inView) v.play().catch(() => {});
+      });
+    };
+
+    document.addEventListener('portfolio:lightbox-open', handleOpen);
+    document.addEventListener('portfolio:lightbox-close', handleClose);
+    return () => {
+      document.removeEventListener('portfolio:lightbox-open', handleOpen);
+      document.removeEventListener('portfolio:lightbox-close', handleClose);
+    };
+  }, []);
+
 
   const totalCards = items.length;
   const cardSize = getCardSize(vw);

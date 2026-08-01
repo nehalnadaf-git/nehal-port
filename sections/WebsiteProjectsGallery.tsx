@@ -62,7 +62,7 @@ const websiteProjects: ArcCarouselItem[] = [
     poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785392081/tippu-shaheed_wayjlm.mp4'),
     alt: 'Tippu Shaheed Education Trust',
     category: 'Education',
-    url: 'tippu-shaheed.vercel.app',
+    url: 'tpshaheed.vercel.app',
   },
   {
     src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784355432/Hosatti_qcfsw3.mp4'),
