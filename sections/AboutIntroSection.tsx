@@ -15,7 +15,7 @@ export default function AboutIntroSection() {
     >
       {/* Large headline — scroll-driven word reveal */}
       <MagicText
-        text="I'm Nehal Nadaf, based in [Hubli,] [Karnataka.]"
+        text={"I'm Nehal Nadaf, based in\n[Hubli,] [Karnataka.]"}
         wrapperClassName="justify-center text-center font-extrabold !leading-[1.05] tracking-tight"
         fontSize="clamp(28px, 6vw, 96px)"
         ghostOpacity={0.1}

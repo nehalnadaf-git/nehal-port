@@ -154,7 +154,13 @@ export const MagicText: React.FC<MagicTextProps> = ({
 
     for (let i = 0; i < text.length; i++) {
       const char = text[i];
-      if (char === '[') {
+      if (char === '\n') {
+        if (currentToken) {
+          tokens.push(currentToken);
+          currentToken = "";
+        }
+        tokens.push("\n");
+      } else if (char === '[') {
         insideBrackets = true;
         currentToken += char;
       } else if (char === ']') {
@@ -209,6 +215,9 @@ export const MagicText: React.FC<MagicTextProps> = ({
         style={Object.keys(wrapperStyle).length ? wrapperStyle : undefined}
       >
         {words.map((word, i) => {
+          if (word === "\n") {
+            return <span key={`br-${i}`} className="block w-full h-0" />;
+          }
           const start = i / words.length;
           const end = start + 1 / words.length;
 

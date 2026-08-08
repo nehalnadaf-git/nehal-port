@@ -231,9 +231,9 @@ export default function WebsiteProjectsGallery() {
       {/* ─── Toggle Bar ──────────────────────────────────────────────────── */}
       <div className="container-padding flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 sm:gap-4 pb-8 md:pb-10">
         <MagicText
-          text="Websites Built for [_Real_] Businesses"
-          wrapperClassName="leading-none text-foreground font-extrabold !leading-[1.0] tracking-tight text-left max-w-3xl"
-          fontSize="clamp(36px, 8vw, 120px)"
+          text={"Websites Built for\n[_Real_] Businesses"}
+          wrapperClassName="leading-none text-foreground font-extrabold !leading-[1.05] tracking-tight text-left max-w-full md:max-w-4xl lg:max-w-5xl"
+          fontSize="clamp(32px, 5.2vw, 84px)"
           ghostOpacity={0.1}
         />
 
