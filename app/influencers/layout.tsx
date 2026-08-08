@@ -156,6 +156,54 @@ const influencerListSchema = {
   ],
 };
 
+// FAQPage schema — influencer-marketing-specific FAQs for rich results on /influencers
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: "How does Nehal Nadaf's influencer marketing agency work?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: "The agency identifies the right influencers for your brand from a managed network of Karnataka-based Instagram and YouTube creators, develops the campaign brief, coordinates content creation, reviews and approves content before publishing, and tracks performance post-publication. The full process is managed — brands don't need to coordinate directly with individual influencers.",
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the average reach of influencers in the network?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The influencer network covers creators averaging 50K–100K+ views per post across Instagram and YouTube. The network includes @sahil_hvines (100K+ average views), @afozz_ae, @hubballitimes, and @yavvooshahid (70K+ average views each), @kaifofficial_19 (60K+ average views), and @nadeem_pov (50K+ average views). All are based in Karnataka, India.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does this influencer marketing service cover brands outside Karnataka?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. While the influencer network is primarily Karnataka-based — making it ideal for brands targeting Hubli, Dharwad, Bangalore, and the broader Karnataka market — the agency can source creators for national campaigns across India or international brand awareness campaigns on request.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I start an influencer marketing campaign?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Contact via WhatsApp or email with your brand details, campaign goal, and target audience. The agency will identify the right influencers from the network, propose a campaign structure, and send a detailed proposal before any commitment. WhatsApp: +91 6363278962. Email: nehalnadaff@gmail.com.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What types of influencer content are available?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Instagram Reels for maximum reach and algorithm distribution, Instagram static posts and stories for product placements and brand features, and YouTube dedicated videos or integrations. Content types are matched to the campaign goal — brand awareness favours Reels, product reviews favour YouTube, and event promotions work best as stories combined with Reels.',
+      },
+    },
+  ],
+};
+
 export default function InfluencersLayout({
   children,
 }: {
@@ -174,6 +222,10 @@ export default function InfluencersLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(influencerListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {children}
     </>

@@ -35,31 +35,10 @@ export default function CTASection() {
         href="https://wa.me/916363278962?text=Hi%20Nehal%2C%20I%20am%20interested%20in%20working%20with%20you."
         target="_blank"
         rel="noopener noreferrer"
-        className="rv-up inline-flex items-center justify-center mt-10 rounded-full border-2 border-black px-9 py-4"
+        className="rv-up btn-brutal btn-brutal-primary mt-10"
         style={{
-          background: '#A855F7',
-          color: '#FFFFFF',
-          fontFamily: "'Inter', sans-serif",
-          fontWeight: 800,
-          fontSize: 'clamp(11px, 1.1vw, 13px)',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-          textDecoration: 'none',
-          boxShadow: '4px 4px 0px 0px #000000',
           '--rv-delay': '140ms',
-          transition: 'transform 0.2s cubic-bezier(0.16,1,0.3,1), box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)',
-          whiteSpace: 'nowrap',
         } as React.CSSProperties}
-        onMouseEnter={e => {
-          if (!window.matchMedia('(hover: hover)').matches) return;
-          e.currentTarget.style.transform = 'translate(-2px, -2px)';
-          e.currentTarget.style.boxShadow = '6px 6px 0px 0px #000000';
-        }}
-        onMouseLeave={e => {
-          if (!window.matchMedia('(hover: hover)').matches) return;
-          e.currentTarget.style.transform = 'translate(0, 0)';
-          e.currentTarget.style.boxShadow = '4px 4px 0px 0px #000000';
-        }}
       >
         CONTACT NOW
       </a>

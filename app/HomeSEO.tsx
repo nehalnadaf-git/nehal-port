@@ -168,7 +168,6 @@ function localBusinessSchema() {
       { '@type': 'Place', name: 'International' },
       { '@type': 'Place', name: 'Worldwide' },
     ],
-    priceRange: '₹₹',
     currenciesAccepted: 'INR, USD',
     paymentAccepted: 'Bank Transfer, UPI, Razorpay',
     openingHours: 'Mo-Sa 09:00-21:00',

@@ -277,16 +277,16 @@ export default function WebsiteProjectsGallery() {
             maxWidth: '560px',
           }}
         >
-          10+ live client websites across automotive, education, healthcare, hospitality, home-service &amp; industrial industries — built with React.js, Next.js, and Tailwind CSS.
+          Live client websites across automotive, education, healthcare, hospitality, home-service &amp; industrial industries — built with React.js, Next.js, and Tailwind CSS.
           <span
             style={{
               display: 'inline-block',
               marginLeft: '8px',
-              fontSize: '11px',
               color: '#A855F7',
               fontWeight: 700,
               letterSpacing: '0.1em',
             }}
+            className="type-label"
           >
             Click to explore ↑
           </span>
@@ -308,7 +308,7 @@ export default function WebsiteProjectsGallery() {
               lineHeight: 1.6,
             }}
           >
-            10+ live client websites across automotive, education, healthcare, hospitality, home-service, and industrial industries — built with React.js, Next.js, and Tailwind CSS.
+            Live client websites across automotive, education, healthcare, hospitality, home-service, and industrial industries — built with React.js, Next.js, and Tailwind CSS.
           </p>
         </div>
 

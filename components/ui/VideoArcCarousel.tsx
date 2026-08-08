@@ -509,7 +509,7 @@ export default function VideoArcCarousel({
                     zIndex: 2,
                     boxShadow: '2px 2px 0px #FFFFFF',
                   }}>
-                    <span style={{ fontSize: '11px', color: '#fff', fontWeight: 700, letterSpacing: '0.08em', fontFamily: "'JetBrains Mono', monospace" }}>EXPAND</span>
+                    <span className="type-mono" style={{ color: '#fff', fontWeight: 700, letterSpacing: '0.08em' }}>EXPAND</span>
                     <ArrowUpRight size={12} color="#fff" />
                   </div>
                 )}
@@ -521,7 +521,7 @@ export default function VideoArcCarousel({
                     background: 'linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%)',
                     pointerEvents: 'none',
                   }}>
-                    <span style={{ color: 'rgba(255,255,255,0.8)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.08em' }}>
+                    <span className="type-mono" style={{ color: 'rgba(255,255,255,0.8)', fontWeight: 600, letterSpacing: '0.08em' }}>
                       {item.label || item.title}
                     </span>
                   </div>
@@ -577,12 +577,10 @@ export default function VideoArcCarousel({
         <div style={{ textAlign: 'center', paddingBottom: '20px', paddingTop: '4px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', padding: '4px 16px' }}>
             <span
+              className="type-mono"
               style={{
-                fontSize: 'clamp(12px, 1.4vw, 14px)',
                 fontWeight: 800,
                 color: '#A855F7',
-                fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: '0.08em',
               }}
             >
               {String(activeIndex + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
@@ -604,14 +602,12 @@ export default function VideoArcCarousel({
 
         {/* Mobile swipe hint */}
         <p
-          className="arc-swipe-hint"
+          className="arc-swipe-hint type-mono"
           aria-hidden="true"
           style={{
             textAlign: 'center',
-            fontSize: '10px',
             letterSpacing: '0.12em',
             color: 'var(--muted-foreground)',
-            fontFamily: "'JetBrains Mono', monospace",
             opacity: 0.55,
             paddingBottom: '8px',
             marginTop: '-4px',

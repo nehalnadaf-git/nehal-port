@@ -281,9 +281,10 @@ export default function WebsiteProjectsPage() {
           <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <button
               onClick={() => router.push('/')}
+              className="type-label"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '7px',
-                fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em',
+                fontWeight: 600, letterSpacing: '0.1em',
                 fontFamily: "'Inter', sans-serif",
                 color: 'rgba(0,0,0,0.6)', background: 'none', border: 'none',
                 cursor: 'pointer', padding: 0, transition: 'color 0.2s',
@@ -299,14 +300,14 @@ export default function WebsiteProjectsPage() {
             >
               <ArrowLeft size={13} /> Back
             </button>
-            <span style={{
-              fontSize: '10px', letterSpacing: '0.2em',
+            <span className="type-mono" style={{
+              letterSpacing: '0.2em',
               fontFamily: "'JetBrains Mono', monospace", color: '#7C3AED',
             }}>
               // Website Projects
             </span>
-            <span style={{
-              fontSize: '10px', letterSpacing: '0.1em',
+            <span className="type-mono" style={{
+              letterSpacing: '0.1em',
               fontFamily: "'JetBrains Mono', monospace", color: 'rgba(0,0,0,0.4)',
             }}>
               {websiteItems.length} Sites

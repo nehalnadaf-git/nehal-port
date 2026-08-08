@@ -7,7 +7,7 @@ import { useRef, useMemo } from "react";
 export interface MagicTextProps {
   text: string;
   className?: string;
-  /** Tailwind/inline class for the outer <p> wrapper */
+  /** Tailwind/inline class for the outer wrapper */
   wrapperClassName?: string;
   /** Font size passed through (e.g. "clamp(15px,2.2vw,24px)") */
   fontSize?: string;
@@ -28,7 +28,34 @@ interface WordProps {
   ghostOpacity: number;
 }
 
-/* Single word — opacity driven by scroll progress */
+/**
+ * Strips MagicText bracket markers from raw text to produce clean readable text.
+ *
+ * Handles:
+ *   [_word_]   → word   (italic marker)
+ *   [_word._]  → word.  (italic with inline punctuation)
+ *   [word]     → word   (selection highlight marker)
+ *
+ * Used for the sr-only / crawler-readable version so search engines and screen
+ * readers see a single clean sentence — not the doubled ghost+animated text nodes
+ * that the visual animation requires in the DOM.
+ */
+function stripMarkers(raw: string): string {
+  return raw
+    // [_italic_] and [_italic._] — italic selected words (inner underscores)
+    .replace(/\[_([^\]]+?)_\]([.,?!:;]?)/g, '$1$2')
+    // [selected] — plain selection highlight words
+    .replace(/\[([^\]]+?)\]([.,?!:;]?)/g, '$1$2');
+}
+
+/* ─── Single Word ──────────────────────────────────────────────────────────────
+   Opacity is driven by scroll progress.  Two text nodes are rendered per word:
+   - a dim "ghost" span that preserves layout even when opacity → 0
+   - an absolutely-positioned motion.span that animates from 0 → 1 opacity
+
+   Both are inside an aria-hidden="true" parent so screen readers + crawlers
+   skip this element entirely and read the sr-only sibling instead.
+*/
 const Word: React.FC<WordProps> = ({ children, progress, range, ghostOpacity }) => {
   const opacity = useTransform(progress, range, [0, 1]);
   // Animate selection width from 0% to 100% to simulate a drag selection sweep
@@ -43,7 +70,7 @@ const Word: React.FC<WordProps> = ({ children, progress, range, ghostOpacity }) 
 
   const italicMatch = innerWord.match(/^_(.*?)_$/);
   const isItalic = !!italicMatch;
-  const cleanWord = isItalic ? italicMatch[1] : innerWord;
+  const cleanWord = isItalic ? italicMatch![1] : innerWord;
 
   const fontClass = isItalic ? "type-italic-serif" : "";
 
@@ -77,13 +104,13 @@ const Word: React.FC<WordProps> = ({ children, progress, range, ghostOpacity }) 
         </motion.span>
       )}
 
-      {/* Ghost (dim placeholder so layout doesn't shift) */}
+      {/* Ghost (dim placeholder so layout doesn't shift when revealed word arrives) */}
       <span className={fontClass} style={{ opacity: ghostOpacity }}>
         {cleanWord}
         {punctuation}
       </span>
 
-      {/* Revealed word */}
+      {/* Revealed word — animates from transparent to opaque on scroll */}
       <motion.span
         className={fontClass}
         style={{
@@ -116,7 +143,8 @@ export const MagicText: React.FC<MagicTextProps> = ({
 
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: [offsetStart, offsetEnd],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    offset: [offsetStart, offsetEnd] as any,
   });
 
   const words = useMemo(() => {
@@ -151,27 +179,51 @@ export const MagicText: React.FC<MagicTextProps> = ({
   if (fontSize) wrapperStyle.fontSize = fontSize;
   if (fontFamily) wrapperStyle.fontFamily = fontFamily;
 
-  return (
-    <p
-      ref={container}
-      className={`flex flex-wrap leading-relaxed ${wrapperClassName}`}
-      style={Object.keys(wrapperStyle).length ? wrapperStyle : undefined}
-    >
-      {words.map((word, i) => {
-        const start = i / words.length;
-        const end = start + 1 / words.length;
+  // Clean text for screen readers and search engine crawlers:
+  // strip the [_bracket_] animation markers so the accessible version reads
+  // as a normal sentence without any doubled words.
+  const accessibleText = useMemo(() => stripMarkers(text), [text]);
 
-        return (
-          <Word
-            key={i}
-            progress={scrollYProgress}
-            range={[start, end]}
-            ghostOpacity={ghostOpacity}
-          >
-            {word}
-          </Word>
-        );
-      })}
-    </p>
+  return (
+    <>
+      {/*
+        ── Accessible / crawler version ────────────────────────────────────────
+        Standard Tailwind sr-only: position absolute, 1×1px, overflow hidden,
+        clip-path inset(50%) — NOT display:none so search engine crawlers still
+        parse it as real text content.  Screen readers read this single clean
+        sentence; they never reach the aria-hidden animated block below.
+      */}
+      <p className={`sr-only ${className}`}>{accessibleText}</p>
+
+      {/*
+        ── Animated visual version ─────────────────────────────────────────────
+        aria-hidden="true" tells screen readers and accessibility tools to skip
+        this entire block. Crawlers that respect aria semantics also skip it.
+        The scroll-driven word reveal animation plays exactly as before for
+        sighted users in a browser.
+      */}
+      <p
+        aria-hidden="true"
+        ref={container}
+        className={`flex flex-wrap leading-relaxed ${wrapperClassName}`}
+        style={Object.keys(wrapperStyle).length ? wrapperStyle : undefined}
+      >
+        {words.map((word, i) => {
+          const start = i / words.length;
+          const end = start + 1 / words.length;
+
+          return (
+            <Word
+              key={i}
+              progress={scrollYProgress}
+              range={[start, end]}
+              ghostOpacity={ghostOpacity}
+            >
+              {word}
+            </Word>
+          );
+        })}
+      </p>
+    </>
   );
 };

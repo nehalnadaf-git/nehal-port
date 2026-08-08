@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import {
   MagneticDock,
   DockIconHome,
@@ -42,7 +43,7 @@ function scrollToSection(id: string) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   Detect which section is in view
+   Detect which section is in view on homepage
 ───────────────────────────────────────────────────────────────────────────── */
 function useActiveSection(ids: string[]) {
   const [active, setActive] = useState(ids[0])
@@ -67,7 +68,6 @@ function useActiveSection(ids: string[]) {
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Responsive config — single source of truth for icon sizing and mobile flag.
-   This drives both the dock appearance and MagneticDock's isMobile prop.
 ───────────────────────────────────────────────────────────────────────────── */
 function useResponsiveDock() {
   const [config, setConfig] = useState({
@@ -75,7 +75,6 @@ function useResponsiveDock() {
     maxScale: 1.65,
     magneticDistance: 145,
     isMobile: false,
-    // Bottom clearance — accounts for Android Chrome UI bar + iOS home indicator
     bottomInset: "calc(20px + env(safe-area-inset-bottom, 0px))",
   })
 
@@ -87,19 +86,16 @@ function useResponsiveDock() {
       const mobile = w < 768
 
       if (w < 400) {
-        // Very small phones (iPhone SE 1st gen, small Androids)
         setConfig({
           iconSize: 34,
           maxScale: 1.0,
           magneticDistance: 60,
           isMobile: true,
-          // Extra clearance for Android bottom bar in portrait (≈56px UI bar + buffer)
           bottomInset: isLandscape
             ? "calc(12px + env(safe-area-inset-bottom, 0px))"
             : "calc(env(safe-area-inset-bottom, 0px) + 72px)",
         })
       } else if (w < 640) {
-        // Standard mobile (iPhone, Pixel, etc.)
         setConfig({
           iconSize: 38,
           maxScale: 1.0,
@@ -110,7 +106,6 @@ function useResponsiveDock() {
             : "calc(env(safe-area-inset-bottom, 0px) + 72px)",
         })
       } else if (w < 768) {
-        // Large phones / small tablets
         setConfig({
           iconSize: 42,
           maxScale: 1.15,
@@ -121,7 +116,6 @@ function useResponsiveDock() {
             : "calc(env(safe-area-inset-bottom, 0px) + 64px)",
         })
       } else if (w < 1024) {
-        // Tablets (iPad, Android tablet)
         setConfig({
           iconSize: 46,
           maxScale: 1.4,
@@ -130,7 +124,6 @@ function useResponsiveDock() {
           bottomInset: "calc(24px + env(safe-area-inset-bottom, 0px))",
         })
       } else {
-        // Desktop / large displays
         setConfig({
           iconSize: 52,
           maxScale: 1.65,
@@ -140,7 +133,7 @@ function useResponsiveDock() {
         })
       }
 
-      void mobile // suppress lint — already used via w < 768
+      void mobile
     }
 
     update()
@@ -157,11 +150,9 @@ function useResponsiveDock() {
 
 /* ─────────────────────────────────────────────────────────────────────────────
    Dock visibility — unified scroll + footer observer.
-   Avoids the conflict between two separate effects fighting over `showDock`.
 ───────────────────────────────────────────────────────────────────────────── */
-function useDockVisibility(): boolean {
+function useDockVisibility(pathname: string): boolean {
   const [showDock, setShowDock] = useState(false)
-  // Track footer intersection separately so scroll handler doesn't override it
   const footerVisibleRef = useRef(false)
 
   const evaluate = useCallback(() => {
@@ -170,18 +161,15 @@ function useDockVisibility(): boolean {
       return
     }
     const scrollY = window.scrollY
-    // Show once user has scrolled past the hero (first full viewport height)
-    const pastHero = scrollY >= window.innerHeight - 10
-    setShowDock(pastHero)
-  }, [])
+    const threshold = pathname === '/' ? window.innerHeight - 10 : 150
+    setShowDock(scrollY >= threshold)
+  }, [pathname])
 
   useEffect(() => {
-    // Scroll listener
     const onScroll = () => evaluate()
     window.addEventListener("scroll", onScroll, { passive: true })
-    evaluate() // run once on mount
+    evaluate()
 
-    // Footer intersection
     const footer = document.querySelector("footer")
     let footerObs: IntersectionObserver | null = null
     if (footer) {
@@ -208,15 +196,80 @@ function useDockVisibility(): boolean {
    Main component
 ───────────────────────────────────────────────────────────────────────────── */
 export default function PortfolioDock() {
+  const pathname = usePathname()
+  const router = useRouter()
   const sectionIds = NAV_ITEMS.map((i) => i.id)
-  const activeId = useActiveSection(sectionIds)
+  const sectionActiveId = useActiveSection(sectionIds)
   const { iconSize, maxScale, magneticDistance, isMobile, bottomInset } = useResponsiveDock()
-  const showDock = useDockVisibility()
+  const showDock = useDockVisibility(pathname)
+
+  // Compute active item based on route
+  let activeId = sectionActiveId
+  if (pathname === '/about') activeId = 'about'
+  else if (pathname === '/contact') activeId = 'cta'
+  else if (pathname === '/projects') activeId = 'projects'
+  else if (pathname === '/videos') activeId = 'video'
+
+  const handleItemClick = (id: string) => {
+    if (pathname === '/') {
+      scrollToSection(id)
+      return
+    }
+
+    // On sub-pages (e.g. /about, /contact, /services/*, /projects, etc.)
+    if (id === 'hero') {
+      router.push('/')
+      return
+    }
+
+    if (id === 'about') {
+      if (pathname === '/about') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        router.push('/about')
+      }
+      return
+    }
+
+    if (id === 'projects') {
+      if (pathname === '/projects') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        router.push('/projects')
+      }
+      return
+    }
+
+    if (id === 'video') {
+      if (pathname === '/videos') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        router.push('/videos')
+      }
+      return
+    }
+
+    if (id === 'cta') {
+      if (pathname === '/contact') {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        router.push('/contact')
+      }
+      return
+    }
+
+    if (id === 'creative' || id === 'stack') {
+      router.push(`/#${id}`)
+      return
+    }
+
+    router.push('/')
+  }
 
   const items: DockItemData[] = NAV_ITEMS.map((nav) => ({
     ...nav,
     isActive: nav.id === activeId,
-    onClick: () => scrollToSection(nav.id),
+    onClick: () => handleItemClick(nav.id),
   }))
 
   return (
@@ -227,10 +280,8 @@ export default function PortfolioDock() {
       aria-label="Page navigation dock"
     >
       <div
-        // max-w ensures dock never overflows on tiny screens; overflow-visible keeps tooltips visible
         className="overflow-visible"
         style={{
-          // clamp dock width: never wider than 95vw
           maxWidth: "95vw",
           opacity: showDock ? 1 : 0,
           transform: `translateY(${showDock ? "0" : "40px"})`,

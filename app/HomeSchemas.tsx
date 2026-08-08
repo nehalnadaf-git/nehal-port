@@ -29,7 +29,7 @@ const faqs = [
   {
     question: 'How many projects has Nehal Nadaf delivered?',
     answer:
-      '10+ professional business websites across automotive detailing, education, dental healthcare, food service, restaurant, and home-appliance industries — plus years of video production and social media work for brands and content creators across Karnataka, India.',
+      'Professional business websites across automotive detailing, education, dental healthcare, food service, restaurant, and home-appliance industries — plus 5+ years of video production and social media work for brands and content creators across Karnataka, India.',
   },
   {
     question: 'How do we get started with Nehal Nadaf?',

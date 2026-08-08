@@ -19,10 +19,10 @@ export const SEO = {
   tagline: 'Web Developer · UI/UX Designer · Video Editor',
   // Primary meta description — 155 chars, entity-rich for LLM indexing
   description:
-    'Nehal Nadaf — Freelance Web Developer, UI/UX Designer, Video Editor & Social Media Agency. Based in Hubli, Karnataka — serving clients across India and worldwide. 5+ years in premium websites, brand videos, and influencer marketing.',
+    'Nehal Nadaf — Freelance Web Developer, UI/UX Designer, Video Editor & Social Media Agency. Based in Hubli, Karnataka — serving clients across India and worldwide. 5+ years of video editing experience.',
   // Long-form description used in JSON-LD schemas — LLM-optimised entity data
   longDescription:
-    'Nehal Nadaf is a multi-disciplinary creative professional based in Hubli, Karnataka, India — available for remote and on-site work across India and internationally. He specialises in premium web development (React.js, Next.js, Tailwind CSS, GSAP), UI/UX design (Figma), professional video production and colour grading (DaVinci Resolve), social media content creation, and influencer marketing. He has delivered 10+ live client websites across the automotive detailing, education, dental healthcare, restaurant, food service, and home-appliance repair industries. His creative agency manages influencer collaborations for brands across Karnataka, connecting them with content creators averaging 50K–100K+ views on Instagram. He works with clients locally in Hubli and Dharwad, remotely across India, and internationally worldwide.',
+    'Nehal Nadaf is a multi-disciplinary creative professional based in Hubli, Karnataka, India — available for remote and on-site work across India and internationally. He specialises in premium web development (React.js, Next.js, Tailwind CSS, GSAP), UI/UX design (Figma), professional video production and colour grading (DaVinci Resolve), social media content creation, and influencer marketing. He has delivered live client websites across the automotive detailing, education, dental healthcare, restaurant, food service, and home-appliance repair industries. His creative agency manages influencer collaborations for brands across Karnataka, connecting them with content creators averaging 50K–100K+ views on Instagram. He works with clients locally in Hubli and Dharwad, remotely across India, and internationally worldwide.',
   email: 'nehalnadaff@gmail.com',
   phone: '+916363278962',
   whatsapp: 'https://wa.me/916363278962?text=Hi%20Nehal%2C%20I%20am%20interested%20in%20working%20with%20you.',
@@ -179,6 +179,14 @@ export const SEO = {
     projects: '/projects',
     videos: '/videos',
     influencers: '/influencers',
+    about: '/about',
+    contact: '/contact',
+    services: {
+      webDevelopment: '/services/web-development',
+      uiUxDesign: '/services/ui-ux-design',
+      videoEditing: '/services/video-editing',
+      socialMediaMarketing: '/services/social-media-marketing',
+    },
   },
 } as const;
 

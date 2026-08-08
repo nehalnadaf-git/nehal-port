@@ -21,7 +21,7 @@ const faqs = [
   {
     question: 'How many projects have you delivered?',
     answer:
-      '10+ professional business websites across automotive detailing, education, dental healthcare, food service, and home-appliance industries — plus years of video production work for brands and content creators.',
+      'Professional business websites across automotive detailing, education, dental healthcare, food service, and home-appliance industries — plus 5+ years of video production work for brands and content creators.',
   },
   {
     question: 'How do we get started?',

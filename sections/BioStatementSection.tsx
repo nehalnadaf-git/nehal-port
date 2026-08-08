@@ -50,22 +50,9 @@ export default function BioStatementSection() {
           href="https://wa.me/916363278962?text=Hi%20Nehal%2C%20I%20would%20like%20to%20discuss%20a%20project."
           target="_blank"
           rel="noopener noreferrer"
-          className="type-label inline-block bg-purple border-2 border-black rounded-xl px-8 py-4 text-white shadow-[4px_4px_0px_0px_#000000]"
-          style={{
-            transition: 'transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1)',
-          }}
-          onMouseEnter={e => {
-            if (!window.matchMedia('(hover: hover)').matches) return;
-            e.currentTarget.style.transform = 'translate(-1px, -1px)';
-            e.currentTarget.style.boxShadow = '5px 5px 0px 0px #000000';
-          }}
-          onMouseLeave={e => {
-            if (!window.matchMedia('(hover: hover)').matches) return;
-            e.currentTarget.style.transform = 'translate(0, 0)';
-            e.currentTarget.style.boxShadow = '4px 4px 0px 0px #000000';
-          }}
+          className="btn-brutal btn-brutal-primary"
         >
-          Contact Now
+          CONTACT NOW
         </a>
       </div>
 

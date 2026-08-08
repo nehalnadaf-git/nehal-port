@@ -189,11 +189,9 @@ export default function PortfolioLightbox({
         }}
       >
         {item.category && (
-          <span style={{
-            fontSize: '11px',
+          <span className="type-mono" style={{
             color: '#A855F7',
             letterSpacing: '0.18em',
-            fontFamily: "'JetBrains Mono', monospace",
             textTransform: 'uppercase',
             fontWeight: 700,
           }}>

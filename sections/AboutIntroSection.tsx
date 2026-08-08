@@ -26,7 +26,7 @@ export default function AboutIntroSection() {
       {/* Sub-copy — scroll-driven word reveal */}
       <div className="mt-4 max-w-[500px] mx-auto">
         <MagicText
-          text="Multi-disciplinary creative professional with 5+ years of freelance expertise — spanning premium web development, UI/UX design, and cinematic video production."
+          text="Multi-disciplinary creative professional based in Hubli — spanning premium web development, UI/UX design, cinematic video production, and social media marketing."
           wrapperClassName="justify-center text-center leading-relaxed"
           fontSize="clamp(14px, 1.4vw, 16px)"
           ghostOpacity={0.2}

@@ -1,20 +1,20 @@
 'use client'
 
-import { MapPin, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
-import { MagicText } from '@/components/ui/magic-text';
 import { MorphingText } from '@/components/ui/morphing-text';
 import { useReveal, useRevealChildren } from '@/hooks/useReveal';
+import { SEO } from '@/lib/seo';
 
 export default function Footer() {
   const lineRef    = useReveal<HTMLDivElement>({ threshold: 0.3, rootMargin: '0px 0px -20px 0px' });
-  const topRowRef  = useReveal<HTMLDivElement>({ threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
-  const linksRef   = useRevealChildren<HTMLDivElement>('.footer-link', {
-    staggerMs: 80,
-    threshold: 0.2,
+  const topRef     = useReveal<HTMLDivElement>({ threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+  const morphRef   = useReveal<HTMLDivElement>({ threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+  const contactRef = useReveal<HTMLDivElement>({ threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+  const linksRef   = useRevealChildren<HTMLDivElement>('.lbow-link', {
+    staggerMs: 30,
+    threshold: 0.1,
     rootMargin: '0px 0px -20px 0px',
   });
-  const morphRef   = useReveal<HTMLDivElement>({ threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
   const bottomRef  = useReveal<HTMLDivElement>({ threshold: 0.2, rootMargin: '0px 0px -20px 0px' });
 
   const scrollToTop = () => {
@@ -23,108 +23,48 @@ export default function Footer() {
 
   return (
     <footer
-      className="container-padding pt-24"
-      style={{ paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}
+      className="container-padding pt-10 md:pt-16 lg:pt-20 font-sans"
+      style={{
+        background: '#000000',
+        color: '#FFFFFF',
+        paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 0px))',
+      }}
     >
-      {/* Top border line — clip-path sweep */}
+      {/* Top border line */}
       <div
         ref={lineRef}
         className="rv-clip"
-        style={{ height: '1px', background: 'var(--border)', marginBottom: '0' }}
+        style={{ height: '1.5px', background: 'rgba(255, 255, 255, 0.2)', marginBottom: '0' }}
       />
 
-      {/* Top Row */}
+      {/* Row 1: Top Sub-Header Bar (3 Columns) */}
       <div
-        ref={topRowRef}
-        className="rv-up flex flex-col sm:flex-row items-start sm:justify-between gap-4 mb-12 md:mb-16 pt-8"
+        ref={topRef}
+        className="rv-up grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 pt-6 md:pt-8 pb-4 md:pb-6 text-xs sm:text-sm md:text-base text-white/80 font-sans tracking-wider"
       >
-        <div className="flex items-center gap-2 text-foreground">
-          <MapPin size={12} className="opacity-50" />
-          <span className="type-label opacity-60">Based in Hubli,<br />Karnataka</span>
+        <div>
+          <p className="font-bold text-white">WEB DEVELOPER &amp; UI/UX DESIGNER</p>
+          <p className="text-white/70">FREELANCE CREATIVE STUDIO</p>
         </div>
-        <div className="type-label text-foreground opacity-60 sm:text-right">
-          Web Dev + UI/UX<br />Video Production
+        <div className="md:text-center">
+          <p className="font-bold text-white">CREATIVE AGENCY &amp; PRODUCTION</p>
+          <Link href="/about" className="hover:underline text-white font-bold">
+            VIEW SERVICES &rarr;
+          </Link>
+        </div>
+        <div className="md:text-right">
+          <p className="font-bold text-white">HUBLI, KARNATAKA, INDIA</p>
+          <p className="text-white/70">EST. 2021</p>
         </div>
       </div>
 
-      {/* Middle Row — MagicText scroll reveal (self-animating) */}
-      <MagicText
-        text="Based in Hubli, Karnataka — I engineer high-performance websites, craft immersive UI/UX experiences, and produce cinematic video content. Every project is built with precision, purpose, and a commitment to digital excellence."
-        wrapperClassName="justify-center text-center font-bold tracking-wide max-w-2xl mx-auto"
-        fontSize="clamp(13px, 1.2vw, 16px)"
-        ghostOpacity={0.18}
-        offsetStart="start 0.95"
-        offsetEnd="start 0.5"
-      />
-
-      {/* Social Links — staggered reveal */}
-      <div ref={linksRef} className="flex flex-wrap items-center justify-center gap-6 md:gap-8 mt-8">
-        <Link
-          href="/projects"
-          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
-          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
-        >
-          Website Projects <ArrowUpRight size={12} />
-        </Link>
-        <Link
-          href="/videos"
-          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
-          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
-        >
-          Video Projects <ArrowUpRight size={12} />
-        </Link>
-        <Link
-          href="/influencers"
-          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
-          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
-        >
-          Influencer Collabs <ArrowUpRight size={12} />
-        </Link>
-        <a
-          href="https://linkedin.com/in/nehal-nadaf-473800414"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
-          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
-        >
-          LinkedIn <ArrowUpRight size={12} />
-        </a>
-        <a
-          href="https://instagram.com/nehalnadaxf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
-          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
-        >
-          Instagram <ArrowUpRight size={12} />
-        </a>
-        <a
-          href="https://x.com/NadafNehal"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="footer-link rv-up type-label text-foreground flex items-center gap-1 hover:underline"
-          style={{ minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}
-        >
-          X (Twitter) <ArrowUpRight size={12} />
-        </a>
-      </div>
-
-      {/* Large TextMorph — rv-up then self-animating */}
-      {/*
-        overflow: visible is critical — the spans use translate3d(-50%,-50%) so they
-        physically extend beyond the div bounds. Any overflow:hidden ancestor clips them.
-        The negative mx breaks out of container-padding so wide italic text (e.g. "Nadaf")
-        never hits the edge on narrow viewports.
-      */}
+      {/* Row 2: Morphing Text Animation — Balanced desktop height */}
       <div
         ref={morphRef}
-        className="rv-scale relative flex items-center justify-center w-full mt-12 md:mt-16 py-8 pb-10"
+        className="rv-scale relative flex items-center justify-center w-full my-4 md:my-6 py-2 md:py-4 text-center select-none"
         style={{
-          minHeight: 'clamp(100px, 18vw, 240px)',
-          overflow: 'visible',
-          marginLeft: 'clamp(-20px, -5vw, -80px)',
-          marginRight: 'clamp(-20px, -5vw, -80px)',
-          width: 'calc(100% + clamp(40px, 10vw, 160px))',
+          minHeight: 'clamp(60px, 14vw, 150px)',
+          width: '100%',
         }}
       >
         <MorphingText
@@ -132,31 +72,116 @@ export default function Footer() {
           style={{
             fontFamily: "'Inter', system-ui, sans-serif",
             fontWeight: 900,
-            fontSize: "clamp(42px, 18vw, 240px)",
-            height: "clamp(55px, 18vw, 240px)",
+            fontSize: "clamp(48px, 14vw, 150px)",
+            height: "clamp(52px, 14vw, 150px)",
             letterSpacing: "-0.05em",
-            color: "#000",
-            overflow: 'visible',
+            color: "#FFFFFF",
+            width: "100%",
           }}
         />
       </div>
 
-      {/* Bottom Row */}
+      {/* Row 3: Contact Details Strip (3 Columns) */}
+      <div
+        ref={contactRef}
+        className="rv-up grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 py-4 md:py-6 border-t-2 border-b-2 border-white/20 font-sans tracking-wider"
+      >
+        <div>
+          <p className="text-white/50 mb-1 text-xs font-bold tracking-widest">// CONTACT</p>
+          <a href="tel:+916363278962" className="font-bold text-white hover:underline text-sm sm:text-base md:text-lg">
+            +91 6363278962
+          </a>
+        </div>
+        <div className="md:text-center">
+          <p className="text-white/50 mb-1 text-xs font-bold tracking-widest">// EMAIL</p>
+          <a href={`mailto:${SEO.email}`} className="font-bold text-white hover:underline text-sm sm:text-base md:text-lg">
+            {SEO.email.toUpperCase()}
+          </a>
+        </div>
+        <div className="md:text-right">
+          <p className="text-white/50 mb-1 text-xs font-bold tracking-widest">// LOCATION</p>
+          <p className="font-bold text-white text-sm sm:text-base md:text-lg">HUBLI, KARNATAKA, INDIA</p>
+        </div>
+      </div>
+
+      {/* Row 4: Technical Links — Balanced spacing */}
+      <div
+        ref={linksRef}
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10 py-6 md:py-8 border-b-2 border-white/20 font-sans text-xs sm:text-sm md:text-base tracking-wider"
+      >
+        {/* Column 1: Services */}
+        <div className="flex flex-col gap-2 md:gap-2.5">
+          <p className="text-white/50 font-bold mb-1 md:mb-1.5 tracking-widest text-xs sm:text-sm">// SERVICES</p>
+          <Link href="/services/web-development" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            WEB DEVELOPMENT
+          </Link>
+          <Link href="/services/ui-ux-design" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            UI/UX DESIGN
+          </Link>
+          <Link href="/services/video-editing" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            VIDEO EDITING &amp; COLOUR GRADING
+          </Link>
+          <Link href="/services/social-media-marketing" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            SOCIAL MEDIA MARKETING
+          </Link>
+        </div>
+
+        {/* Column 2: Portfolio */}
+        <div className="flex flex-col gap-2 md:gap-2.5">
+          <p className="text-white/50 font-bold mb-1 md:mb-1.5 tracking-widest text-xs sm:text-sm">// PORTFOLIO</p>
+          <Link href="/projects" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            WEBSITE PROJECTS
+          </Link>
+          <Link href="/videos" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            VIDEO PROJECTS
+          </Link>
+          <Link href="/influencers" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            INFLUENCER COLLABS
+          </Link>
+          <Link href="/contact" className="lbow-link rv-up font-bold text-[#C084FC] hover:underline py-0.5 mt-0.5">
+            START A PROJECT &rarr;
+          </Link>
+        </div>
+
+        {/* Column 3: Social & Quick Links */}
+        <div className="flex flex-col gap-2 md:gap-2.5 sm:col-span-2 md:col-span-1">
+          <p className="text-white/50 font-bold mb-1 md:mb-1.5 tracking-widest text-xs sm:text-sm">// CONNECT</p>
+          <Link href="/about" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            ABOUT NEHAL
+          </Link>
+          <a href={SEO.social.linkedin} target="_blank" rel="noopener noreferrer" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            LINKEDIN
+          </a>
+          <a href={SEO.social.instagram} target="_blank" rel="noopener noreferrer" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            INSTAGRAM
+          </a>
+          <a href={SEO.social.twitter} target="_blank" rel="noopener noreferrer" className="lbow-link rv-up font-bold text-white hover:text-purple-300 hover:underline py-0.5">
+            X (TWITTER)
+          </a>
+        </div>
+      </div>
+
+      {/* Row 5: Bottom Copyright Bar */}
       <div
         ref={bottomRef}
-        className="rv-up flex flex-col sm:flex-row items-center sm:justify-between gap-3 mt-8 pt-8"
-        style={{ borderTop: '1px solid var(--border)' }}
+        className="rv-up flex flex-col sm:flex-row items-center justify-between gap-3 pt-5 md:pt-6 font-sans text-xs sm:text-sm tracking-wider text-white/70"
       >
-        <span className="type-mono text-foreground text-center sm:text-left opacity-40">
-          &copy;2026 Nehal Nadaf. All rights reserved.
-        </span>
-        <button
-          onClick={scrollToTop}
-          className="type-label text-foreground hover:underline transition-colors"
-          style={{ minHeight: '44px' }}
-        >
-          Back To Top ↑
-        </button>
+        <p className="text-center sm:text-left font-semibold text-white/70">
+          &copy; 2026 NEHAL NADAF | HUBLI, KARNATAKA
+        </p>
+        <div className="flex items-center gap-3 md:gap-4 font-bold">
+          <a href={SEO.whatsapp} target="_blank" rel="noopener noreferrer" className="hover:underline text-white">
+            WHATSAPP
+          </a>
+          <span>|</span>
+          <a href={`mailto:${SEO.email}`} className="hover:underline text-white">
+            EMAIL
+          </a>
+          <span>|</span>
+          <button onClick={scrollToTop} className="hover:underline text-white">
+            BACK TO TOP &uarr;
+          </button>
+        </div>
       </div>
     </footer>
   );

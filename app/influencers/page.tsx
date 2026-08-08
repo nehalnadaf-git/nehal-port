@@ -2,8 +2,9 @@
 
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { ArrowLeft, MapPin } from 'lucide-react';
+import { ArrowLeft, MapPin, MessageSquare } from 'lucide-react';
 import GrainOverlay from '@/components/GrainOverlay';
+import { SEO } from '@/lib/seo';
 import {
   DraggableContainer,
   GridBody,
@@ -203,11 +204,12 @@ export default function InfluencersPage() {
               onClick={() => router.push('/')}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: '7px',
-                fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em',
+                fontWeight: 600, letterSpacing: '0.1em',
                 fontFamily: "'Inter', sans-serif",
                 color: 'rgba(0,0,0,0.6)', background: 'none', border: 'none',
                 cursor: 'pointer', padding: 0, transition: 'color 0.2s',
               }}
+              className="type-label"
               onMouseEnter={e => {
                 if (!window.matchMedia('(hover: hover)').matches) return;
                 (e.currentTarget as HTMLElement).style.color = '#000';
@@ -219,35 +221,35 @@ export default function InfluencersPage() {
             >
               <ArrowLeft size={13} /> Back
             </button>
-            <span style={{
-              fontSize: '10px', letterSpacing: '0.2em',
+            <span className="type-mono" style={{
+              letterSpacing: '0.2em',
               fontFamily: "'JetBrains Mono', monospace", color: '#7C3AED',
             }}>
               // Influencer Collabs
             </span>
-            <span style={{
-              fontSize: '10px', letterSpacing: '0.1em',
+            <span className="type-mono" style={{
+              letterSpacing: '0.1em',
               fontFamily: "'JetBrains Mono', monospace", color: 'rgba(0,0,0,0.4)',
             }}>
               {influencers.length} Creators
             </span>
           </div>
 
-          {/* Row 2 — Headline */}
+          {/* Row 2 — Headline + service pitch ─────────────────────── */}
           <div style={{ textAlign: 'center' }}>
             <div style={{
               fontSize: '9px', color: '#7C3AED', letterSpacing: '0.2em',
               fontFamily: "'Inter', sans-serif", fontWeight: 600,
               marginBottom: '8px', opacity: 0.85,
             }}>
-              Brand Partnerships
+              Influencer Marketing Service — Hubli, Karnataka
             </div>
             <h1 style={{
               fontSize: 'clamp(26px, 5vw, 68px)', fontWeight: 900,
               lineHeight: 0.92, letterSpacing: '-0.04em',
               margin: 0, color: '#000',
             }}>
-              Creators We{' '}
+              Influencer Campaigns{' '}
               <span className="brutal-selection">
                 <span className="brutal-selection-handle-left" />
                 <span style={{
@@ -258,14 +260,57 @@ export default function InfluencersPage() {
                   textTransform: 'none',
                   letterSpacing: '0em',
                 }}>
-                  Worked
+                  for Brands
                 </span>
                 <span className="brutal-selection-handle-right" />
-              </span>{' '}
-              With
+              </span>
             </h1>
           </div>
 
+          {/* Service pitch: brand perspective */}
+          <div style={{ maxWidth: '520px', textAlign: 'center' }}>
+            <p style={{
+              fontSize: 'clamp(12px, 1.4vw, 14px)',
+              fontFamily: "'Inter', sans-serif",
+              fontWeight: 500,
+              color: 'rgba(0,0,0,0.65)',
+              lineHeight: 1.6,
+              marginBottom: '10px',
+            }}>
+              We manage influencer campaigns end-to-end — strategy, creator matching, content
+              approval, and performance tracking. Creators in the network average{' '}
+              <strong style={{ color: '#000' }}>50K–100K+ views per post</strong>{' '}
+              across Karnataka, India.
+            </p>
+            <p className="type-mono" style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              color: 'rgba(0,0,0,0.35)',
+              letterSpacing: '0.06em',
+              marginBottom: '14px',
+            }}>
+              Instagram Reels &middot; YouTube &middot; Stories
+            </p>
+            <a
+              href={SEO.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-brutal btn-brutal-primary"
+              style={{ background: '#000', gap: '8px' }}
+            >
+              <MessageSquare size={12} />
+              ENQUIRE FOR YOUR BRAND
+            </a>
+          </div>
+
+          {/* Divider label above creator grid */}
+          <p className="type-mono" style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            color: 'rgba(0,0,0,0.28)',
+            letterSpacing: '0.15em',
+            margin: 0,
+          }}>
+            ↓&nbsp; Creators in the network — drag to explore
+          </p>
 
         </div>
       </motion.div>

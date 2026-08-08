@@ -288,8 +288,8 @@ body {
 
 .type-label {
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -297,10 +297,72 @@ body {
 
 .type-mono {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 400;
+  font-size: clamp(12px, 0.9vw, 14px);
+  font-weight: 600;
   line-height: 1.4;
   letter-spacing: 0.04em;
+}
+
+/* ── Reusable brutalist button — primary (purple) ── */
+.btn-brutal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #000;
+  padding: 14px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 4px 4px 0px 0px #000;
+  min-height: 52px;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+.btn-brutal:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px #000;
+}
+.btn-brutal:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px 0px #000;
+}
+.btn-brutal-primary {
+  background: #A855F7;
+  color: #fff;
+}
+.btn-brutal-ghost {
+  background: transparent;
+  color: #000;
+}
+
+/* ── Reusable brutalist badge / tool chip ── */
+.badge-brutal {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(12px, 1vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 0;
+  padding: 10px 20px;
+  box-shadow: 4px 4px 0px #000;
+  transition: transform 0.2s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+.badge-brutal:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000;
 }
 
 .type-italic-serif {

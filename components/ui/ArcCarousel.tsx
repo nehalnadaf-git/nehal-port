@@ -473,7 +473,7 @@ export default function ArcCarousel({
                     pointerEvents: 'none',
                     boxShadow: '2px 2px 0px #FFFFFF',
                   }}>
-                    <span style={{ fontSize: '11px', color: '#fff', fontWeight: 700, letterSpacing: '0.08em', fontFamily: "'JetBrains Mono', monospace" }}>VIEW</span>
+                    <span className="type-mono" style={{ color: '#fff', fontWeight: 700, letterSpacing: '0.08em' }}>VIEW</span>
                     <ArrowUpRight size={12} color="#fff" />
                   </div>
                 )}
@@ -528,12 +528,10 @@ export default function ArcCarousel({
         <div style={{ textAlign: 'center', paddingBottom: '20px', paddingTop: '4px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px', flexWrap: 'wrap', padding: '4px 16px' }}>
             <span
+              className="type-mono"
               style={{
-                fontSize: 'clamp(12px, 1.4vw, 14px)',
                 fontWeight: 800,
                 color: '#A855F7',
-                fontFamily: "'JetBrains Mono', monospace",
-                letterSpacing: '0.08em',
               }}
             >
               {String(activeIndex + 1).padStart(2, '0')} / {String(items.length).padStart(2, '0')}
@@ -555,14 +553,12 @@ export default function ArcCarousel({
 
         {/* Mobile swipe hint — hidden on desktop via CSS pointer media query */}
         <p
-          className="arc-swipe-hint"
+          className="arc-swipe-hint type-mono"
           aria-hidden="true"
           style={{
             textAlign: 'center',
-            fontSize: '10px',
             letterSpacing: '0.12em',
             color: 'var(--muted-foreground)',
-            fontFamily: "'JetBrains Mono', monospace",
             opacity: 0.55,
             paddingBottom: '8px',
             marginTop: '-4px',

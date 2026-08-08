@@ -261,11 +261,11 @@ export default function VideoProjectsGallery() {
             style={{
               display: 'inline-block',
               marginLeft: '8px',
-              fontSize: '11px',
               color: '#A855F7',
               fontWeight: 700,
               letterSpacing: '0.1em',
             }}
+            className="type-label"
           >
             Click to explore ↑
           </span>

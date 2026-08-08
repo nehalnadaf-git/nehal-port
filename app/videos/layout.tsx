@@ -146,6 +146,54 @@ const videoListSchema = {
   ],
 };
 
+// FAQPage schema — video-editing-specific FAQs for rich results on /videos
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What type of video editing does Nehal Nadaf offer?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Brand films, Instagram Reels, YouTube content, product promos, event highlight reels, and short-form social media videos. The service covers the full editing pipeline: cut, colour grading, audio mix, motion graphics, titles, and platform-optimised export in all required aspect ratios — 16:9 for YouTube, 9:16 for Reels and Stories.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Nehal Nadaf do colour grading?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — professional colour grading in DaVinci Resolve is applied to every video project. This includes primary colour correction (exposure, white balance, skin tones) and secondary creative grading for the final visual look. DaVinci Resolve is the industry standard used on Hollywood films and major commercial productions worldwide.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "What is the turnaround time for a brand video or Instagram Reel?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Instagram Reels and short-form content under 60 seconds are typically delivered within 1–2 business days. A standard brand video or commercial (1–3 minutes) is typically delivered as a first cut within 3–5 business days. Revision rounds are structured and agreed upfront for every project.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can Nehal Nadaf edit videos for international brands remotely?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes — remote video editing is the default workflow. Footage is shared via Google Drive, Dropbox, or WeTransfer. Review links are delivered in a browser-viewable format. Final exports are delivered in the resolution, format, and aspect ratio required for each platform. Clients across India and internationally are served this way without any quality compromise.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What software does Nehal Nadaf use for video editing?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'DaVinci Resolve is the primary editing and colour grading tool — the industry standard for cinematic colour work, used on major Hollywood productions and commercial campaigns. Adobe Premiere Pro is also available for projects requiring specific Adobe workflows or multi-platform compatibility.',
+      },
+    },
+  ],
+};
+
 export default function VideosLayout({
   children,
 }: {
@@ -164,6 +212,10 @@ export default function VideosLayout({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(videoObjectSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       {children}
     </>

@@ -8,19 +8,19 @@ import { SEO } from '@/lib/seo';
  * General allow-all policy using wildcard user-agent (*).
  * Automatically covers all standard and AI crawlers (GPTBot, ClaudeBot,
  * PerplexityBot, Google-Extended, etc.) without needing per-bot blocks.
+ *
+ * IMPORTANT: /_next/image/ and /_next/static/ are explicitly allowed BEFORE
+ * any disallow rules. Without these, Googlebot cannot fetch Next.js-optimised
+ * images or the CSS/JS it needs to render pages — harming both image indexing
+ * and JavaScript rendering quality.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
-        allow: '/',
-        disallow: [
-          '/admin/',
-          '/_next/',
-          '/api/',
-          '/sw.js',
-        ],
+        allow: ['/', '/_next/image/', '/_next/static/'],
+        disallow: ['/admin/', '/api/', '/sw.js'],
       },
     ],
     sitemap: `${SEO.baseUrl}/sitemap.xml`,

@@ -4,7 +4,7 @@
 
 ## Who is Nehal Nadaf?
 
-Nehal Nadaf is a multi-disciplinary creative professional with 5+ years of experience delivering end-to-end digital work for businesses. He operates from Hubli, Karnataka, India, serving clients locally, remotely across India, and internationally.
+Nehal Nadaf is a multi-disciplinary creative professional based in Hubli, Karnataka, India, with 5+ years of video editing experience delivering end-to-end digital work for businesses. He operates locally, remotely across India, and internationally.
 
 He is the founder of a boutique creative agency in Hubli that provides web development, video production, social media management, and influencer marketing as a single cohesive offering.
 
@@ -37,7 +37,7 @@ He is the founder of a boutique creative agency in Hubli that provides web devel
 
 ## Portfolio
 
-### Website Projects (10+ delivered)
+### Website Projects
 - Auto Glam Detailing Studio — https://auto-glam.vercel.app
 - CARDEE The Detailing Studio — https://cardee-detailing-studio.vercel.app
 - Baba Royal Garage — https://baba-royal-garage-m6hv.vercel.app

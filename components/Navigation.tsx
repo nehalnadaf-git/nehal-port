@@ -1,10 +1,30 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+const linkStyle = {
+  fontFamily: "'Inter', sans-serif",
+  fontSize: 'clamp(10px, 1vw, 12px)',
+  fontWeight: 600,
+  letterSpacing: '0.07em',
+  textTransform: 'uppercase' as const,
+  color: 'rgba(0, 0, 0, 0.60)',
+  textDecoration: 'none',
+  transition: 'color 0.2s ease',
+  whiteSpace: 'nowrap' as const,
+};
+
+const PAGE_LINKS = [
+  { href: '/about',   label: 'About'   },
+  { href: '/contact', label: 'Contact' },
+];
 
 export default function Navigation() {
   const [time, setTime] = useState('');
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const update = () => {
@@ -87,41 +107,80 @@ export default function Navigation() {
         </span>
 
         {/* Centre — brand name (always perfectly centred) */}
-        <div
+        <Link
+          href="/"
+          style={{ textDecoration: 'none' }}
+          aria-label="Nehal Nadaf — Home"
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: '5px',
+              userSelect: 'none',
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "'Inter', sans-serif",
+                fontWeight: 900,
+                fontSize: 'clamp(15px, 1.6vw, 18px)',
+                letterSpacing: '-0.04em',
+                color: '#000000',
+              }}
+            >
+              Nehal
+            </span>
+            <span
+              style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontStyle: 'italic',
+                fontWeight: 500,
+                fontSize: 'clamp(15px, 1.6vw, 18px)',
+                letterSpacing: '0em',
+                color: '#000000',
+              }}
+            >
+              Nadaf
+            </span>
+          </div>
+        </Link>
+
+        {/* Right — page links */}
+        <nav
+          aria-label="Page links"
           style={{
             display: 'flex',
-            alignItems: 'baseline',
-            gap: '5px',
-            userSelect: 'none',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: 'clamp(12px, 1.8vw, 28px)',
           }}
         >
-          <span
-            style={{
-              fontFamily: "'Inter', sans-serif",
-              fontWeight: 900,
-              fontSize: 'clamp(15px, 1.6vw, 18px)',
-              letterSpacing: '-0.04em',
-              color: '#000000',
-            }}
-          >
-            Nehal
-          </span>
-          <span
-            style={{
-              fontFamily: "'Playfair Display', Georgia, serif",
-              fontStyle: 'italic',
-              fontWeight: 500,
-              fontSize: 'clamp(15px, 1.6vw, 18px)',
-              letterSpacing: '0em',
-              color: '#000000',
-            }}
-          >
-            Nadaf
-          </span>
-        </div>
-
-        {/* Right — empty, balances the grid */}
-        <span aria-hidden="true" />
+          {PAGE_LINKS.map(({ href, label }) => {
+            const isActive = pathname === href;
+            return (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  ...linkStyle,
+                  color: isActive ? '#000' : 'rgba(0, 0, 0, 0.60)',
+                  borderBottom: isActive ? '1px solid #000' : '1px solid transparent',
+                }}
+                onMouseEnter={e => {
+                  if (!window.matchMedia('(hover: hover)').matches) return;
+                  (e.currentTarget as HTMLElement).style.color = '#000';
+                }}
+                onMouseLeave={e => {
+                  if (!window.matchMedia('(hover: hover)').matches) return;
+                  (e.currentTarget as HTMLElement).style.color = isActive ? '#000' : 'rgba(0,0,0,0.60)';
+                }}
+              >
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </nav>
   );
