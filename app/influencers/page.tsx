@@ -80,7 +80,7 @@ export default function InfluencersPage() {
             {influencers.map((inf, i) => (
               <GridItem
                 key={i}
-                className="w-[280px] h-[360px] relative max-w-full"
+                className="w-[210px] sm:w-[230px] h-[270px] sm:h-[290px] relative max-w-full"
                 onClick={() => window.open(inf.instagramUrl, '_blank', 'noopener,noreferrer')}
               >
                 {/* ── Transparent card — no white bg ─────────────────── */}
@@ -88,16 +88,16 @@ export default function InfluencersPage() {
                   width: '100%', height: '100%',
                   display: 'flex', flexDirection: 'column',
                   alignItems: 'center',
-                  padding: '20px 14px 16px',
+                  padding: '16px 12px 14px',
                 }}>
 
                   {/* Circle photo */}
                   <div style={{
-                    width: '180px', height: '180px',
+                    width: 'clamp(115px, 28vw, 130px)', height: 'clamp(115px, 28vw, 130px)',
                     borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
-                    border: '3px solid #000000',
-                    boxShadow: '5px 5px 0px #000000',
-                    marginBottom: '20px',
+                    border: '2.5px solid #000000',
+                    boxShadow: '4px 4px 0px #000000',
+                    marginBottom: '12px',
                     background: '#ffffff',
                   }}>
                     <img
@@ -113,10 +113,10 @@ export default function InfluencersPage() {
 
                   {/* Username (@handle) */}
                   <div style={{
-                    fontSize: 'clamp(20px, 4vw, 24px)', fontWeight: 900, color: '#000000',
+                    fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 900, color: '#000000',
                     fontFamily: "'Inter', sans-serif",
                     letterSpacing: '-0.01em',
-                    marginBottom: '8px',
+                    marginBottom: '4px',
                     textAlign: 'center',
                   }}>
                     {inf.handle}
@@ -124,15 +124,15 @@ export default function InfluencersPage() {
 
                   {/* Location */}
                   <div style={{
-                    display: 'flex', alignItems: 'center', gap: '6px',
-                    marginBottom: '8px',
+                    display: 'flex', alignItems: 'center', gap: '4px',
+                    marginBottom: '6px',
                     justifyContent: 'center',
                   }}>
-                    <MapPin size={16} style={{ color: '#000', flexShrink: 0 }} />
+                    <MapPin size={13} style={{ color: '#000', flexShrink: 0 }} />
                     <span style={{
-                      fontSize: 'clamp(12px, 3vw, 15px)', color: '#000',
+                      fontSize: 'clamp(11px, 2.2vw, 13px)', color: '#000',
                       fontFamily: "'Inter', sans-serif",
-                      fontWeight: 700, letterSpacing: '0.06em',
+                      fontWeight: 700, letterSpacing: '0.04em',
                     }}>
                       {inf.location}
                     </span>
@@ -140,9 +140,9 @@ export default function InfluencersPage() {
 
                   {/* Average Views */}
                   <div style={{
-                    fontSize: 'clamp(14px, 3.5vw, 16px)', fontWeight: 800, color: '#000000',
+                    fontSize: 'clamp(12px, 2.5vw, 14px)', fontWeight: 800, color: '#000000',
                     fontFamily: "'JetBrains Mono', monospace",
-                    letterSpacing: '0.04em',
+                    letterSpacing: '0.03em',
                     textAlign: 'center',
                   }}>
                     AVG views:{' '}
