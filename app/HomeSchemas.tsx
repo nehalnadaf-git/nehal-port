@@ -14,7 +14,7 @@ const faqs = [
   {
     question: 'What services does Nehal Nadaf offer?',
     answer:
-      'Nehal Nadaf offers premium web development (React.js, Next.js, Tailwind CSS, GSAP), UI/UX design (Figma), professional video editing and colour grading (DaVinci Resolve), social media management, content creation, and full influencer marketing campaigns — serving businesses in Hubli, Karnataka, and across India.',
+      'Nehal Nadaf offers premium web development (React.js, Next.js, Tailwind CSS, GSAP), UI/UX design, professional video editing and colour grading (DaVinci Resolve), social media management, content creation, and full influencer marketing campaigns — serving businesses in Hubli, Karnataka, and across India.',
   },
   {
     question: 'Does Nehal Nadaf do social media management and marketing?',

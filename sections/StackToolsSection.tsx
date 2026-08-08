@@ -32,16 +32,6 @@ const GsapLogo = () => (
   </svg>
 );
 
-const FigmaLogo = () => (
-  <svg viewBox="0 0 24 24" width="32" height="32" aria-label="Figma logo" fill="none">
-    <path d="M8 24c2.208 0 4-1.792 4-4v-4H8c-2.208 0-4 1.792-4 4s1.792 4 4 4z" fill="#0ACF83"/>
-    <path d="M4 12c0-2.208 1.792-4 4-4h4v8H8c-2.208 0-4-1.792-4-4z" fill="#A259FF"/>
-    <path d="M4 4c0-2.208 1.792-4 4-4h4v8H8C5.792 8 4 6.208 4 4z" fill="#F24E1E"/>
-    <path d="M12 0h4c2.208 0 4 1.792 4 4s-1.792 4-4 4h-4V0z" fill="#FF7262"/>
-    <path d="M20 12c0 2.208-1.792 4-4 4s-4-1.792-4-4 1.792-4 4-4 4 1.792 4 4z" fill="#1ABCFE"/>
-  </svg>
-);
-
 const DaVinciLogo = () => (
   <svg viewBox="0 0 24 24" width="32" height="32" aria-label="DaVinci Resolve logo" fill="none">
     <circle cx="12" cy="12" r="11" fill="#1B1B1B" stroke="#333" strokeWidth="0.5"/>

@@ -23,23 +23,23 @@ const SERVICES = [
     logo: '/images/new-icons/agency_graphic_designers.webp',
     name: 'UI/UX Design',
     slug: 'ui-ux-design',
-    description: 'High-fidelity Figma prototypes and design systems built around conversion, clarity, and brand precision. Design and development in one.',
+    description: 'High-fidelity prototypes and design systems built around conversion, clarity, and brand precision. Design and development in one.',
   },
   {
     logo: '/images/new-icons/stack_davinci.webp',
     name: 'Video Editing & Production',
     slug: 'video-editing',
-    description: 'Brand films, Reels, and YouTube content cut and colour-graded in DaVinci Resolve to commercial production standards.',
+    description: 'Cinematic brand films, Instagram Reels, YouTube content, and product promos. Edited and colour-graded in DaVinci Resolve.',
   },
   {
     logo: '/images/new-icons/exp_social_media_agency.webp',
     name: 'Social Media Marketing',
     slug: 'social-media-marketing',
-    description: 'Full-service social media management — content strategy, production, scheduling, and influencer campaigns.',
+    description: 'Full content creation, account management, and Karnataka creator collaborations averaging 50K–100K+ views on Instagram.',
   },
 ];
 
-const TOOLS = ['React.js', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Figma', 'DaVinci Resolve', 'Vercel'];
+const TOOLS = ['React.js', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'DaVinci Resolve', 'Vercel'];
 
 const LOCATIONS = [
   { icon: MapPin,  label: 'Hubli–Dharwad', sub: 'North Karnataka, India' },

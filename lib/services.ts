@@ -49,7 +49,7 @@ export interface Service {
 }
 
 export const services: Service[] = [
-  /* ── 1. Web Development ──────────────────────────────────────────────────── */
+  /* ── 1. Web Development ─────────────────────────────────────────────────── */
   {
     slug: 'web-development',
     name: 'Web Development',
@@ -61,11 +61,11 @@ export const services: Service[] = [
 
 Serving clients in Hubli, Dharwad, and across Karnataka, with a growing portfolio of remote clients across India and internationally, the web development practice has delivered live business websites across automotive detailing, dental healthcare, education, restaurants, food service, and home appliance repair. Every industry. Every size. Every time to the same standard.
 
-Each website is designed in Figma first, developed with precision in React.js and Next.js, animated with GSAP for cinematic micro-interactions, and deployed on Vercel for edge-performance globally. TypeScript ensures maintainable, type-safe codebases. Tailwind CSS provides consistent, pixel-accurate design systems without runtime CSS overhead.
+Each website is designed with a modern UI/UX system first, developed with precision in React.js and Next.js, animated with GSAP for cinematic micro-interactions, and deployed on Vercel for edge-performance globally. TypeScript ensures maintainable, type-safe codebases. Tailwind CSS provides consistent, pixel-accurate design systems without runtime CSS overhead.
 
 The combination means faster delivery, fewer bugs, and a website that genuinely reflects the calibre of the business it represents — whether it is a single-page landing that converts or a multi-section portfolio that impresses.`,
     whatIsIncluded: [
-      'Custom design (no templates) — Figma wireframes to pixel-accurate implementation',
+      'Custom design (no templates) — wireframes to pixel-accurate implementation',
       'React.js / Next.js development with TypeScript for maintainability',
       'Responsive, mobile-first layouts tested across iOS, Android, and desktop',
       'GSAP scroll-triggered animations and micro-interactions',
@@ -74,7 +74,7 @@ The combination means faster delivery, fewer bugs, and a website that genuinely 
       'Performance optimisation: lazy loading, image optimisation, code splitting',
       'On-page content integration and keyword alignment',
     ],
-    toolsUsed: ['React.js', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Figma', 'Vercel'],
+    toolsUsed: ['React.js', 'Next.js', 'TypeScript', 'Tailwind CSS', 'GSAP', 'Vercel'],
     whyChoose: [
       {
         title: 'No templates — ever',
@@ -89,7 +89,7 @@ The combination means faster delivery, fewer bugs, and a website that genuinely 
       {
         title: 'Design and development in one',
         description:
-          'When the designer and developer are the same person, there is zero handoff friction. The Figma design is implemented exactly as designed — right fonts, right spacing, right animations. No translation loss between design and code.',
+          'When the designer and developer are the same person, there is zero handoff friction. The UI/UX design is implemented exactly as designed — right fonts, right spacing, right animations. No translation loss between design and code.',
       },
       {
         title: 'Built for long-term performance',
@@ -106,7 +106,7 @@ The combination means faster delivery, fewer bugs, and a website that genuinely 
       {
         question: 'Does Nehal Nadaf build websites for clients outside Hubli?',
         answer:
-          'Yes — the majority of web development work is remote-compatible. Clients across Karnataka, across India, and internationally receive the same process: Figma design review, iterative feedback rounds, and final deployment on Vercel. Time zones and geography are not a constraint.',
+          'Yes — the majority of web development work is remote-compatible. Clients across Karnataka, across India, and internationally receive the same process: design review, iterative feedback rounds, and final deployment on Vercel. Time zones and geography are not a constraint.',
       },
       {
         question: 'What tech stack is used and why?',
@@ -116,7 +116,7 @@ The combination means faster delivery, fewer bugs, and a website that genuinely 
       {
         question: 'How long does it take to build a business website?',
         answer:
-          'A standard business website with 5–8 pages typically takes 3–5 weeks from design kickoff to live deployment — including the Figma design phase, development, content integration, cross-device testing, and final SEO setup. More complex projects may take 6–10 weeks. Every project includes a clear timeline agreed upfront.',
+          'A standard business website with 5–8 pages typically takes 3–5 weeks from design kickoff to live deployment — including the UI/UX design phase, development, content integration, cross-device testing, and final SEO setup. More complex projects may take 6–10 weeks. Every project includes a clear timeline agreed upfront.',
       },
       {
         question: 'What happens after the website is live?',
@@ -146,28 +146,28 @@ The combination means faster delivery, fewer bugs, and a website that genuinely 
   {
     slug: 'ui-ux-design',
     name: 'UI/UX Design',
-    tagline: 'Conversion-Focused Digital Experiences Designed in Figma — Hubli, Karnataka',
+    tagline: 'Conversion-Focused Digital Experiences — Hubli, Karnataka',
     shortDescription:
       'Every interface is designed around one question: what does this visitor need to do next? From wireframes to polished high-fidelity prototypes, the process is grounded in user behaviour, brand precision, and a visual standard that makes a first impression count.',
     fullDescription:
       `Good design is not decoration — it is the difference between a visitor who leaves in three seconds and a client who picks up the phone. The UI/UX design process starts with understanding: the brand, the audience, and the specific outcome the design needs to achieve.
 
-From there, wireframes establish the information architecture and user flows before a single visual decision is made. High-fidelity prototypes in Figma bring the design to life — letting you experience the product before any code is written, reducing development time and design misalignment.
+From there, wireframes establish the information architecture and user flows before a single visual decision is made. High-fidelity prototypes bring the design to life — letting you experience the product before any code is written, reducing development time and design misalignment.
 
 The visual design language is deliberately premium: considered typography (no generic system fonts), a curated colour palette, and micro-interactions that reward exploration without distracting from the goal. For web interfaces, every component is designed with its responsive behaviour defined — desktop, tablet, and mobile are designed together, not added as afterthoughts.
 
-For clients who need both design and development, the UI/UX process flows directly into the React.js and Next.js build — no handoff friction, no file conversion, no visual drift between design and production. The result is a website that looks exactly like the Figma file and behaves exactly as designed.`,
+For clients who need both design and development, the UI/UX process flows directly into the React.js and Next.js build — no handoff friction, no file conversion, no visual drift between design and production. The result is a website that looks and behaves exactly as designed.`,
     whatIsIncluded: [
       'Discovery call and brand alignment session',
       'Information architecture and user flow mapping',
       'Low-fidelity wireframes for all core pages and screens',
-      'High-fidelity Figma prototypes with interactive states',
+      'High-fidelity prototypes with interactive states',
       'Responsive design across desktop, tablet, and mobile breakpoints',
       'Design system: type scale, colour palette, spacing tokens, component library',
-      'Handoff-ready Figma files with developer annotations',
+      'Developer-ready annotations and design documentation',
       'Optional: direct transition to React.js / Next.js development',
     ],
-    toolsUsed: ['Figma', 'React.js', 'Next.js', 'Tailwind CSS', 'GSAP'],
+    toolsUsed: ['React.js', 'Next.js', 'Tailwind CSS', 'GSAP'],
     whyChoose: [
       {
         title: 'Design that converts, not just impresses',
@@ -175,9 +175,9 @@ For clients who need both design and development, the UI/UX process flows direct
           'Every layout decision is made with a conversion goal in mind. Typography hierarchy guides the eye. Whitespace creates focus. CTAs are placed where user attention naturally lands. Beautiful and effective are not trade-offs here.',
       },
       {
-        title: 'Figma → production with zero drift',
+        title: 'Design → production with zero drift',
         description:
-          'When design and development are done by the same person, the Figma prototype is what gets built — exact fonts, exact spacing, exact animations. No "close enough" from a developer who never met the designer.',
+          'When design and development are done by the same person, the interactive prototype is what gets built — exact fonts, exact spacing, exact animations. No "close enough" from a developer who never met the designer.',
       },
       {
         title: 'Responsive by default, not by afterthought',
@@ -185,16 +185,16 @@ For clients who need both design and development, the UI/UX process flows direct
           'Every component is designed for mobile, tablet, and desktop simultaneously from the wireframe stage. The mobile layout is not a scaled-down desktop; it is a fully considered experience for touch and small screens.',
       },
       {
-        title: 'You own the design files',
+        title: 'Complete ownership of design assets',
         description:
-          'All Figma source files — frames, components, design system tokens, and interactive prototypes — are delivered at project completion. You own them outright and can use them with any future developer.',
+          'All design assets — wireframes, components, design system tokens, and interactive prototypes — are delivered at project completion. You own them outright and can use them for future development.',
       },
     ],
     faqs: [
       {
         question: 'What does the UI/UX design process look like?',
         answer:
-          'It begins with a discovery session to understand your brand, target audience, and design goals. From there: wireframes establish structure, high-fidelity Figma designs build the visual system, and an interactive prototype demonstrates the experience before development begins. Feedback rounds are built into every stage.',
+          'It begins with a discovery session to understand your brand, target audience, and design goals. From there: wireframes establish structure, high-fidelity designs build the visual system, and an interactive prototype demonstrates the experience before development begins. Feedback rounds are built into every stage.',
       },
       {
         question: 'Do you design for mobile as well as desktop?',
@@ -207,24 +207,23 @@ For clients who need both design and development, the UI/UX process flows direct
           'Yes — and this is the strongest version of the service. When UI/UX design and React.js / Next.js development are handled by the same person, there is zero handoff friction. The design is implemented exactly as intended, with the right fonts, spacing, animation, and interaction behaviours. No translation loss.',
       },
       {
-        question: 'Do I get the Figma source files?',
+        question: 'Do I get the source design files?',
         answer:
-          'Yes. All Figma source files are delivered at project completion — including all frames, components, and the full design system. You own them outright and can take them to any future developer without restriction.',
+          'Yes. All design files are delivered at project completion — including all frames, components, and the full design system. You own them outright without restriction.',
       },
       {
         question: 'What if I already have a brand identity but need a new website design?',
         answer:
-          'Existing brand guidelines are integrated directly into the Figma design system from the start — typography, colour palette, logo usage. If guidelines are informal or incomplete, a short brand alignment session can formalise the key decisions before design begins.',
+          'Existing brand guidelines are integrated directly into the design system from the start — typography, colour palette, logo usage. If guidelines are informal or incomplete, a short brand alignment session can formalise the key decisions before design begins.',
       },
     ],
     relatedServices: ['web-development', 'social-media-marketing'],
     metaTitle: 'UI/UX Design in Hubli, Karnataka | Nehal Nadaf',
     metaDescription:
-      'Professional UI/UX design in Figma by Nehal Nadaf — Hubli, Karnataka. Conversion-focused interfaces, responsive design for all devices, and direct handoff to React.js / Next.js development.',
+      'Professional UI/UX design by Nehal Nadaf — Hubli, Karnataka. Conversion-focused interfaces, responsive design for all devices, and direct handoff to React.js / Next.js development.',
     keywords: [
       'UI UX design Hubli',
       'UI UX designer Karnataka',
-      'Figma designer Hubli',
       'web design Hubli Karnataka',
       'UI design freelancer India',
       'UX design Karnataka',
@@ -351,7 +350,7 @@ The influencer marketing side connects brand campaigns with a network of Karnata
       'Influencer identification and campaign coordination (on request)',
       'Monthly performance report: reach, impressions, follower growth, top posts',
     ],
-    toolsUsed: ['Instagram', 'YouTube', 'DaVinci Resolve', 'Figma', 'Meta Business Suite'],
+    toolsUsed: ['Instagram', 'YouTube', 'DaVinci Resolve', 'Meta Business Suite'],
     whyChoose: [
       {
         title: 'Full production, not just strategy',

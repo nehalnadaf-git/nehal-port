@@ -27,9 +27,9 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 const SERVICE_OPTIONS = [
   { value: '',                         label: 'Select a service…'             },
-  { value: 'web-development',          label: 'Web Development (React.js / Next.js)' },
-  { value: 'ui-ux-design',             label: 'UI/UX Design (Figma)'           },
-  { value: 'video-editing',            label: 'Video Editing & Colour Grading'  },
+  { value: 'web-development',          label: 'Web Development (React / Next.js)' },
+  { value: 'ui-ux-design',             label: 'UI/UX Design'                   },
+  { value: 'video-editing',            label: 'Video Editing & Production'     },
   { value: 'social-media-marketing',   label: 'Social Media Management'         },
   { value: 'influencer-marketing',     label: 'Influencer Marketing Campaign'   },
   { value: 'other',                    label: 'Something else'                  },

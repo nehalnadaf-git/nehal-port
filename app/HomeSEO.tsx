@@ -63,7 +63,6 @@ function personSchema() {
       'Tailwind CSS',
       'GSAP Animation',
       'UI/UX Design',
-      'Figma',
       'Video Editing',
       'DaVinci Resolve',
       'Colour Grading',
@@ -194,7 +193,7 @@ function localBusinessSchema() {
             '@type': 'Service',
             name: 'UI/UX Design',
             description:
-              'Immersive, conversion-focused digital experiences with modern typography, micro-animations, and user-centred design in Figma.',
+              'Immersive, conversion-focused digital experiences with modern typography, micro-animations, and user-centred design.',
           },
         },
         {
@@ -279,7 +278,7 @@ function professionalServiceSchema() {
       'Content Creation',
     ],
     knowsAbout: [
-      'React.js', 'Next.js', 'Tailwind CSS', 'GSAP', 'Figma',
+      'React.js', 'Next.js', 'Tailwind CSS', 'GSAP',
       'DaVinci Resolve', 'Instagram Reels', 'YouTube Content',
       'Influencer Marketing', 'Social Media Management',
     ],

@@ -147,7 +147,7 @@ const faqSchema = {
       name: 'Does Nehal Nadaf build websites for clients outside India?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. Web development is fully remote-compatible. Clients across Karnataka, across India, and internationally receive the same process: Figma design review, iterative feedback rounds, and final deployment on Vercel. Time zones and geography are not a constraint — all collaboration happens asynchronously via video calls and shared design files.',
+        text: 'Yes. Web development is fully remote-compatible. Clients across Karnataka, across India, and internationally receive the same process: design review, iterative feedback rounds, and final deployment on Vercel. Time zones and geography are not a constraint — all collaboration happens asynchronously via video calls and shared design files.',
       },
     },
     {
@@ -163,7 +163,7 @@ const faqSchema = {
       name: 'How long does it take to build a professional business website?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'A standard business website with 5–8 pages typically takes 3–5 weeks from design kickoff to live deployment — including the Figma design phase, React.js / Next.js development, content integration, cross-device testing, and final SEO setup. More complex projects with custom functionality may take 6–10 weeks. Every project includes a timeline agreed upfront.',
+        text: 'A standard business website with 5–8 pages typically takes 3–5 weeks from design kickoff to live deployment — including the UI/UX design phase, React.js / Next.js development, content integration, cross-device testing, and final SEO setup. More complex projects with custom functionality may take 6–10 weeks. Every project includes a timeline agreed upfront.',
       },
     },
     {
