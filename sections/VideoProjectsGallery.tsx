@@ -20,51 +20,85 @@ gsap.registerPlugin(ScrollTrigger);
 
 const verticalVideoProjects: VideoArcItem[] = [
   {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353308/TPF_Tajweed_hmazce.mp4'),
-    title: 'TPF Tajweed',
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'),
+    title: 'Brand Reel 01',
     label: 'Brand Reel • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785126183/True_Path_foundation_ADV_apywir.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785126183/True_Path_foundation_ADV_apywir.mp4'),
-    title: 'True Path Foundation ADV',
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'),
+    title: 'Brand Reel 02',
     label: 'Brand Reel • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351905/AQMrZwsUNPY_X_buPNvjEiDXTPpWd3kLcvfmCK3kYawXJyhE9AD7f3e9kiZtuGC_N1mAZ417R1yH93PRnYjKhpI_bw5xps.mp4'),
-    title: 'Brand Reel 04',
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'),
+    title: 'Brand Reel 03',
     label: 'Social Media • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1785126518/YC5_slkuzx.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1785126518/YC5_slkuzx.mp4'),
-    title: 'YC5 Brand Film',
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'),
+    title: 'Brand Reel 04',
     label: 'Brand Film • 9:16',
     aspectRatio: 'vertical',
   },
   {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784351903/AQNs7JWx7643lqque_gte9iVmvD3FmzWci4MY8qN7q4JPfInqGeT1zo24ArKmWatBkcLBaLWUh16lZdDBU9_wSxY19IxEjyjmQXQWOg_bk1qkg.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784351903/AQNs7JWx7643lqque_gte9iVmvD3FmzWci4MY8qN7q4JPfInqGeT1zo24ArKmWatBkcLBaLWUh16lZdDBU9_wSxY19IxEjyjmQXQWOg_bk1qkg.mp4'),
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'),
+    title: 'Brand Reel 05',
+    label: 'Brand Reel • 9:16',
+    aspectRatio: 'vertical',
+  },
+  {
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'),
     title: 'Brand Reel 06',
     label: 'Instagram Reel • 9:16',
     aspectRatio: 'vertical',
   },
+  {
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'),
+    title: 'Brand Reel 07',
+    label: 'Brand Reel • 9:16',
+    aspectRatio: 'vertical',
+  },
+  {
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'),
+    title: 'Brand Reel 08',
+    label: 'Brand Reel • 9:16',
+    aspectRatio: 'vertical',
+  },
+  {
+    src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'),
+    poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'),
+    title: 'Brand Reel 09',
+    label: 'Brand Reel • 9:16',
+    aspectRatio: 'vertical',
+  },
+  // ⚠️ Missing from new upload — re-upload to ep3ji8zn and uncomment:
+  // TPF Tajweed, True Path Foundation ADV, YC5 Brand Film,
+  // AQMrZw... (Brand Reel 04 Social), AQNs7J... (Brand Reel 06)
 ];
 
+// ⚠️ Al Moon Academy (horizontal) has no new upload in ep3ji8zn yet.
+// Re-upload to ep3ji8zn and restore this entry.
 const horizontalVideoProjects: ArcCarouselItem[] = [
-  {
-    src: cldVideo('https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4'),
-    poster: cldPoster('https://res.cloudinary.com/w71scqkk/video/upload/v1784353283/Al_Moon_Academy_Eng_1_l5pbgt.mp4'),
-    alt: 'Al Moon Academy',
-    category: 'Education',
-    url: undefined,
-  },
+  // {
+  //   src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/vXXXXXXXXXX/Al_Moon_Academy.mp4'),
+  //   poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/vXXXXXXXXXX/Al_Moon_Academy.mp4'),
+  //   alt: 'Al Moon Academy',
+  //   category: 'Education',
+  //   url: undefined,
+  // },
 ];
+
 
 export default function VideoProjectsGallery() {
   const router = useRouter();

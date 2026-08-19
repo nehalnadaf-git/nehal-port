@@ -9,11 +9,14 @@
  * Transformation params used:
  *   f_auto      — serve WebM/MP4/AVIF automatically based on browser support
  *   q_auto:good — quality balanced for visual fidelity vs file size (~60–80% smaller)
+ *   vc_h264     — force H.264 codec on video delivery; prevents black-box on Chrome/Firefox
+ *                 when the source file is HEVC/H.265 (hvc1), which only Safari/iOS decodes.
+ *                 Safe to apply universally — Cloudinary transcodes as needed.
  *   w_1280      — cap width at 1280px (HD) — sufficient for carousel previews
  *   so_0        — seek-offset: thumbnail captured at 0 seconds (first frame)
  */
 
-const VIDEO_TRANSFORM = 'f_auto,q_auto:good,w_1280';
+const VIDEO_TRANSFORM = 'f_auto,q_auto:good,vc_h264,w_1280';
 const POSTER_TRANSFORM = 'f_auto,q_auto:good,w_640,so_0';
 
 /**
@@ -21,7 +24,7 @@ const POSTER_TRANSFORM = 'f_auto,q_auto:good,w_640,so_0';
  * Handles URLs with and without an existing version segment (v12345...).
  *
  * Input:  https://res.cloudinary.com/cloud/video/upload/v123/file.mp4
- * Output: https://res.cloudinary.com/cloud/video/upload/f_auto,q_auto:good,w_1280/v123/file.mp4
+ * Output: https://res.cloudinary.com/cloud/video/upload/f_auto,q_auto:good,vc_h264,w_1280/v123/file.mp4
  */
 export function cldVideo(src: string): string {
   return src.replace('/upload/', `/upload/${VIDEO_TRANSFORM}/`);
