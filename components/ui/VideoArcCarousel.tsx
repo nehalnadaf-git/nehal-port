@@ -366,7 +366,7 @@ export default function VideoArcCarousel({
     // orientationchange fires on mobile before resize — re-evaluate vw immediately
     window.addEventListener('orientationchange', onResize);
 
-    // ─── IntersectionObserver: only load video data when carousel is near viewport
+    // ─── IntersectionObserver: resume videos when carousel enters viewport
     const observer = new IntersectionObserver(
       ([entry]) => {
         // One-shot lazy-load: only goes true, triggers video preload
@@ -375,6 +375,14 @@ export default function VideoArcCarousel({
         isInViewRef.current = entry.isIntersecting;
         if (entry.isIntersecting && rafId.current === null) {
           rafId.current = requestAnimationFrame(animate);
+        }
+        // Desktop fix: explicitly call play() every time the section enters view.
+        // autoPlay + preload="metadata" still silently fails on desktop Chrome/Firefox
+        // if no play() is called programmatically after a scroll-away/scroll-back.
+        if (entry.isIntersecting) {
+          videosRef.current.forEach(v => {
+            if (v && v.paused) v.play().catch(() => {});
+          });
         }
       },
       { rootMargin: '200px' }
@@ -389,6 +397,7 @@ export default function VideoArcCarousel({
       observer.disconnect();
     };
   }, [animate]);
+
 
   useEffect(() => { updateCards(); }, [updateCards]);
 
@@ -476,7 +485,7 @@ export default function VideoArcCarousel({
                   loop
                   muted
                   playsInline
-                  preload={isVisible ? 'metadata' : 'none'}
+                  preload="metadata"
                   style={{
                     position: 'absolute',
                     top: 0,
