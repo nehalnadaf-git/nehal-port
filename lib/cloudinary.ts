@@ -12,22 +12,36 @@
  *   vc_h264     — force H.264 codec on video delivery; prevents black-box on Chrome/Firefox
  *                 when the source file is HEVC/H.265 (hvc1), which only Safari/iOS decodes.
  *                 Safe to apply universally — Cloudinary transcodes as needed.
- *   w_1280      — cap width at 1280px (HD) — sufficient for carousel previews
+ *   w_1280      — cap width at 1280px (HD) — used for lightbox / full-view only
+ *   w_480       — 480px width for carousel card previews — ~60–70% smaller than w_1280
  *   so_0        — seek-offset: thumbnail captured at 0 seconds (first frame)
  */
 
 const VIDEO_TRANSFORM = 'f_auto,q_auto:good,vc_h264,w_1280';
+const VIDEO_PREVIEW_TRANSFORM = 'f_auto,q_auto:good,vc_h264,w_480';
 const POSTER_TRANSFORM = 'f_auto,q_auto:good,w_640,so_0';
 
 /**
  * Injects Cloudinary transformation params into a Cloudinary video URL.
- * Handles URLs with and without an existing version segment (v12345...).
+ * Produces a 1280px-wide HD stream — use for lightbox / full-screen playback only.
  *
  * Input:  https://res.cloudinary.com/cloud/video/upload/v123/file.mp4
  * Output: https://res.cloudinary.com/cloud/video/upload/f_auto,q_auto:good,vc_h264,w_1280/v123/file.mp4
  */
 export function cldVideo(src: string): string {
   return src.replace('/upload/', `/upload/${VIDEO_TRANSFORM}/`);
+}
+
+/**
+ * Low-bandwidth preview variant (480px wide) for carousel cards and grid tiles.
+ * ~60–70% smaller than cldVideo — saves significant Cloudinary CDN bandwidth.
+ * Use cldVideo() for the lightbox src so full quality plays when expanded.
+ *
+ * Input:  https://res.cloudinary.com/cloud/video/upload/v123/file.mp4
+ * Output: https://res.cloudinary.com/cloud/video/upload/f_auto,q_auto:good,vc_h264,w_480/v123/file.mp4
+ */
+export function cldVideoPreview(src: string): string {
+  return src.replace('/upload/', `/upload/${VIDEO_PREVIEW_TRANSFORM}/`);
 }
 
 /**

@@ -11,11 +11,13 @@ import {
   GridBody,
   GridItem,
 } from '@/components/ui/infinite-drag-scroll';
-import { cldVideo, cldPoster } from '@/lib/cloudinary';
+import { cldVideo, cldVideoPreview, cldPoster } from '@/lib/cloudinary';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 interface VideoItem {
   src: string;
+  /** Low-bandwidth w_480 preview for the grid card tile */
+  previewSrc: string;
   alt: string;
   label: string;
   category: string;
@@ -23,15 +25,15 @@ interface VideoItem {
 }
 
 const videoItems: VideoItem[] = [
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'), alt: 'Brand Reel 01', label: 'Brand Reel 01', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'), alt: 'Brand Reel 02', label: 'Brand Reel 02', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'), alt: 'Brand Reel 03', label: 'Brand Reel 03', category: 'Social Media', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'), alt: 'Brand Reel 04', label: 'Brand Reel 04', category: 'Brand Film', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'), alt: 'Brand Reel 05', label: 'Brand Reel 05', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'), alt: 'Brand Reel 06', label: 'Brand Reel 06', category: 'Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'), alt: 'Brand Reel 07', label: 'Brand Reel 07', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'), alt: 'Brand Reel 08', label: 'Brand Reel 08', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4') },
-  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'), alt: 'Brand Reel 09', label: 'Brand Reel 09', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'), alt: 'Brand Reel 01', label: 'Brand Reel 01', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'), alt: 'Brand Reel 02', label: 'Brand Reel 02', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'), alt: 'Brand Reel 03', label: 'Brand Reel 03', category: 'Social Media', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'), alt: 'Brand Reel 04', label: 'Brand Reel 04', category: 'Brand Film', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'), alt: 'Brand Reel 05', label: 'Brand Reel 05', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'), alt: 'Brand Reel 06', label: 'Brand Reel 06', category: 'Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'), alt: 'Brand Reel 07', label: 'Brand Reel 07', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'), alt: 'Brand Reel 08', label: 'Brand Reel 08', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4') },
+  { src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'), previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'), alt: 'Brand Reel 09', label: 'Brand Reel 09', category: 'Brand Reel', thumbSrc: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4') },
   // ⚠️ Missing from new upload — re-upload to ep3ji8zn and restore:
   // TPF Tajweed, True Path Foundation ADV, Empire Commercial, Al Moon Academy,
   // YC5 Brand Film, AQMrZw... (Brand Reel), AQNs7J... (Brand Reel 06)
@@ -90,7 +92,7 @@ function VideoCard({
       <video
         ref={videoRef}
         data-grid-video="true"
-        src={item.src}
+        src={item.previewSrc}
         poster={item.thumbSrc}
         muted
         loop

@@ -12,7 +12,7 @@ import type { VideoArcItem } from '@/components/ui/VideoArcCarousel';
 import ArcCarousel from '@/components/ui/ArcCarousel';
 import type { ArcCarouselItem } from '@/components/ui/ArcCarousel';
 import { MagicText } from '@/components/ui/magic-text';
-import { cldVideo, cldPoster } from '@/lib/cloudinary';
+import { cldVideo, cldVideoPreview, cldPoster } from '@/lib/cloudinary';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,6 +21,7 @@ gsap.registerPlugin(ScrollTrigger);
 const verticalVideoProjects: VideoArcItem[] = [
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111535/1_10.mp4'),
     title: 'Brand Reel 01',
     label: 'Brand Reel • 9:16',
@@ -28,6 +29,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111466/1_9.mp4'),
     title: 'Brand Reel 02',
     label: 'Brand Reel • 9:16',
@@ -35,6 +37,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111448/1_8.mp4'),
     title: 'Brand Reel 03',
     label: 'Social Media • 9:16',
@@ -42,6 +45,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111401/1_7.mp4'),
     title: 'Brand Reel 04',
     label: 'Brand Film • 9:16',
@@ -49,6 +53,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111364/1_6.mp4'),
     title: 'Brand Reel 05',
     label: 'Brand Reel • 9:16',
@@ -56,6 +61,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111328/1_5.mp4'),
     title: 'Brand Reel 06',
     label: 'Instagram Reel • 9:16',
@@ -63,6 +69,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110583/1_1.mp4'),
     title: 'Brand Reel 07',
     label: 'Brand Reel • 9:16',
@@ -70,6 +77,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110575/1_2.mp4'),
     title: 'Brand Reel 08',
     label: 'Brand Reel • 9:16',
@@ -77,6 +85,7 @@ const verticalVideoProjects: VideoArcItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787110559/1_3.mp4'),
     title: 'Brand Reel 09',
     label: 'Brand Reel • 9:16',

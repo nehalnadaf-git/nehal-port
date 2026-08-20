@@ -11,11 +11,13 @@ import {
   GridBody,
   GridItem,
 } from '@/components/ui/infinite-drag-scroll';
-import { cldVideo, cldPoster } from '@/lib/cloudinary';
+import { cldVideo, cldVideoPreview, cldPoster } from '@/lib/cloudinary';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 interface WebsiteItem {
   src: string;
+  /** Low-bandwidth w_480 preview for the grid card tile */
+  previewSrc: string;
   poster: string;
   alt: string;
   category: string;
@@ -25,6 +27,7 @@ interface WebsiteItem {
 const websiteItems: WebsiteItem[] = [
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111590/AutoGlam.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111590/AutoGlam.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111590/AutoGlam.mp4'),
     alt: 'Auto Glam Detailing Studio',
     category: 'Automotive',
@@ -32,6 +35,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111599/Cardee.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111599/Cardee.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111599/Cardee.mp4'),
     alt: 'CARDEE The Detailing Studio',
     category: 'Automotive',
@@ -39,6 +43,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111656/Baba.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111656/Baba.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111656/Baba.mp4'),
     alt: 'Baba Royal Garage',
     category: 'Automotive',
@@ -46,6 +51,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111570/Apex.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111570/Apex.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111570/Apex.mp4'),
     alt: 'Apex Dental Clinic',
     category: 'Healthcare',
@@ -53,6 +59,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111614/Empire.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111614/Empire.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111614/Empire.mp4'),
     alt: 'Empire Restaurant',
     category: 'Hospitality',
@@ -60,6 +67,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111543/Annachi.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111543/Annachi.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111543/Annachi.mp4'),
     alt: 'Annachi Tiffin Centre',
     category: 'Hospitality',
@@ -67,6 +75,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787112069/tippu-shaheed.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787112069/tippu-shaheed.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787112069/tippu-shaheed.mp4'),
     alt: 'Tippu Shaheed Education Trust',
     category: 'Education',
@@ -74,6 +83,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111574/Hosatti.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111574/Hosatti.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111574/Hosatti.mp4'),
     alt: 'Hosatti Home Services',
     category: 'Home Service',
@@ -81,6 +91,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111551/Arshan.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111551/Arshan.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111551/Arshan.mp4'),
     alt: 'Custom Resume Website',
     category: 'Personal',
@@ -88,6 +99,7 @@ const websiteItems: WebsiteItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111636/LBow.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111636/LBow.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111636/LBow.mp4'),
     alt: 'LNS Industrial Piping',
     category: 'Industrial',
@@ -159,7 +171,7 @@ function ProjectCard({
         // data attribute lets the page effect find and pause all grid videos
         // when the lightbox opens, freeing GPU/CPU for the lightbox player.
         data-grid-video="true"
-        src={item.src}
+        src={item.previewSrc}
         poster={item.poster}
         muted
         loop

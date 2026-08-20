@@ -8,6 +8,8 @@ import PortfolioLightbox, { type LightboxItem } from '@/components/ui/PortfolioL
 
 export interface VideoArcItem {
   src: string;
+  /** Low-bandwidth preview URL (w_480) for the card — use cldVideoPreview(). */
+  previewSrc?: string;
   poster?: string;
   title: string;
   label?: string;
@@ -479,13 +481,13 @@ export default function VideoArcCarousel({
                 <video
                   ref={(el) => { videosRef.current[i] = el; }}
                   key={item.src}
-                  src={item.src}
+                  src={item.previewSrc ?? item.src}
                   poster={item.poster}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   style={{
                     position: 'absolute',
                     top: 0,
