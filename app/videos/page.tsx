@@ -92,7 +92,7 @@ function VideoCard({
       <video
         ref={videoRef}
         data-grid-video="true"
-        src={item.previewSrc}
+        src={item.src}
         poster={item.thumbSrc}
         muted
         loop

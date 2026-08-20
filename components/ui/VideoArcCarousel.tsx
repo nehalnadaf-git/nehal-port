@@ -481,13 +481,13 @@ export default function VideoArcCarousel({
                 <video
                   ref={(el) => { videosRef.current[i] = el; }}
                   key={item.src}
-                  src={item.previewSrc ?? item.src}
+                  src={item.src}
                   poster={item.poster}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload="none"
+                  preload="metadata"
                   style={{
                     position: 'absolute',
                     top: 0,

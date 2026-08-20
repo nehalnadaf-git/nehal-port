@@ -451,13 +451,13 @@ export default function ArcCarousel({
               >
                 <video
                   ref={(el) => { videosRef.current[i] = el; }}
-                  src={item.previewSrc ?? item.src}
+                  src={item.src}
                   poster={item.poster}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload="none"
+                  preload="metadata"
                   style={{
                     width: '100%',
                     height: '100%',
