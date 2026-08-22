@@ -171,7 +171,7 @@ function ProjectCard({
         // data attribute lets the page effect find and pause all grid videos
         // when the lightbox opens, freeing GPU/CPU for the lightbox player.
         data-grid-video="true"
-        src={item.src}
+        src={item.previewSrc}
         poster={item.poster}
         muted
         loop

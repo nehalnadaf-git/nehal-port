@@ -79,22 +79,10 @@ export default function ArcCarousel({
   const [vw, setVw] = useState(1200);
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  // iOS Fix: autoPlay attribute is ignored when src is already present at mount.
-  // Explicitly call play() on all videos once the carousel enters the viewport.
-  useEffect(() => {
-    if (!isVisible) return;
-    videosRef.current.forEach(v => {
-      if (v && v.paused) {
-        v.play().catch(() => { /* autoplay blocked by browser policy — poster shown as fallback */ });
-      }
-    });
-  }, [isVisible]);
 
   // ── Pause background videos while the lightbox is open ─────────────────────
   // When PortfolioLightbox opens it dispatches 'portfolio:lightbox-open' on the
