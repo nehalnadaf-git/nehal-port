@@ -10,13 +10,14 @@ import SectionHeader from '@/components/SectionHeader';
 import ArcCarousel from '@/components/ui/ArcCarousel';
 import type { ArcCarouselItem } from '@/components/ui/ArcCarousel';
 import { MagicText } from '@/components/ui/magic-text';
-import { cldVideo, cldPoster } from '@/lib/cloudinary';
+import { cldVideo, cldVideoPreview, cldPoster } from '@/lib/cloudinary';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const websiteProjects: ArcCarouselItem[] = [
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111590/AutoGlam.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111590/AutoGlam.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111590/AutoGlam.mp4'),
     alt: 'Auto Glam Detailing Studio',
     category: 'Automotive',
@@ -24,6 +25,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111599/Cardee.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111599/Cardee.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111599/Cardee.mp4'),
     alt: 'CARDEE The Detailing Studio',
     category: 'Automotive',
@@ -31,6 +33,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111656/Baba.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111656/Baba.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111656/Baba.mp4'),
     alt: 'Baba Royal Garage',
     category: 'Automotive',
@@ -38,6 +41,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111570/Apex.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111570/Apex.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111570/Apex.mp4'),
     alt: 'Apex Dental Clinic',
     category: 'Healthcare',
@@ -45,6 +49,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111614/Empire.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111614/Empire.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111614/Empire.mp4'),
     alt: 'Empire Restaurant',
     category: 'Hospitality',
@@ -52,6 +57,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111543/Annachi.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111543/Annachi.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111543/Annachi.mp4'),
     alt: 'Annachi Tiffin Centre',
     category: 'Hospitality',
@@ -59,6 +65,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787112069/tippu-shaheed.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787112069/tippu-shaheed.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787112069/tippu-shaheed.mp4'),
     alt: 'Tippu Shaheed Education Trust',
     category: 'Education',
@@ -66,6 +73,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111574/Hosatti.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111574/Hosatti.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111574/Hosatti.mp4'),
     alt: 'Hosatti Home Services',
     category: 'Home Service',
@@ -73,6 +81,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111551/Arshan.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111551/Arshan.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111551/Arshan.mp4'),
     alt: 'Custom Resume Website',
     category: 'Personal',
@@ -80,6 +89,7 @@ const websiteProjects: ArcCarouselItem[] = [
   },
   {
     src: cldVideo('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111636/LBow.mp4'),
+    previewSrc: cldVideoPreview('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111636/LBow.mp4'),
     poster: cldPoster('https://res.cloudinary.com/ep3ji8zn/video/upload/v1787111636/LBow.mp4'),
     alt: 'LNS Industrial Piping',
     category: 'Industrial',

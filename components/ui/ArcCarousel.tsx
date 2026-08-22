@@ -348,26 +348,23 @@ export default function ArcCarousel({
     // orientationchange fires on mobile before resize — re-evaluate vw immediately
     window.addEventListener('orientationchange', onResize);
 
-    // ─── IntersectionObserver: resume videos when carousel enters viewport
+    // ─── IntersectionObserver: play when section is visible, pause when not
+    // rootMargin: 0px = triggers exactly at viewport edge, no early start
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // One-shot lazy-load: only goes true, triggers video preload
-        if (entry.isIntersecting) setIsVisible(true);
-        // Bidirectional: pause RAF when scrolled away, resume when back in view
         isInViewRef.current = entry.isIntersecting;
-        if (entry.isIntersecting && rafId.current === null) {
-          rafId.current = requestAnimationFrame(animate);
-        }
-        // Desktop fix: explicitly call play() every time the section enters view.
-        // autoPlay + preload="metadata" still silently fails on desktop Chrome/Firefox
-        // if no play() is called programmatically after a scroll-away/scroll-back.
         if (entry.isIntersecting) {
+          // Section entered viewport — start RAF and resume videos
+          if (rafId.current === null) rafId.current = requestAnimationFrame(animate);
           videosRef.current.forEach(v => {
             if (v && v.paused) v.play().catch(() => {});
           });
+        } else {
+          // Section left viewport — pause all card videos immediately
+          videosRef.current.forEach(v => { if (v) v.pause(); });
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '0px' }
     );
     if (containerRef.current) observer.observe(containerRef.current);
 
@@ -451,13 +448,13 @@ export default function ArcCarousel({
               >
                 <video
                   ref={(el) => { videosRef.current[i] = el; }}
-                  src={item.src}
+                  src={item.previewSrc || item.src}
                   poster={item.poster}
                   autoPlay
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   style={{
                     width: '100%',
                     height: '100%',

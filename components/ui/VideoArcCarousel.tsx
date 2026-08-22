@@ -345,16 +345,23 @@ export default function VideoArcCarousel({
     // orientationchange fires on mobile before resize — re-evaluate vw immediately
     window.addEventListener('orientationchange', onResize);
 
-    // ─── IntersectionObserver: pause RAF loop when section scrolls out of view (performance)
+    // ─── IntersectionObserver: play when section is visible, pause when not
+    // rootMargin: 0px = triggers exactly at viewport edge, not 200px early
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Bidirectional: pause RAF when scrolled away, resume when back in view
         isInViewRef.current = entry.isIntersecting;
-        if (entry.isIntersecting && rafId.current === null) {
-          rafId.current = requestAnimationFrame(animate);
+        if (entry.isIntersecting) {
+          // Section entered viewport — start RAF and resume videos
+          if (rafId.current === null) rafId.current = requestAnimationFrame(animate);
+          videosRef.current.forEach(v => {
+            if (v && v.paused) v.play().catch(() => {});
+          });
+        } else {
+          // Section left viewport — pause all card videos immediately
+          videosRef.current.forEach(v => { if (v) v.pause(); });
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '0px' }
     );
     if (containerRef.current) observer.observe(containerRef.current);
 
@@ -450,6 +457,7 @@ export default function VideoArcCarousel({
                   key={item.src}
                   src={item.previewSrc || item.src}
                   poster={item.poster}
+                  autoPlay
                   loop
                   muted
                   playsInline
