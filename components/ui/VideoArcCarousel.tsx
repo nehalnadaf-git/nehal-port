@@ -82,23 +82,13 @@ export default function VideoArcCarousel({
     setMounted(true);
   }, []);
 
-  // ── Pause background videos while the lightbox is open —————————————————
-  // PortfolioLightbox dispatches 'portfolio:lightbox-open' when any project
-  // or video card is tapped. On close we broadcast the inverse event.
+  // Pause card videos when lightbox opens (no resume on close — cards don't autoplay)
   useEffect(() => {
     const handleOpen = () => {
       videosRef.current.forEach(v => { if (v) v.pause(); });
     };
-    const handleClose = () => {
-      // Cards don't autoplay, so nothing to resume on close.
-    };
-
     document.addEventListener('portfolio:lightbox-open', handleOpen);
-    document.addEventListener('portfolio:lightbox-close', handleClose);
-    return () => {
-      document.removeEventListener('portfolio:lightbox-open', handleOpen);
-      document.removeEventListener('portfolio:lightbox-close', handleClose);
-    };
+    return () => document.removeEventListener('portfolio:lightbox-open', handleOpen);
   }, []);
 
   // Sync lightbox ref so animate loop doesn't need it as a dep
@@ -345,21 +335,14 @@ export default function VideoArcCarousel({
     // orientationchange fires on mobile before resize — re-evaluate vw immediately
     window.addEventListener('orientationchange', onResize);
 
-    // ─── IntersectionObserver: play when section is visible, pause when not
-    // rootMargin: 0px = triggers exactly at viewport edge, not 200px early
+    // ─── IntersectionObserver: pause RAF when section scrolls out of view (performance only)
     const observer = new IntersectionObserver(
       ([entry]) => {
         isInViewRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) {
-          // Section entered viewport — start RAF and resume videos
-          if (rafId.current === null) rafId.current = requestAnimationFrame(animate);
-          videosRef.current.forEach(v => {
-            if (v && v.paused) v.play().catch(() => {});
-          });
-        } else {
-          // Section left viewport — pause all card videos immediately
-          videosRef.current.forEach(v => { if (v) v.pause(); });
+        if (entry.isIntersecting && rafId.current === null) {
+          rafId.current = requestAnimationFrame(animate);
         }
+        // No video play/pause — cards show poster only until user clicks
       },
       { rootMargin: '0px' }
     );
@@ -457,7 +440,6 @@ export default function VideoArcCarousel({
                   key={item.src}
                   src={item.previewSrc || item.src}
                   poster={item.poster}
-                  autoPlay
                   loop
                   muted
                   playsInline

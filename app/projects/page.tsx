@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -108,10 +108,7 @@ const websiteItems: WebsiteItem[] = [
 ];
 
 
-// ─── ProjectCard — plays only when visible in the viewport ────────────────────
-// Uses IntersectionObserver to play/pause the video tile based on visibility.
-// This caps concurrent video decoders to only the tiles currently on screen
-// instead of all 36 (9 items × 4 grid copies) firing simultaneously on mount.
+// ─── ProjectCard — shows poster thumbnail; opens lightbox on click ─────────────────
 function ProjectCard({
   item,
   onOpen,
@@ -119,35 +116,6 @@ function ProjectCard({
   item: WebsiteItem;
   onOpen: (lightbox: LightboxItem) => void;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-
-    // Only play/pause based on viewport intersection — avoids off-screen decoding.
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          // Load and play only when the tile enters the viewport
-          v.play().catch(() => {});
-        } else {
-          // Pause and unload src when fully off-screen to free decoder memory
-          v.pause();
-        }
-      },
-      {
-        // Fire when even 10% of the tile is visible
-        threshold: 0.1,
-        // Small margin so play starts just before the tile is fully visible
-        rootMargin: '50px',
-      },
-    );
-
-    observer.observe(v);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <GridItem
       className="w-[300px] h-[169px]"
@@ -166,24 +134,15 @@ function ProjectCard({
         overflow: 'hidden',
       }}
     >
-      <video
-        ref={videoRef}
-        // data attribute lets the page effect find and pause all grid videos
-        // when the lightbox opens, freeing GPU/CPU for the lightbox player.
-        data-grid-video="true"
-        src={item.previewSrc}
-        poster={item.poster}
-        muted
-        loop
-        playsInline
-        // preload="none" — browser fetches zero bytes until play() is called.
-        // Eliminates 36 × partial prefetch network hits on page load.
-        preload="none"
+      {/* Poster thumbnail — no autoplay; video plays in lightbox when user clicks */}
+      <img
+        src={item.poster}
+        alt={item.alt}
+        loading="lazy"
         style={{
           position: 'absolute', top: 0, left: 0,
           width: '100%', height: '100%',
           objectFit: 'cover', pointerEvents: 'none',
-          borderRadius: '0px', background: '#000000',
         }}
       />
       {/* Hover overlay */}
@@ -221,33 +180,8 @@ export default function WebsiteProjectsPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  // ── Pause all grid videos while the lightbox is open ────────────────────────
-  // When a lightbox video plays, having 36 background videos also decoding
-  // causes GPU/CPU memory pressure that crashes mobile browsers. Pausing them
-  // while the overlay is open and resuming when it closes keeps resource usage
-  // within safe bounds on low-memory devices.
-  useEffect(() => {
-    const gridVideos = document.querySelectorAll<HTMLVideoElement>(
-      'video[data-grid-video="true"]',
-    );
-    if (activeProject) {
-      // Lightbox opened — pause every background tile video
-      gridVideos.forEach((v) => v.pause());
-    } else {
-      // Lightbox closed — resume only the tiles currently intersecting the viewport.
-      gridVideos.forEach((v) => {
-        const rect = v.getBoundingClientRect();
-        const inView =
-          rect.bottom > 0 &&
-          rect.right > 0 &&
-          rect.top < window.innerHeight &&
-          rect.left < window.innerWidth;
-        if (inView) {
-          v.play().catch(() => {});
-        }
-      });
-    }
-  }, [activeProject]);
+  // No grid video playback — cards show poster only. Nothing to pause/resume.
+  useEffect(() => {}, [activeProject]);
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#F2F1E6', overflow: 'hidden' }}>

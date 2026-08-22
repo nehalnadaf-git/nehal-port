@@ -70,7 +70,7 @@ export default function ArcCarousel({
   const pointerMovedRef = useRef(false);
   // Tracks which card index is currently hovered (for pop effect)
   const hoveredCardIndexRef = useRef(-1);
-  // Bidirectional visibility: pauses RAF when section scrolls off screen
+  // Pauses RAF when section scrolls off screen
   const isInViewRef = useRef(true);
   // Tracks last rendered active index — prevents 60 React re-renders/sec
   const prevActiveRef = useRef(-1);
@@ -80,41 +80,16 @@ export default function ArcCarousel({
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
-  // ── Pause background videos while the lightbox is open ─────────────────────
-  // When PortfolioLightbox opens it dispatches 'portfolio:lightbox-open' on the
-  // document. We pause all carousel videos so the GPU only decodes one stream
-  // at a time (the lightbox video). On close, 'portfolio:lightbox-close' fires
-  // and we resume only the videos that are currently in the viewport.
+  // Pause card videos when lightbox opens (no resume on close — cards don't autoplay)
   useEffect(() => {
     const handleOpen = () => {
       videosRef.current.forEach(v => { if (v) v.pause(); });
     };
-    const handleClose = () => {
-      // Only resume videos that are currently visible in the viewport
-      videosRef.current.forEach(v => {
-        if (!v) return;
-        const rect = v.getBoundingClientRect();
-        const inView =
-          rect.bottom > 0 &&
-          rect.right > 0 &&
-          rect.top < window.innerHeight &&
-          rect.left < window.innerWidth;
-        if (inView) v.play().catch(() => {});
-      });
-    };
-
     document.addEventListener('portfolio:lightbox-open', handleOpen);
-    document.addEventListener('portfolio:lightbox-close', handleClose);
-    return () => {
-      document.removeEventListener('portfolio:lightbox-open', handleOpen);
-      document.removeEventListener('portfolio:lightbox-close', handleClose);
-    };
+    return () => document.removeEventListener('portfolio:lightbox-open', handleOpen);
   }, []);
-
 
   const totalCards = items.length;
   const cardSize = getCardSize(vw);
@@ -336,21 +311,14 @@ export default function ArcCarousel({
     // orientationchange fires on mobile before resize — re-evaluate vw immediately
     window.addEventListener('orientationchange', onResize);
 
-    // ─── IntersectionObserver: play when section is visible, pause when not
-    // rootMargin: 0px = triggers exactly at viewport edge, no early start
+    // ─── IntersectionObserver: pause RAF when section scrolls out of view (performance only)
     const observer = new IntersectionObserver(
       ([entry]) => {
         isInViewRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) {
-          // Section entered viewport — start RAF and resume videos
-          if (rafId.current === null) rafId.current = requestAnimationFrame(animate);
-          videosRef.current.forEach(v => {
-            if (v && v.paused) v.play().catch(() => {});
-          });
-        } else {
-          // Section left viewport — pause all card videos immediately
-          videosRef.current.forEach(v => { if (v) v.pause(); });
+        if (entry.isIntersecting && rafId.current === null) {
+          rafId.current = requestAnimationFrame(animate);
         }
+        // No video play/pause here — cards show poster only until user clicks
       },
       { rootMargin: '0px' }
     );
@@ -438,7 +406,6 @@ export default function ArcCarousel({
                   ref={(el) => { videosRef.current[i] = el; }}
                   src={item.previewSrc || item.src}
                   poster={item.poster}
-                  autoPlay
                   loop
                   muted
                   playsInline
