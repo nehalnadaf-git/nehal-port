@@ -164,7 +164,6 @@ export default function PortfolioLightbox({
           poster={item.src.replace('/upload/', '/upload/f_auto,q_auto:good,w_640,so_0/').replace(/\.mp4$/, '.jpg')}
           autoPlay
           loop
-          muted
           controls
           playsInline
           style={{

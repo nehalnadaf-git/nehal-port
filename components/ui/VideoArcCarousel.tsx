@@ -77,43 +77,20 @@ export default function VideoArcCarousel({
   const [vw, setVw] = useState(1200);
   const [lightboxItem, setLightboxItem] = useState<LightboxItem | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // iOS Fix: autoPlay attribute is ignored when src is already present at mount.
-  // Explicitly call play() on all videos once the carousel enters the viewport.
-  useEffect(() => {
-    if (!isVisible) return;
-    videosRef.current.forEach(v => {
-      if (v && v.paused) {
-        v.play().catch(() => { /* autoplay blocked by browser policy — poster shown as fallback */ });
-      }
-    });
-  }, [isVisible]);
-
-  // ── Pause background videos while the lightbox is open ─────────────────────
+  // ── Pause background videos while the lightbox is open —————————————————
   // PortfolioLightbox dispatches 'portfolio:lightbox-open' when any project
-  // or video card is tapped. We pause all background carousel videos immediately
-  // so the GPU focuses entirely on the lightbox video decoder. On close, we
-  // resume only the videos that are currently inside the viewport.
+  // or video card is tapped. On close we broadcast the inverse event.
   useEffect(() => {
     const handleOpen = () => {
       videosRef.current.forEach(v => { if (v) v.pause(); });
     };
     const handleClose = () => {
-      videosRef.current.forEach(v => {
-        if (!v) return;
-        const rect = v.getBoundingClientRect();
-        const inView =
-          rect.bottom > 0 &&
-          rect.right > 0 &&
-          rect.top < window.innerHeight &&
-          rect.left < window.innerWidth;
-        if (inView) v.play().catch(() => {});
-      });
+      // Cards don't autoplay, so nothing to resume on close.
     };
 
     document.addEventListener('portfolio:lightbox-open', handleOpen);
@@ -368,23 +345,13 @@ export default function VideoArcCarousel({
     // orientationchange fires on mobile before resize — re-evaluate vw immediately
     window.addEventListener('orientationchange', onResize);
 
-    // ─── IntersectionObserver: resume videos when carousel enters viewport
+    // ─── IntersectionObserver: pause RAF loop when section scrolls out of view (performance)
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // One-shot lazy-load: only goes true, triggers video preload
-        if (entry.isIntersecting) setIsVisible(true);
         // Bidirectional: pause RAF when scrolled away, resume when back in view
         isInViewRef.current = entry.isIntersecting;
         if (entry.isIntersecting && rafId.current === null) {
           rafId.current = requestAnimationFrame(animate);
-        }
-        // Desktop fix: explicitly call play() every time the section enters view.
-        // autoPlay + preload="metadata" still silently fails on desktop Chrome/Firefox
-        // if no play() is called programmatically after a scroll-away/scroll-back.
-        if (entry.isIntersecting) {
-          videosRef.current.forEach(v => {
-            if (v && v.paused) v.play().catch(() => {});
-          });
         }
       },
       { rootMargin: '200px' }
@@ -481,13 +448,12 @@ export default function VideoArcCarousel({
                 <video
                   ref={(el) => { videosRef.current[i] = el; }}
                   key={item.src}
-                  src={item.src}
+                  src={item.previewSrc || item.src}
                   poster={item.poster}
-                  autoPlay
                   loop
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="none"
                   style={{
                     position: 'absolute',
                     top: 0,

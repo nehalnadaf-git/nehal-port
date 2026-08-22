@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Play } from 'lucide-react';
@@ -40,7 +40,7 @@ const videoItems: VideoItem[] = [
 ];
 
 
-// ─── VideoCard — continuous autoplay looping video ─────────────────────────────
+// ─── VideoCard — shows poster thumbnail; opens lightbox on click ──────────────────
 function VideoCard({
   item,
   onOpen,
@@ -48,29 +48,7 @@ function VideoCard({
   item: VideoItem;
   onOpen: (lightbox: LightboxItem) => void;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
   const isHorizontal = item.label === 'Al Moon Academy' || item.alt.includes('Al Moon Academy');
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-
-    // Play only when the tile enters the viewport — prevents 28 simultaneous
-    // decoders (7 items × 4 grid copies) from firing on mount and crashing mobile.
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          v.play().catch(() => {});
-        } else {
-          v.pause();
-        }
-      },
-      { threshold: 0.1, rootMargin: '50px' },
-    );
-
-    observer.observe(v);
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <GridItem
@@ -89,21 +67,15 @@ function VideoCard({
         overflow: 'hidden',
       }}
     >
-      <video
-        ref={videoRef}
-        data-grid-video="true"
-        src={item.src}
-        poster={item.thumbSrc}
-        muted
-        loop
-        playsInline
-        preload="none"
+      {/* Poster thumbnail — no autoplay; video plays in lightbox when user opens it */}
+      <img
+        src={item.thumbSrc}
+        alt={item.alt}
+        loading="lazy"
         style={{
           position: 'absolute', top: 0, left: 0,
           width: '100%', height: '100%', objectFit: 'cover',
           pointerEvents: 'none',
-          borderRadius: '0px',
-          background: '#000000',
         }}
       />
       {/* Play indicator overlay */}
@@ -144,31 +116,10 @@ export default function VideoProjectsPage() {
 
   useEffect(() => { setMounted(true); }, []);
 
-  // ── Pause all grid videos while the lightbox is open ─────────────────────────
-  // When a lightbox video plays, having 28+ background videos also decoding
-  // (7 items × 4 grid copies) causes GPU/CPU memory pressure that crashes
-  // mobile browsers. Pause all grid tiles while the overlay is open, then
-  // resume only the viewport-visible tiles when it closes.
-  useEffect(() => {
-    const gridVideos = document.querySelectorAll<HTMLVideoElement>(
-      'video[data-grid-video="true"]',
-    );
-    if (activeVideo) {
-      // Lightbox opened — pause every background tile video
-      gridVideos.forEach((v) => v.pause());
-    } else {
-      // Lightbox closed — resume only the tiles currently in the viewport
-      gridVideos.forEach((v) => {
-        const rect = v.getBoundingClientRect();
-        const inView =
-          rect.bottom > 0 &&
-          rect.right > 0 &&
-          rect.top < window.innerHeight &&
-          rect.left < window.innerWidth;
-        if (inView) v.play().catch(() => {});
-      });
-    }
-  }, [activeVideo]);
+  // Lightbox open: nothing to pause (grid cards no longer autoplay).
+  // Lightbox close: nothing to resume.
+  // Keeping the effect stub in case grid auto-play is re-enabled in the future.
+  useEffect(() => {}, [activeVideo]);
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#F2F1E6', overflow: 'hidden' }}>

@@ -7,18 +7,19 @@
  * transformation. Free plan: 1,000 unique transformations/month (this site uses ~30).
  *
  * Transformation params used:
- *   f_auto      — serve WebM/MP4/AVIF automatically based on browser support
+ *   f_mp4       — explicitly deliver MP4 container (avoids f_auto/vc_h264 conflict
+ *                 where Cloudinary could serve WebM/AVIF behind a .mp4 URL).
+ *                 MP4/H.264 is universally supported across all browsers and devices.
  *   q_auto:good — quality balanced for visual fidelity vs file size (~60–80% smaller)
- *   vc_h264     — force H.264 codec on video delivery; prevents black-box on Chrome/Firefox
- *                 when the source file is HEVC/H.265 (hvc1), which only Safari/iOS decodes.
- *                 Safe to apply universally — Cloudinary transcodes as needed.
+ *   vc_h264     — force H.264 codec; prevents black-box on Chrome/Firefox when the
+ *                 source is HEVC/H.265 (hvc1), which only Safari/iOS decodes natively.
  *   w_1280      — cap width at 1280px (HD) — used for lightbox / full-view only
  *   w_480       — 480px width for carousel card previews — ~60–70% smaller than w_1280
  *   so_0        — seek-offset: thumbnail captured at 0 seconds (first frame)
  */
 
-const VIDEO_TRANSFORM = 'f_auto,q_auto:good,vc_h264,w_1280';
-const VIDEO_PREVIEW_TRANSFORM = 'f_auto,q_auto:good,vc_h264,w_480';
+const VIDEO_TRANSFORM = 'f_mp4,q_auto:good,vc_h264,w_1280';
+const VIDEO_PREVIEW_TRANSFORM = 'f_mp4,q_auto:good,vc_h264,w_480';
 const POSTER_TRANSFORM = 'f_auto,q_auto:good,w_640,so_0';
 
 /**
