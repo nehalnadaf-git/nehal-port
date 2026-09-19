@@ -70,15 +70,25 @@ export interface ResolvedLine {
   lineTotal: number;
 }
 
+export type FulfillmentType = 'store' | 'delivery';
+
 export interface ResolvedOrder {
   customerName: string;
+  fulfillment: FulfillmentType;
+  address?: string;
   note: string;
   lines: ResolvedLine[];
   totalInr: number;
   itemCount: number;
 }
 
-export function resolveCart(lines: CartLine[], customerName = '', note = ''): ResolvedOrder | null {
+export function resolveCart(
+  lines: CartLine[],
+  customerName = '',
+  note = '',
+  fulfillment: FulfillmentType = 'store',
+  address = '',
+): ResolvedOrder | null {
   const resolved: ResolvedLine[] = [];
 
   for (const line of lines) {
@@ -99,6 +109,8 @@ export function resolveCart(lines: CartLine[], customerName = '', note = ''): Re
 
   return {
     customerName: customerName.trim(),
+    fulfillment,
+    address: address.trim(),
     note: note.trim(),
     lines: resolved,
     totalInr: resolved.reduce((sum, line) => sum + line.lineTotal, 0),

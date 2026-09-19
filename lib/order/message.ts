@@ -46,6 +46,15 @@ export function buildOrderMessage(order: ResolvedOrder, token?: string): string 
     `Time      : ${timeStr}`,
   ];
 
+  if (order.fulfillment === 'delivery') {
+    lines.push('Option    : Delivery');
+    if (order.address && order.address.trim()) {
+      lines.push(`Address   : ${order.address.trim()}`);
+    }
+  } else {
+    lines.push('Option    : Store (We will pick that up)');
+  }
+
   if (order.note && order.note.trim()) {
     lines.push(`Note      : ${order.note.trim()}`);
   }
@@ -61,13 +70,12 @@ export function buildOrderMessage(order: ResolvedOrder, token?: string): string 
   );
 
   if (token) {
-    lines.push('', `Invoice : ${payPageUrl(token)}`);
+    lines.push('', `Web : ${payPageUrl(token)}`);
   }
 
   lines.push(
     divider,
-    'Kindly confirm this order once payment is done.',
-    `Thank you for ordering from ${businessName}.`,
+    'Please do not pay anything until we reply to you.',
   );
 
   return lines.join('\n');

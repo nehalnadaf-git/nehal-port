@@ -65,12 +65,32 @@ export default function PayView({
 
         <section className="mt-12 border-2 border-black bg-[#E8E6D8] p-6 shadow-[4px_4px_0px_#000000]">
           <p className="type-mono opacity-50 mb-4 tracking-widest">// Order</p>
-          {order.customerName ? (
-            <p className="type-body mb-4">
-              <span className="opacity-50">Name </span>
-              {order.customerName}
+          <div className="space-y-2 mb-4 pb-4" style={{ borderBottom: '1.5px solid rgba(0,0,0,0.2)' }}>
+            {order.customerName ? (
+              <p className="type-body">
+                <span className="opacity-50">Customer: </span>
+                <span className="font-semibold">{order.customerName}</span>
+              </p>
+            ) : null}
+            <p className="type-body">
+              <span className="opacity-50">Option: </span>
+              <span className="font-semibold">
+                {order.fulfillment === 'delivery' ? 'Delivery' : 'Store (We will pick that up)'}
+              </span>
             </p>
-          ) : null}
+            {order.fulfillment === 'delivery' && order.address ? (
+              <p className="type-body">
+                <span className="opacity-50">Address: </span>
+                <span>{order.address}</span>
+              </p>
+            ) : null}
+            {order.note ? (
+              <p className="type-body">
+                <span className="opacity-50">Note: </span>
+                <span>{order.note}</span>
+              </p>
+            ) : null}
+          </div>
           <div className="space-y-4">
             {order.lines.map((line) => (
               <div key={line.product.sku} className="flex items-center justify-between gap-4 type-body">

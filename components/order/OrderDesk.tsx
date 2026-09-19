@@ -41,6 +41,8 @@ const fieldStyle: React.CSSProperties = {
 export default function OrderDesk() {
   const [cart, setCart] = useState<CartLine[] | null>(null);
   const [name, setName] = useState('');
+  const [fulfillment, setFulfillment] = useState<'store' | 'delivery'>('store');
+  const [address, setAddress] = useState('');
   const [note, setNote] = useState('');
   const [error, setError] = useState('');
 
@@ -54,10 +56,13 @@ export default function OrderDesk() {
   }, [cart]);
 
   const lines = cart ?? [];
-  const order = useMemo(() => resolveCart(lines, name, note), [lines, name, note]);
+  const order = useMemo(
+    () => resolveCart(lines, name, note, fulfillment, address),
+    [lines, name, note, fulfillment, address],
+  );
   const token = useMemo(
-    () => (order ? encodeOrderToken(lines, name, note) : ''),
-    [order, lines, name, note],
+    () => (order ? encodeOrderToken(lines, name, note, fulfillment, address) : ''),
+    [order, lines, name, note, fulfillment, address],
   );
   const whatsappUrl = useMemo(
     () => (order && token ? buildWhatsAppUrl(buildOrderMessage(order, token)) : ''),
@@ -84,13 +89,18 @@ export default function OrderDesk() {
       setError('Select at least one item.');
       return;
     }
+    if (fulfillment === 'delivery' && !address.trim()) {
+      e.preventDefault();
+      setError('Please enter your delivery address.');
+      return;
+    }
     setError('');
-    const latestOrder = resolveCart(lines, name, note);
+    const latestOrder = resolveCart(lines, name, note, fulfillment, address);
     if (!latestOrder) {
       e.preventDefault();
       return;
     }
-    const latestToken = encodeOrderToken(lines, name, note);
+    const latestToken = encodeOrderToken(lines, name, note, fulfillment, address);
     const msg = buildOrderMessage(latestOrder, latestToken);
     e.currentTarget.href = buildWhatsAppUrl(msg);
   };
@@ -228,16 +238,84 @@ export default function OrderDesk() {
                 style={fieldStyle}
               />
 
-              <label className="type-mono text-foreground/50 mt-5 block" htmlFor="order-note">
+              <div className="mt-5">
+                <p className="type-mono text-foreground/50 mb-2">Fulfillment Option</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFulfillment('store');
+                      setError('');
+                    }}
+                    className={`p-3 text-left border-2 border-black transition-all cursor-pointer ${
+                      fulfillment === 'store'
+                        ? 'bg-black text-white shadow-[2px_2px_0px_#000000]'
+                        : 'bg-white text-black hover:bg-black/5'
+                    }`}
+                  >
+                    <p className="font-bold text-sm leading-tight">Store</p>
+                    <p
+                      className={`text-xs mt-1 leading-snug ${
+                        fulfillment === 'store' ? 'text-white/80' : 'text-black/60'
+                      }`}
+                    >
+                      We will pick that up
+                    </p>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFulfillment('delivery');
+                      setError('');
+                    }}
+                    className={`p-3 text-left border-2 border-black transition-all cursor-pointer ${
+                      fulfillment === 'delivery'
+                        ? 'bg-black text-white shadow-[2px_2px_0px_#000000]'
+                        : 'bg-white text-black hover:bg-black/5'
+                    }`}
+                  >
+                    <p className="font-bold text-sm leading-tight">Delivery</p>
+                    <p
+                      className={`text-xs mt-1 leading-snug ${
+                        fulfillment === 'delivery' ? 'text-white/80' : 'text-black/60'
+                      }`}
+                    >
+                      Add address
+                    </p>
+                  </button>
+                </div>
+              </div>
+
+              {fulfillment === 'delivery' ? (
+                <div className="mt-4">
+                  <label className="type-mono text-foreground/50 block" htmlFor="order-address">
+                    Delivery Address *
+                  </label>
+                  <textarea
+                    id="order-address"
+                    value={address}
+                    onChange={(e) => {
+                      setAddress(e.target.value);
+                      setError('');
+                    }}
+                    placeholder="House/flat no., street, area, city, pincode"
+                    rows={2}
+                    style={{ ...fieldStyle, resize: 'vertical', minHeight: 64 }}
+                  />
+                </div>
+              ) : null}
+
+              <label className="type-mono text-foreground/50 mt-4 block" htmlFor="order-note">
                 Note (optional)
               </label>
               <textarea
                 id="order-note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="Deadline, references, platform"
-                rows={3}
-                style={{ ...fieldStyle, resize: 'vertical', minHeight: 80 }}
+                placeholder="Any special instructions"
+                rows={2}
+                style={{ ...fieldStyle, resize: 'vertical', minHeight: 60 }}
               />
 
               <div className="mt-6 space-y-3">
@@ -287,7 +365,13 @@ export default function OrderDesk() {
                 <button
                   type="button"
                   className="btn-brutal btn-brutal-primary w-full mt-6"
-                  onClick={() => setError('Select at least one item.')}
+                  onClick={() => {
+                    if (lines.length === 0) {
+                      setError('Select at least one item.');
+                    } else if (fulfillment === 'delivery' && !address.trim()) {
+                      setError('Please enter your delivery address.');
+                    }
+                  }}
                 >
                   List Order
                 </button>
