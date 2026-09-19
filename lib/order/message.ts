@@ -59,7 +59,7 @@ export function buildOrderMessage(order: ResolvedOrder, token?: string): string 
   );
 
   if (token) {
-    lines.push(`Invoice : ${payPageUrl(token)}`);
+    lines.push('', `Invoice : ${payPageUrl(token)}`);
   }
 
   lines.push(

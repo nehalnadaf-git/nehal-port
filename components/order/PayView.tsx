@@ -1,10 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import QrCode from '@/components/order/QrCode';
 import { formatInr, type ResolvedOrder } from '@/lib/order/catalog';
-import { PAYMENT, buildPaytmUri, buildUpiUri } from '@/lib/order/payment';
+import { PAYMENT, buildUpiUri } from '@/lib/order/payment';
 import { buildOrderMessage, buildWhatsAppUrl } from '@/lib/order/message';
 
 export default function PayView({
@@ -14,18 +14,10 @@ export default function PayView({
   order: ResolvedOrder;
   token: string;
 }) {
-  const [copied, setCopied] = useState('');
-  const upiNote = `NN ${order.customerName || 'order'}`.slice(0, 50);
+  const upiNote = `${PAYMENT.payeeName} Order`.slice(0, 50);
   const upiUri = useMemo(() => buildUpiUri(order.totalInr, upiNote), [order.totalInr, upiNote]);
-  const paytmUri = useMemo(() => buildPaytmUri(order.totalInr, upiNote), [order.totalInr, upiNote]);
   const message = useMemo(() => buildOrderMessage(order, token), [order, token]);
   const whatsappUrl = useMemo(() => buildWhatsAppUrl(message), [message]);
-
-  const copy = async (label: string, value: string) => {
-    await navigator.clipboard.writeText(value);
-    setCopied(label);
-    window.setTimeout(() => setCopied(''), 2000);
-  };
 
   return (
     <>
@@ -69,16 +61,6 @@ export default function PayView({
           <a href={upiUri} className="btn-brutal btn-brutal-primary" style={{ textDecoration: 'none' }}>
             Open UPI
           </a>
-          <a href={paytmUri} className="btn-brutal btn-brutal-ghost" style={{ textDecoration: 'none' }}>
-            Open Paytm UPI
-          </a>
-          <button
-            type="button"
-            className="btn-brutal btn-brutal-ghost"
-            onClick={() => copy('upi', PAYMENT.upiId)}
-          >
-            {copied === 'upi' ? 'Copied' : 'Copy UPI ID'}
-          </button>
         </div>
 
         <section className="mt-12 border-2 border-black bg-[#E8E6D8] p-6 shadow-[4px_4px_0px_#000000]">
@@ -106,30 +88,14 @@ export default function PayView({
           </div>
         </section>
 
-        <section className="mt-8">
-          <p className="type-mono opacity-50 mb-3 tracking-widest">// WhatsApp message</p>
-          <pre
-            className="type-mono whitespace-pre-wrap bg-[#F2F1E6] border-2 border-black p-5"
-            style={{ fontWeight: 500, lineHeight: 1.6 }}
-          >
-            {message}
-          </pre>
-          <div className="flex flex-wrap gap-3 mt-4">
-            <a href={whatsappUrl} className="btn-brutal btn-brutal-primary" style={{ textDecoration: 'none' }}>
-              List Order on WhatsApp
-            </a>
-            <button
-              type="button"
-              className="btn-brutal btn-brutal-ghost"
-              onClick={() => copy('msg', message)}
-            >
-              {copied === 'msg' ? 'Copied' : 'Copy message'}
-            </button>
-            <Link href="/order" className="btn-brutal btn-brutal-ghost" style={{ textDecoration: 'none' }}>
-              Back to catalog
-            </Link>
-          </div>
-        </section>
+        <div className="flex flex-wrap gap-3 mt-8">
+          <a href={whatsappUrl} className="btn-brutal btn-brutal-primary" style={{ textDecoration: 'none' }}>
+            Send Order on WhatsApp
+          </a>
+          <Link href="/order" className="btn-brutal btn-brutal-ghost" style={{ textDecoration: 'none' }}>
+            Back to catalog
+          </Link>
+        </div>
       </div>
     </main>
     </>
