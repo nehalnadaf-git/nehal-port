@@ -198,6 +198,8 @@ interface MetadataOverrides {
   keywords?: string[];
   canonicalPath?: string;   // e.g. '/projects'  → will be appended to baseUrl
   ogImage?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
   noIndex?: boolean;
 }
 
@@ -213,6 +215,9 @@ export function buildMetadata(overrides: MetadataOverrides = {}): Metadata {
     : SEO.defaultKeywords;
 
   const ogImageUrl = overrides.ogImage ?? SEO.ogImage;
+  const ogWidth = overrides.ogImageWidth ?? 1200;
+  const ogHeight = overrides.ogImageHeight ?? 630;
+  const isSquare = ogWidth === ogHeight;
 
   return {
     metadataBase: new URL(SEO.baseUrl),
@@ -267,16 +272,16 @@ export function buildMetadata(overrides: MetadataOverrides = {}): Metadata {
       images: [
         {
           url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: `${SEO.name} — ${SEO.tagline}`,
+          width: ogWidth,
+          height: ogHeight,
+          alt: `${SEO.name} — UPI Payment QR`,
           type: 'image/webp',
         },
       ],
       locale: 'en_IN',
     },
     twitter: {
-      card: 'summary_large_image',
+      card: isSquare ? 'summary' : 'summary_large_image',
       title,
       description,
       images: [ogImageUrl],

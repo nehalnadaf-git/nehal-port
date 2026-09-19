@@ -25,14 +25,15 @@ export async function generateMetadata({
 
   const title = `Pay ${formatInr(order.totalInr)} — ${SEO.name}`;
   const description = `UPI payment of ${formatInr(order.totalInr)} to ${SEO.name}. Scan the QR to pay.`;
-  const ogImage = '/og-order.webp';
 
   return buildMetadata({
     title,
     description,
     noIndex: true,
     canonicalPath: `/order/pay/${token}`,
-    ogImage,
+    ogImage: '/og-order.webp',
+    ogImageWidth: 800,
+    ogImageHeight: 800,
   });
 }
 

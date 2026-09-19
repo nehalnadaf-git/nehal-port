@@ -14,6 +14,8 @@ export const metadata: Metadata = buildMetadata({
   noIndex: true,
   keywords: [],
   ogImage: '/og-order.webp',
+  ogImageWidth: 800,
+  ogImageHeight: 800,
 });
 
 export default function OrderLayout({ children }: { children: React.ReactNode }) {
