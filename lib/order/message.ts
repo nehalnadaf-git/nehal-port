@@ -1,49 +1,74 @@
-import { formatInr, type ResolvedOrder } from '@/lib/order/catalog';
-import { PAYMENT, payPageUrl } from '@/lib/order/payment';
+import { type ResolvedOrder } from '@/lib/order/catalog';
+import { PAYMENT, buildUpiUri, payPageUrl } from '@/lib/order/payment';
 import { SEO } from '@/lib/seo';
 
-export function buildOrderMessage(order: ResolvedOrder, token: string): string {
-  const list = order.lines
-    .map((line, index) => {
-      return [
-        `${index + 1}. ${line.product.sku}  ${line.product.name}`,
-        `   Qty ${line.qty} x ${formatInr(line.product.priceInr)}  =  ${formatInr(line.lineTotal)}`,
-      ].join('\n');
+export function buildOrderMessage(order: ResolvedOrder, token?: string): string {
+  const businessName = PAYMENT.payeeName || SEO.name;
+  const customerName = order.customerName.trim() || 'Direct Client';
+
+  const now = new Date();
+  const dateStr = new Intl.DateTimeFormat('en-IN', {
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+    timeZone: 'Asia/Kolkata',
+  }).format(now);
+
+  const timeStr = new Intl.DateTimeFormat('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+    timeZone: 'Asia/Kolkata',
+  })
+    .format(now)
+    .toUpperCase();
+
+  const divider = '--------------------------------------';
+
+  const itemsFormatted = order.lines
+    .map((line) => {
+      const name = line.product.name.padEnd(22, ' ');
+      return `  - ${name}x${line.qty}  Rs. ${line.lineTotal}`;
     })
     .join('\n');
 
+  const upiNote = `${businessName} Order`;
+  const upiUri = buildUpiUri(order.totalInr, upiNote);
+
   const lines: string[] = [
-    'Order',
-    SEO.name,
-    '',
+    'ORDER REQUEST —',
+    businessName,
+    divider,
+    `Customer  : ${customerName}`,
+    `Date      : ${dateStr}`,
+    `Time      : ${timeStr}`,
   ];
 
-  if (order.customerName) {
-    lines.push('Customer', order.customerName, '');
-  }
-
-  lines.push(
-    'List',
-    list,
-    '',
-    'Total',
-    formatInr(order.totalInr),
-  );
-
   if (order.note) {
-    lines.push('', 'Note', order.note);
+    lines.push(`Note      : ${order.note}`);
   }
 
   lines.push(
-    '',
-    'Pay',
-    `UPI  ${PAYMENT.upiId}`,
-    `Amount  ${formatInr(order.totalInr)}`,
-    'QR (scan the preview image or open this link)',
-    payPageUrl(token),
+    divider,
+    'ITEMS ORDERED',
+    itemsFormatted,
+    divider,
+    `TOTAL AMOUNT : Rs. ${order.totalInr}`,
+    divider,
+    `Upi link: ${upiUri}`,
   );
 
-  return lines.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  if (token) {
+    lines.push(`Invoice : ${payPageUrl(token)}`);
+  }
+
+  lines.push(
+    divider,
+    'Kindly confirm this order once payment is done.',
+    `Thank you for ordering from ${businessName}.`,
+  );
+
+  return lines.join('\n');
 }
 
 export function buildWhatsAppUrl(message: string): string {
