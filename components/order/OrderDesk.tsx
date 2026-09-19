@@ -259,7 +259,7 @@ export default function OrderDesk() {
                         fulfillment === 'store' ? 'text-white/80' : 'text-black/60'
                       }`}
                     >
-                      We will pick that up
+                      Pick up
                     </p>
                   </button>
 

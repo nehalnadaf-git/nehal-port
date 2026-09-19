@@ -52,7 +52,7 @@ export function buildOrderMessage(order: ResolvedOrder, token?: string): string 
       lines.push(`Address   : ${order.address.trim()}`);
     }
   } else {
-    lines.push('Option    : Store (We will pick that up)');
+    lines.push('Option    : Store');
   }
 
   if (order.note && order.note.trim()) {

@@ -75,7 +75,7 @@ export default function PayView({
             <p className="type-body">
               <span className="opacity-50">Option: </span>
               <span className="font-semibold">
-                {order.fulfillment === 'delivery' ? 'Delivery' : 'Store (We will pick that up)'}
+                {order.fulfillment === 'delivery' ? 'Delivery' : 'Store'}
               </span>
             </p>
             {order.fulfillment === 'delivery' && order.address ? (
