@@ -13,14 +13,17 @@ import { SEO } from '@/lib/seo';
  * any disallow rules. Without these, Googlebot cannot fetch Next.js-optimised
  * images or the CSS/JS it needs to render pages — harming both image indexing
  * and JavaScript rendering quality.
+ *
+ * /order is the private catalog (disallow). /order/pay/ stays allowed so
+ * WhatsApp can fetch the Open Graph QR image.
  */
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
         userAgent: '*',
-        allow: ['/', '/_next/image/', '/_next/static/'],
-        disallow: ['/admin/', '/api/', '/sw.js'],
+        allow: ['/', '/_next/image/', '/_next/static/', '/order/pay/'],
+        disallow: ['/admin/', '/api/', '/sw.js', '/order'],
       },
     ],
     sitemap: `${SEO.baseUrl}/sitemap.xml`,
