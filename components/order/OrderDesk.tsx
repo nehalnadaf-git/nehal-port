@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   ORDER_CATEGORIES,
   ORDER_PRODUCTS,
@@ -40,7 +39,6 @@ const fieldStyle: React.CSSProperties = {
 };
 
 export default function OrderDesk() {
-  const router = useRouter();
   const [cart, setCart] = useState<CartLine[] | null>(null);
   const [name, setName] = useState('');
   const [note, setNote] = useState('');
@@ -80,13 +78,21 @@ export default function OrderDesk() {
 
   const qtyOf = (sku: string) => lines.find((line) => line.sku === sku)?.qty ?? 0;
 
-  const proceedToPay = () => {
-    if (!order || !token) {
+  const handleListOrder = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!order || lines.length === 0) {
+      e.preventDefault();
       setError('Select at least one item.');
       return;
     }
     setError('');
-    router.push(`/order/pay/${token}`);
+    const latestOrder = resolveCart(lines, name, note);
+    if (!latestOrder) {
+      e.preventDefault();
+      return;
+    }
+    const latestToken = encodeOrderToken(lines, name, note);
+    const msg = buildOrderMessage(latestOrder, latestToken);
+    e.currentTarget.href = buildWhatsAppUrl(msg);
   };
 
   return (
@@ -257,6 +263,7 @@ export default function OrderDesk() {
               {whatsappUrl ? (
                 <a
                   href={whatsappUrl}
+                  onClick={handleListOrder}
                   className="btn-brutal btn-brutal-primary w-full mt-6"
                   style={{ textDecoration: 'none' }}
                 >
@@ -271,13 +278,6 @@ export default function OrderDesk() {
                   List Order
                 </button>
               )}
-              <button
-                type="button"
-                className="btn-brutal btn-brutal-ghost w-full mt-3"
-                onClick={proceedToPay}
-              >
-                Proceed to Pay
-              </button>
               <p className="type-mono text-foreground/40 mt-4">
                 List Order opens WhatsApp with the list, total, UPI ID, and QR pay link.
               </p>

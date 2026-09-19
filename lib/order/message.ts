@@ -4,7 +4,7 @@ import { SEO } from '@/lib/seo';
 
 export function buildOrderMessage(order: ResolvedOrder, token?: string): string {
   const businessName = PAYMENT.payeeName || SEO.name;
-  const customerName = order.customerName.trim() || 'Direct Client';
+  const customerName = order.customerName.trim() || '-';
 
   const now = new Date();
   const dateStr = new Intl.DateTimeFormat('en-IN', {
@@ -23,12 +23,14 @@ export function buildOrderMessage(order: ResolvedOrder, token?: string): string 
     .format(now)
     .toUpperCase();
 
-  const divider = '--------------------------------------';
+  const divider = '--------------------------';
 
   const itemsFormatted = order.lines
     .map((line) => {
-      const name = line.product.name.padEnd(22, ' ');
-      return `  - ${name}x${line.qty}  Rs. ${line.lineTotal}`;
+      const name = line.product.name;
+      const single = `  - ${name} x${line.qty}  Rs. ${line.lineTotal}`;
+      if (single.length <= 30) return single;
+      return `  - ${name}\n    x${line.qty}  Rs. ${line.lineTotal}`;
     })
     .join('\n');
 
@@ -44,8 +46,8 @@ export function buildOrderMessage(order: ResolvedOrder, token?: string): string 
     `Time      : ${timeStr}`,
   ];
 
-  if (order.note) {
-    lines.push(`Note      : ${order.note}`);
+  if (order.note && order.note.trim()) {
+    lines.push(`Note      : ${order.note.trim()}`);
   }
 
   lines.push(
