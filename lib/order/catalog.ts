@@ -12,56 +12,36 @@ export interface OrderProduct {
   spec: string;
   unit: string;
   priceInr: number;
+  image?: string;
 }
 
 export const ORDER_PRODUCTS: OrderProduct[] = [
   {
-    sku: 'NN-WEB-01',
-    name: 'Website Build',
-    category: 'Web Development',
-    spec: 'Custom React / Next.js website, responsive layout, SEO foundation, and deployment.',
-    unit: 'project',
-    priceInr: 45000,
+    sku: 'BAC-01',
+    name: 'Birty Auto Cleanser',
+    category: 'Auto Care',
+    spec: 'Premium exterior auto cleanser formula for deep cleaning and surface restoration.',
+    unit: 'piece',
+    priceInr: 899,
+    image: '/images/order-products/auto-cleanser-1000x1000.webp',
   },
   {
-    sku: 'NN-WEB-02',
-    name: 'Landing Page',
-    category: 'Web Development',
-    spec: 'Single-page conversion website with custom UI and motion interactions.',
-    unit: 'project',
-    priceInr: 18000,
+    sku: 'IC-02',
+    name: 'Interior Cleaner',
+    category: 'Auto Care',
+    spec: 'Concentrated interior cleaner for leather, fabric, upholstery, and dashboard trim.',
+    unit: 'piece',
+    priceInr: 1499,
+    image: '/images/order-products/interior-cleaner-concentrate-500x500.webp',
   },
   {
-    sku: 'NN-UX-01',
-    name: 'UI/UX Design',
-    category: 'UI/UX Design',
-    spec: 'Complete Figma interface design, wireframes, prototypes, and component system.',
-    unit: 'project',
-    priceInr: 22000,
-  },
-  {
-    sku: 'NN-VID-01',
-    name: 'Video Editing',
-    category: 'Video Editing',
-    spec: 'Professional cut, creative color grade, and sound mastering in DaVinci Resolve.',
-    unit: 'video',
-    priceInr: 8000,
-  },
-  {
-    sku: 'NN-VID-02',
-    name: 'Reels Pack',
-    category: 'Video Editing',
-    spec: 'Short-form videos planned, edited, and captioned for Instagram Reels and Shorts.',
-    unit: 'pack',
-    priceInr: 12000,
-  },
-  {
-    sku: 'NN-SMM-01',
-    name: 'Social Media',
-    category: 'Social Media Marketing',
-    spec: 'Monthly content production, captions, scheduling, and account management.',
-    unit: 'month',
-    priceInr: 20000,
+    sku: 'CBS-03',
+    name: 'Car & Bike Shiner',
+    category: 'Auto Care',
+    spec: 'High-gloss protective instant shiner spray for cars and motorcycles.',
+    unit: 'piece',
+    priceInr: 399,
+    image: '/images/order-products/car-and-bike-shiner-500x500.webp',
   },
 ];
 

@@ -127,15 +127,15 @@ export default function OrderDesk() {
       <main className="container-padding" style={{ paddingTop: 40, paddingBottom: 80 }}>
         <div className="max-w-6xl mx-auto grid lg:grid-cols-[1.4fr_0.9fr] gap-10">
           <section>
-            <p className="type-mono opacity-50 mb-3 tracking-widest">// Catalog</p>
+            <p className="type-mono opacity-50 mb-3 tracking-widest">// Private Catalog</p>
             <h1 className="type-h2 text-foreground mb-3">
-              Service{' '}
+              Auto Care{' '}
               <span style={{ fontFamily: "'Playfair Display', serif", fontStyle: 'italic' }}>
                 products
               </span>
             </h1>
             <p className="type-body text-foreground/65 mb-8 max-w-xl">
-              Full list of services. Select quantity, then List Order to send the list, total, and QR pay link on WhatsApp.
+              Select product quantities, enter your details, and tap List Order to send the order details, total, and live QR payment link directly on WhatsApp.
             </p>
 
             <div className="flex flex-col gap-10">
@@ -152,38 +152,52 @@ export default function OrderDesk() {
                           className="bg-[#F2F1E6] border-2 border-black p-5 shadow-[4px_4px_0px_#000000]"
                           style={{ outline: selected ? '2px solid #A855F7' : undefined }}
                         >
-                          <div className="flex flex-wrap justify-between gap-3 mb-3">
-                            <p className="type-mono opacity-50">{product.sku}</p>
-                            <p className="type-mono">{product.category}</p>
-                          </div>
-                          <h2 className="type-h3 mb-2">{product.name}</h2>
-                          <p className="type-body text-foreground/65 mb-4">{product.spec}</p>
-                          <div className="flex flex-wrap items-center justify-between gap-4">
-                            <p className="type-body font-semibold">
-                              {formatInr(product.priceInr)}
-                              <span className="type-mono opacity-50 ml-2">/ {product.unit}</span>
-                            </p>
-                            <div className="flex items-center gap-2">
-                              <button
-                                type="button"
-                                className="btn-brutal btn-brutal-ghost"
-                                style={{ minHeight: 44, padding: '8px 16px' }}
-                                onClick={() => changeQty(product.sku, -1)}
-                                disabled={qty === 0}
-                                aria-label={`Remove one ${product.name}`}
-                              >
-                                -
-                              </button>
-                              <span className="type-mono w-8 text-center">{qty}</span>
-                              <button
-                                type="button"
-                                className="btn-brutal btn-brutal-primary"
-                                style={{ minHeight: 44, padding: '8px 16px' }}
-                                onClick={() => changeQty(product.sku, 1)}
-                                aria-label={`Add one ${product.name}`}
-                              >
-                                +
-                              </button>
+                          <div className="flex flex-col sm:flex-row gap-5 items-start">
+                            {product.image ? (
+                              <div className="w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0 border-2 border-black bg-white p-1 overflow-hidden shadow-[2px_2px_0px_#000000]">
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-full h-full object-contain"
+                                  loading="lazy"
+                                />
+                              </div>
+                            ) : null}
+                            <div className="flex-1 w-full">
+                              <div className="flex flex-wrap justify-between gap-3 mb-2">
+                                <p className="type-mono opacity-50">{product.sku}</p>
+                                <p className="type-mono">{product.category}</p>
+                              </div>
+                              <h2 className="type-h3 mb-2">{product.name}</h2>
+                              <p className="type-body text-foreground/65 mb-4">{product.spec}</p>
+                              <div className="flex flex-wrap items-center justify-between gap-4">
+                                <p className="type-body font-semibold">
+                                  {formatInr(product.priceInr)}
+                                  <span className="type-mono opacity-50 ml-2">/ {product.unit}</span>
+                                </p>
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    className="btn-brutal btn-brutal-ghost"
+                                    style={{ minHeight: 44, padding: '8px 16px' }}
+                                    onClick={() => changeQty(product.sku, -1)}
+                                    disabled={qty === 0}
+                                    aria-label={`Remove one ${product.name}`}
+                                  >
+                                    -
+                                  </button>
+                                  <span className="type-mono w-8 text-center">{qty}</span>
+                                  <button
+                                    type="button"
+                                    className="btn-brutal btn-brutal-primary"
+                                    style={{ minHeight: 44, padding: '8px 16px' }}
+                                    onClick={() => changeQty(product.sku, 1)}
+                                    aria-label={`Add one ${product.name}`}
+                                  >
+                                    +
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </article>

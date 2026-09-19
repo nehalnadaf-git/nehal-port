@@ -71,14 +71,25 @@ export default function PayView({
               {order.customerName}
             </p>
           ) : null}
-          <div className="space-y-3">
+          <div className="space-y-4">
             {order.lines.map((line) => (
-              <div key={line.product.sku} className="flex justify-between gap-4 type-body">
-                <span>
-                  {line.product.sku} {line.product.name}
-                  <span className="opacity-50"> x{line.qty}</span>
-                </span>
-                <span>{formatInr(line.lineTotal)}</span>
+              <div key={line.product.sku} className="flex items-center justify-between gap-4 type-body">
+                <div className="flex items-center gap-3">
+                  {line.product.image ? (
+                    <div className="w-12 h-12 flex-shrink-0 border border-black bg-white p-0.5 overflow-hidden">
+                      <img
+                        src={line.product.image}
+                        alt={line.product.name}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                  ) : null}
+                  <span>
+                    {line.product.name}
+                    <span className="opacity-50 ml-2">x{line.qty}</span>
+                  </span>
+                </div>
+                <span className="font-semibold">{formatInr(line.lineTotal)}</span>
               </div>
             ))}
           </div>
