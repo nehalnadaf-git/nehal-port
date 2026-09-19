@@ -31,7 +31,7 @@ export async function generateMetadata({
     description,
     noIndex: true,
     canonicalPath: `/order/pay/${token}`,
-    ogImage: '/og-order.webp',
+    ogImage: `/order/pay/${token}/qr.webp`,
     ogImageWidth: 800,
     ogImageHeight: 800,
   });
