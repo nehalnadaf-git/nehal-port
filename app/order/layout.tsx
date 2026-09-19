@@ -13,6 +13,7 @@ export const metadata: Metadata = buildMetadata({
   canonicalPath: '/order',
   noIndex: true,
   keywords: [],
+  ogImage: '/og-order.webp',
 });
 
 export default function OrderLayout({ children }: { children: React.ReactNode }) {

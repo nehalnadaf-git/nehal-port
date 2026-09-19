@@ -48,7 +48,7 @@ export const SEO = {
   },
 
   // ─── Images ────────────────────────────────────────────────────────────────
-  ogImage: '/og-image.jpg',
+  ogImage: '/og-image.webp',
   portrait: '/images/Nehal.webp',
 
   // ─── Primary Keywords ──────────────────────────────────────────────────────
@@ -270,6 +270,7 @@ export function buildMetadata(overrides: MetadataOverrides = {}): Metadata {
           width: 1200,
           height: 630,
           alt: `${SEO.name} — ${SEO.tagline}`,
+          type: 'image/webp',
         },
       ],
       locale: 'en_IN',
